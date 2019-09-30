@@ -5,5 +5,10 @@
  **do so within this header file.
 */
 
+
 constexpr int const leftEncoderChannel[2] = {0,0};
 constexpr int const rightEncoderChannel[2] = {0,0};
+constexpr int const frontLeftMotorChannel = 0;
+constexpr int const frontRightMotorChannel = 0;
+constexpr int const backLeftMotorChannel = 0;
+constexpr int const backRightMotorChannel = 0;
