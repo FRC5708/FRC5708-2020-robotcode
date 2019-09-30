@@ -7,6 +7,9 @@
 
 #include "Robot.h"
 
+//Subsystems
+Drivetrain* const Robot::drivetrain = new Drivetrain();
+
 void Robot::RobotInit() {}
 
 void Robot::AutonomousInit() {}

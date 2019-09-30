@@ -9,8 +9,15 @@
 
 #include <frc/TimedRobot.h>
 
+#include "subsystems/Drivetrain.h"
+
 class Robot : public frc::TimedRobot {
- public:
+public:
+
+//Subsystems
+  static Drivetrain* const drivetrain;
+  
+//Functions
   void RobotInit() override;
 
   void AutonomousInit() override;
