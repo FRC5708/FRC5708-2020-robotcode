@@ -1,8 +1,9 @@
-#pragma once
+#ifndef COLOR_VISION
+#define COLOR_VISION
 
 #include <frc2/command/SubsystemBase.h>
 #include "rev/ColorSensorV3.h"
-#include "../RobotMap.h"
+#include "RobotMap.h"
 
 class ColorVision : protected frc2::SubsystemBase {
 private:
@@ -11,3 +12,4 @@ public:
     ColorVision();
     void Periodic();
 };
+#endif

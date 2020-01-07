@@ -6,6 +6,13 @@
 */
 
 
+
+
+
+#ifndef ROBOT_MAP
+//^ This is pretty gosh-dang important, since literally everything includes RobotMap.h and contexprs, by defintion, will cause a compilation error if you try to redefine them.
+#define ROBOT_MAP
+
 constexpr int leftEncoderChannel[2] = {0,0};
 constexpr int rightEncoderChannel[2] = {0,0};
 constexpr int frontLeftMotorChannel = 0;
@@ -14,3 +21,5 @@ constexpr int backLeftMotorChannel = 0;
 constexpr int backRightMotorChannel = 0;
 constexpr int I2CPORT = 0; //CHANGE ME!
 constexpr bool ENABLE_COLOR_VISION_LOGGING = true;
+
+#endif
