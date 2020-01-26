@@ -25,3 +25,13 @@ void Drivetrain::Drive(const double left,const double right){
 	FRMotor->Set(bounded_right);
 	BRMotor->Set(bounded_right);
 }
+void Drivetrain::DrivePolar(const double power, const double turn){
+	double bounded_power = boundValue(power, 1.0);
+	double bounded_turn = boundValue(turn, 1.0);
+	double v = (1-fabs(bounded_turn)) * (bounded_power) + bounded_power;
+	double w = (1-fabs(bounded_power)) * (bounded_turn) + bounded_turn;
+	double rightMotorOutput = (v+w)/2;
+	double leftMotorOutput = (v-w)/2;
+
+	Drive(leftMotorOutput,rightMotorOutput);
+}
