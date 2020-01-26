@@ -18,5 +18,5 @@ class Drivetrain : protected frc2::SubsystemBase {
 	Drivetrain();
 	void Drive(double left, double right);
 	void DrivePolar(double power, double turn);
-	double boundValue(double value, double bound)
+	double boundValue(double value, double bound);
 };
