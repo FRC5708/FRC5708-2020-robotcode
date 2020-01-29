@@ -1,6 +1,6 @@
 #include "subsystems/Drivetrain.h"
 
-double boundValue(const double value, const double bound){
+double Drivetrain::boundValue(const double value, const double bound){
 	/**
 	 * Bounds value to range [-bound,bound]
 	 * If value is outside boundary, return appropriate boundry. Otherwise, return value.

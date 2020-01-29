@@ -25,7 +25,15 @@ bool environment_check(){
 		return IS_PROD_temp; 
 }
 
-void Robot::RobotInit() {}
+Robot* theRobotInstance;
+
+Robot* Robot::GetRobot() {
+	return theRobotInstance;
+}
+
+void Robot::RobotInit() {
+	theRobotInstance = this;
+}
 
 /**
  * This function is called every robot packet, no matter the mode. Use
