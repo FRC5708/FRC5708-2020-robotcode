@@ -10,12 +10,11 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-#include "subsystems/ColorVision.h"
-
 #include <iostream>
 #include <sys/stat.h>
 
 #include <vector>
+
 
 bool environment_check();
 const bool IS_PROD = environment_check(); /*IS_PROD is true if we are running on the production bot.
