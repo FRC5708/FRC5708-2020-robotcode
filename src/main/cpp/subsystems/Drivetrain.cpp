@@ -35,3 +35,10 @@ void Drivetrain::DrivePolar(const double power, const double turn){
 
 	Drive(leftMotorOutput,rightMotorOutput);
 }
+/* std::vector<double> Drivetrain::getMotorPowers()
+** Returns a vector with the current motor powers of drivetrain in the following order: Front-Left, Front-Right, Back-Left, Back-Right
+*/
+std::vector<double> Drivetrain::getMotorPowers(){
+	std::vector<double> vect {FLMotor->Get(),FRMotor->Get(),BLMotor->Get(),BRMotor->Get()};
+	return vect;
+}

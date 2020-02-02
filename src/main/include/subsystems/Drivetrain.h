@@ -3,6 +3,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include "frc/Spark.h"
 #include "frc/Encoder.h"
+#include <vector>
 
 #include "DIOMaps.h"
 
@@ -19,4 +20,5 @@ class Drivetrain : protected frc2::SubsystemBase {
 	void Drive(double left, double right);
 	void DrivePolar(double power, double turn);
 	double boundValue(double value, double bound);
+	std::vector<double> getMotorPowers();
 };

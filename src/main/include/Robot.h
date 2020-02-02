@@ -27,9 +27,11 @@ class Robot : public frc::TimedRobot {
 	void TeleopInit() override;
 	void TeleopPeriodic() override;
 	void TestPeriodic() override;
+	void TestInit() override;
 	static Robot* GetRobot();
 	frc::Joystick DriveJoystick{0};
 	Drivetrain drivetrain;
+	int testing_tick_counter = 0;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
 };

@@ -13,6 +13,9 @@
 #include <iostream>
 #include <sys/stat.h>
 
+#include <string>
+#include <vector>
+
 bool environment_check();
 const bool IS_PROD = environment_check(); /*IS_PROD is true if we are running on the production bot.
 																					 *This is primarily useful if the test and production bots
@@ -80,10 +83,25 @@ void Robot::TeleopInit() {
  */
 void Robot::TeleopPeriodic() {}
 
-/**
- * This function is called periodically during test mode.
- */
-void Robot::TestPeriodic() {}
+
+
+
+//TESTING THINGS
+
+void Robot::TestInit() {
+testing_tick_counter = 0;
+}
+
+//This function is called periodically during test mode.
+void Robot::TestPeriodic() {
+	testing_tick_counter++ ;
+	if (testing_tick_counter == 25) {
+		std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+		std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3);
+		testing_tick_counter = 0;
+		
+	}
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
