@@ -66,7 +66,7 @@ void DriveWithJoystick::Execute() {
 			break;
 		}
 		case XBOX: {
-			turn = Robot::GetRobot()->DriveJoystick.GetX();
+			turn = -Robot::GetRobot()->DriveJoystick.GetX();
 			power = Robot::GetRobot()->DriveJoystick.GetRawAxis(3)-Robot::GetRobot()->DriveJoystick.GetRawAxis(2);
 			turn = inputTransform(turn, 0, 0.1);
 
@@ -97,7 +97,6 @@ void DriveWithJoystick::Execute() {
 	//powerRampup(right, &currentRightPower);
 	
 	Robot::GetRobot()->drivetrain.Drive(left, right);
-	std::cout << "@DriveWithJoystick::Execute: left: " << left << ", right: " << right << std::endl;
 }
 
 // Make this return true when this Command no longer needs to run execute()

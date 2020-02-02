@@ -19,13 +19,12 @@ Drivetrain::Drivetrain() {
 }
 
 void Drivetrain::Drive(const double left,const double right){
-	std::cout << "@Drive: left: " << left << ", right: " << right << std::endl;
 	double bounded_left=boundValue(left,1.0);
 	double bounded_right=boundValue(right,1.0);
 	FLMotor->Set(bounded_left);
 	BLMotor->Set(bounded_left);
-	FRMotor->Set(bounded_right);
-	BRMotor->Set(bounded_right);
+	FRMotor->Set(-1*bounded_right);
+	BRMotor->Set(-1*bounded_right);
 }
 void Drivetrain::DrivePolar(const double power, const double turn){
 	double bounded_power = boundValue(power, 1.0);
