@@ -94,12 +94,19 @@ testing_tick_counter = 0;
 
 //This function is called periodically during test mode.
 void Robot::TestPeriodic() {
-	testing_tick_counter++ ;
-	if (testing_tick_counter == 25) {
-		std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
-		std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3);
-		testing_tick_counter = 0;
-		
+	//TODO: this is going to be replaced with a toggle eventually
+	if (true) {
+		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
+	}
+
+	//TODO: this is going to be replaced with a toggle eventually
+	if (true) {	
+		testing_tick_counter++ ;
+		if (testing_tick_counter == 25) {
+			std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3);
+			testing_tick_counter = 0;
+		}
 	}
 }
 
