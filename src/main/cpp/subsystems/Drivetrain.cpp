@@ -1,4 +1,5 @@
 #include "subsystems/Drivetrain.h"
+#include <iostream>
 
 double Drivetrain::boundValue(const double value, const double bound){
 	/**
@@ -18,6 +19,7 @@ Drivetrain::Drivetrain() {
 }
 
 void Drivetrain::Drive(const double left,const double right){
+	std::cout << "@Drive: left: " << left << ", right: " << right << std::endl;
 	double bounded_left=boundValue(left,1.0);
 	double bounded_right=boundValue(right,1.0);
 	FLMotor->Set(bounded_left);

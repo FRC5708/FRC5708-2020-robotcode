@@ -6,9 +6,9 @@
 */
 
 
-constexpr int const leftEncoderChannel[2] = {0,0};
-constexpr int const rightEncoderChannel[2] = {0,0};
-constexpr int const frontLeftMotorChannel = 0;
+constexpr int const leftEncoderChannel[2] = {0,1};
+constexpr int const rightEncoderChannel[2] = {2,3};
+constexpr int const frontLeftMotorChannel = 2;
 constexpr int const frontRightMotorChannel = 0;
-constexpr int const backLeftMotorChannel = 0;
-constexpr int const backRightMotorChannel = 0;
+constexpr int const backLeftMotorChannel = 3;
+constexpr int const backRightMotorChannel = 1; 

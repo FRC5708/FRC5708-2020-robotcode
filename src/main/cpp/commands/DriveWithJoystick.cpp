@@ -1,6 +1,7 @@
 #include "commands/DriveWithJoystick.h"
 #include <iostream>
 #include <frc2/command/CommandHelper.h>
+#include "Robot.h"
 //#include "subsystems/HatchManipulator.h"
 
 // buttons on xbox:
@@ -45,7 +46,9 @@ void powerRampup(double input, double* outputVar) {
 	*outputVar += 0.1*sign;
 	
 }
-
+void DriveWithJoystick::Initialize() {
+	std::cout << "drive with joystick initialized (hopefully)" << std::endl;
+}
 // TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 
 // Setup for joystick-activated commands go here (lift controls, manipulators, ect.)
@@ -94,6 +97,7 @@ void DriveWithJoystick::Execute() {
 	//powerRampup(right, &currentRightPower);
 	
 	Robot::GetRobot()->drivetrain.Drive(left, right);
+	std::cout << "@DriveWithJoystick::Execute: left: " << left << ", right: " << right << std::endl;
 }
 
 // Make this return true when this Command no longer needs to run execute()

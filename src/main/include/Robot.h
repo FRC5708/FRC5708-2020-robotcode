@@ -12,6 +12,7 @@
 #include <frc/Joystick.h>
 
 #include "subsystems/Drivetrain.h"
+#include "commands/DriveWithJoystick.h"
 
 extern const bool IS_PROD;
 
@@ -30,6 +31,7 @@ class Robot : public frc::TimedRobot {
 	static Robot* GetRobot();
 	frc::Joystick DriveJoystick{0};
 	Drivetrain drivetrain;
+	DriveWithJoystick driveCommand;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
 };

@@ -7,18 +7,18 @@
 
 #pragma once
 
-#include <frc2/command/Command.h>
+#include <frc2/command/CommandBase.h>
+#include <frc2/command/CommandHelper.h>
 #include <frc/Joystick.h>
-
-#include "../Robot.h"
 
 enum JoystickMode {SINGLE_JOY, XBOX};
 
-class DriveWithJoystick : public frc2::Command {
+class DriveWithJoystick : public  frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
 public:
 	JoystickMode joyMode = XBOX;
 
 	DriveWithJoystick();
+	void Initialize() override;
 	void Execute() override;
 	bool IsFinished() override;
 	void End(); // Used to override, but we deleted it 'cause it caused an error. Might cause problems in the future. Sorry! 
