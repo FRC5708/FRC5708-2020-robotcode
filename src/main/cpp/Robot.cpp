@@ -10,10 +10,11 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
+#include "subsystems/ColorVision.h"
+
 #include <iostream>
 #include <sys/stat.h>
 
-#include <string>
 #include <vector>
 
 bool environment_check();
