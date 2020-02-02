@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "RobotMap.h"
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 #include <frc/Joystick.h>
 
 #include "subsystems/Drivetrain.h"
+#include "commands/DriveWithJoystick.h"
 
 extern const bool IS_PROD;
 
@@ -33,6 +33,7 @@ class Robot : public frc::TimedRobot {
 	frc::Joystick DriveJoystick{0};
 	Drivetrain drivetrain;
 	int testing_tick_counter = 0;
+	DriveWithJoystick driveCommand;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
 };

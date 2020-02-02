@@ -1,4 +1,5 @@
 #include "subsystems/Drivetrain.h"
+#include <iostream>
 
 double Drivetrain::boundValue(const double value, const double bound){
 	/**
@@ -22,8 +23,8 @@ void Drivetrain::Drive(const double left,const double right){
 	double bounded_right=boundValue(right,1.0);
 	FLMotor->Set(bounded_left);
 	BLMotor->Set(bounded_left);
-	FRMotor->Set(bounded_right);
-	BRMotor->Set(bounded_right);
+	FRMotor->Set(-1*bounded_right); 
+	BRMotor->Set(-1*bounded_right);
 }
 void Drivetrain::DrivePolar(const double power, const double turn){
 	double bounded_power = boundValue(power, 1.0);
