@@ -7,18 +7,21 @@
 
 #pragma once
 
+#include "RobotMap.h"
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 #include <frc/Joystick.h>
 
 #include "subsystems/Drivetrain.h"
 #include "commands/DriveWithJoystick.h"
+#include "subsystems/ColorVision.h"
 
 extern const bool IS_PROD;
 
 
 class Robot : public frc::TimedRobot {
  public:
+	static ColorVision colorVision;
 	void RobotInit() override;
 	void RobotPeriodic() override;
 	void DisabledInit() override;

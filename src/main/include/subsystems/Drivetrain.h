@@ -4,7 +4,7 @@
 #include <frc/Victor.h>
 #include <frc/Encoder.h>
 
-#include "DIOMaps.h"
+#include "RobotMap.h"
 
 class Drivetrain : protected frc2::SubsystemBase {
 	private:
