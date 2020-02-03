@@ -10,9 +10,11 @@
 #include "RobotMap.h"
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
+#include <frc/Joystick.h>
 
 #include "subsystems/Drivetrain.h"
 #include "subsystems/ColorVision.h"
+#include "commands/DriveWithJoystick.h"
 
 extern const bool IS_PROD;
 
@@ -29,9 +31,10 @@ class Robot : public frc::TimedRobot {
 	void TeleopInit() override;
 	void TeleopPeriodic() override;
 	void TestPeriodic() override;
-
+	static Robot* GetRobot();
+	frc::Joystick DriveJoystick{0};
+	Drivetrain drivetrain;
+	DriveWithJoystick driveCommand;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
-
-	Drivetrain drivetrain;
 };
