@@ -10,13 +10,12 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/Joystick.h>
+#include <frc/XboxController.h>
 
-enum JoystickMode {SINGLE_JOY, XBOX};
 
 class DriveWithJoystick : public  frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
 public:
-	JoystickMode joyMode = XBOX;
-
+	frc::XboxController controller = frc::XboxController(0);
 	DriveWithJoystick();
 	void Initialize() override;
 	void Execute() override;

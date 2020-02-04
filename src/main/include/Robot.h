@@ -9,7 +9,6 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
-#include <frc/Joystick.h>
 
 #include "subsystems/Drivetrain.h"
 #include "commands/DriveWithJoystick.h"
@@ -29,7 +28,6 @@ class Robot : public frc::TimedRobot {
 	void TeleopPeriodic() override;
 	void TestPeriodic() override;
 	static Robot* GetRobot();
-	frc::Joystick DriveJoystick{0};
 	Drivetrain drivetrain;
 	DriveWithJoystick driveCommand;
  private:

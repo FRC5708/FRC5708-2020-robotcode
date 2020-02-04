@@ -10,9 +10,6 @@
 
 constexpr int INTAKE_BUTTON = 5, SHOOT_BUTTON = 6;
 
-
-double currentLeftPower=0.0;
-double currentRightPower=0.0;
 DriveWithJoystick::DriveWithJoystick() {
 }
 double inputTransform(double input, double minPowerOutput, double inputDeadZone, 
@@ -47,7 +44,7 @@ void powerRampup(double input, double* outputVar) {
 	
 }
 void DriveWithJoystick::Initialize() {
-	std::cout << "drive with joystick initialized (hopefully)" << std::endl;
+	std::cout << "drive with joystick initialized" << std::endl;
 }
 // TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 
@@ -58,23 +55,12 @@ void DriveWithJoystick::Execute() {
 	double turn = 0;
 	double power = 0;
 
-	switch (joyMode){
-		case SINGLE_JOY: {
-			turn = -Robot::GetRobot()->DriveJoystick.GetX();
-			power = Robot::GetRobot()->DriveJoystick.GetY();
-			turn = inputTransform(turn, 0, 0);
-			break;
-		}
-		case XBOX: {
-			turn = -Robot::GetRobot()->DriveJoystick.GetX();
-			power = Robot::GetRobot()->DriveJoystick.GetRawAxis(3)-Robot::GetRobot()->DriveJoystick.GetRawAxis(2);
-			turn = inputTransform(turn, 0, 0.1);
+	turn = -controller.GetX(frc::GenericHID::JoystickHand::kLeftHand);
+	power = controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
+	turn = inputTransform(turn, 0, 0.1);
 
-            // Call setup functions for lift and manipulator controls
+    // Call setup functions for lift and manipulator controls
 
-			break;
-		}
-	}
 	power = inputTransform(power, 0.15, 0.03);
 
     // I don't understand what this does, so I'm leaving it out until the big-brain programmers figure it out
