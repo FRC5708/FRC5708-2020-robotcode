@@ -2,6 +2,8 @@
 #include <iostream>
 #include <frc2/command/CommandHelper.h>
 #include "Robot.h"
+#include "commands/IntakeCommand.h"
+#include "commands/ShooterCommand.h"
 //#include "subsystems/HatchManipulator.h"
 
 // buttons on xbox:
@@ -59,11 +61,9 @@ void DriveWithJoystick::Execute() {
 	power = controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
 	turn = inputTransform(turn, 0, 0.1);
 
-    // Call setup functions for lift and manipulator controls
-
 	power = inputTransform(power, 0.15, 0.03);
 
-    // I don't understand what this does, so I'm leaving it out until the big-brain programmers figure it out
+    // Auton stuff
 
 /* 	if (Robot::autoDrive.commandUsing != nullptr) {
 		if (fabs(power) < 0.3 && fabs(turn) < 0.3) return;
