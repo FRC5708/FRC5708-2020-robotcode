@@ -11,14 +11,21 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
+#include "subsystems/Manipulators.h"
+
 
 
 class DriveWithJoystick : public  frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
 public:
 	frc::XboxController controller = frc::XboxController(0);
 	DriveWithJoystick();
+	void doIntake();
+	void doShooter();
 	void Initialize() override;
 	void Execute() override;
 	bool IsFinished() override;
-	void End(); // Used to override, but we deleted it 'cause it caused an error. Might cause problems in the future. Sorry! 
+	void End();
+private:
+	bool pressed = false;
+	Manipulators manipulator;
 };

@@ -12,3 +12,7 @@ constexpr int const frontLeftMotorChannel = 2;
 constexpr int const frontRightMotorChannel = 0;
 constexpr int const backLeftMotorChannel = 3;
 constexpr int const backRightMotorChannel = 1; 
+constexpr int const RightShooterMotorChannel = 4;
+constexpr int const LeftShooterMotorChannel = 5;
+constexpr int const ShooterCAMChannel = 6;
+constexpr int const IntakeMotorChannel = 7;

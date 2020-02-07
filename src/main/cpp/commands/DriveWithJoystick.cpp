@@ -2,15 +2,12 @@
 #include <iostream>
 #include <frc2/command/CommandHelper.h>
 #include "Robot.h"
-#include "commands/IntakeCommand.h"
-#include "commands/ShooterCommand.h"
-//#include "subsystems/HatchManipulator.h"
 
 // buttons on xbox:
 // 1=A, 2=B, 3=X, 4=Y, 5=left bumper, 6=right bumper, 7=Back, 8=Start, 9=left joystick, 10=right joystick
 
 
-constexpr int INTAKE_BUTTON = 5, SHOOT_BUTTON = 6;
+// constexpr int INTAKE_BUTTON = 5, 🤖 = 6;
 
 DriveWithJoystick::DriveWithJoystick() {
 }
@@ -83,6 +80,38 @@ void DriveWithJoystick::Execute() {
 	//powerRampup(right, &currentRightPower);
 	
 	Robot::GetRobot()->drivetrain.Drive(left, right);
+}
+
+void DriveWithJoystick::doShooter() {
+
+	// Controls shooting wheels
+	if (controller.GetXButtonReleased()) {
+		if (!pressed){
+			pressed = true;
+			manipulator.SetShooterWheels(1);
+		}
+		else {
+			pressed = false;
+			manipulator.SetShooterWheels(0);
+		}
+	}
+
+	// Controls CAM
+	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetShooterCAM(1);
+	}
+	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetShooterCAM(0);
+	}
+}
+
+void DriveWithJoystick::doIntake() {
+	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetIntakeWheels(1);
+	}
+	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetIntakeWheels(0);
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()
