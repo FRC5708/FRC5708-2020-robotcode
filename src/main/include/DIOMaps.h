@@ -4,7 +4,7 @@
  **If you are declaring an electronic component anywhere in the code, and are giving it a DIO port, you ~must~
  **do so within this header file.
 */
-
+#pragma once
 
 constexpr int const leftEncoderChannel[2] = {0,1};
 constexpr int const rightEncoderChannel[2] = {2,3};
