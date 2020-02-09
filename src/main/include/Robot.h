@@ -11,6 +11,7 @@
 #include <frc2/command/Command.h>
 #include <frc/Joystick.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <chrono>
 
 #include "subsystems/Drivetrain.h"
 #include "commands/DriveWithJoystick.h"
@@ -35,6 +36,7 @@ class Robot : public frc::TimedRobot {
 	Drivetrain drivetrain;
 	int testing_tick_counter = 0;
 	DriveWithJoystick driveCommand;
+	std::chrono::steady_clock::time_point TestingTime;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
 	//frc::SendableChooser<test_options> primary_objective_select;

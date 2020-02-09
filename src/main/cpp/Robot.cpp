@@ -96,18 +96,23 @@ void Robot::TeleopPeriodic() {}
 void Robot::TestInit() {
 testing_tick_counter = 0;
 TestingTime = std::chrono::steady_clock::now();
-}
+} 
 
 //This function is called periodically during test mode.
 void Robot::TestPeriodic() {
-	//TODO: this is going to be replaced with a toggle eventually
+	//TODO: this is going to be replaced with a toggle eventually, hopefully
 	if (true) {
-		//checks if 3 seconds hacve passed since Robot::TestInit was run
-		if (std::chrono::steady_clock::now() > TestingTime + std::chrono::milliseconds((int) (3000))) {
-			Robot::GetRobot()->drivetrain.Drive(0.3, 0.3)
-
+		//checks if 3 seconds have passed since Robot::TestInit was run
+		if (std::chrono::steady_clock::now() < TestingTime + std::chrono::milliseconds((int) (3000))) {
+			Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
+			//runs once when 2 seconds have passed
+			if (std::chrono::steady_clock::now() == TestingTime + std::chrono::milliseconds((int) (2000))) {
+				std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+				// CURRENT PROBLEM - cant figure out how to correctly refrence the encoder in it's class...
+				std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (Drivetrain::leftEncoder -> getdistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (Drivetrain::rightEncoder -> getdistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (Drivetrain::leftEncoder -> getdistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (Drivetrain::rightEncoder -> getdistance() > 1)) ? "Good :)" : "BAD!!!!");
+				}
+			}
 		}
-	}
 	//TODO: this is going to be replaced with a toggle eventually
 	if (false) {
 		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
@@ -117,12 +122,11 @@ void Robot::TestPeriodic() {
 	if (false) {	
 		// counts so that it activates every half second
 		testing_tick_counter++ ;
-		if (testing_tick_counter %25 = 0) {
-			std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+		if (testing_tick_counter %25 == 0) {
+			std::vector<double> vect=Robot::GetRobot()->drivetrain.getMotorPowers();
 			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3);
 		}
 	}
-	frc::shuffleboard::update()
 }
 
 #ifndef RUNNING_FRC_TESTS

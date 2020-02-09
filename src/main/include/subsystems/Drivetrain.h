@@ -9,8 +9,6 @@
 
 class Drivetrain : protected frc2::SubsystemBase {
 	private:
-	frc::Encoder* const leftEncoder = new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1]);
-	frc::Encoder* const rightEncoder = new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1]);
 	frc::SpeedController* const FLMotor = new frc::Victor(frontLeftMotorChannel);
 	frc::SpeedController* const FRMotor = new frc::Victor(frontRightMotorChannel);
 	frc::SpeedController* const BLMotor = new frc::Victor(backLeftMotorChannel);
@@ -20,5 +18,7 @@ class Drivetrain : protected frc2::SubsystemBase {
 	void Drive(double left, double right);
 	void DrivePolar(double power, double turn);
 	double boundValue(double value, double bound);
+	frc::Encoder* const leftEncoder = new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1]);
+	frc::Encoder* const rightEncoder = new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1]);
 	std::vector<double> getMotorPowers();
 };
