@@ -8,10 +8,13 @@
 #include "Robot.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/shuffleboard/Shuffleboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandScheduler.h>
 
 #include <iostream>
 #include <sys/stat.h>
+#include <chrono>
 
 #include <vector>
 
@@ -92,26 +95,78 @@ void Robot::TeleopPeriodic() {}
 
 void Robot::TestInit() {
 testing_tick_counter = 0;
+TestingTime = std::chrono::steady_clock::now();
 }
 
 //This function is called periodically during test mode.
 void Robot::TestPeriodic() {
 	//TODO: this is going to be replaced with a toggle eventually
 	if (true) {
+		//checks if 3 seconds hacve passed since Robot::TestInit was run
+		if (std::chrono::steady_clock::now() > TestingTime + std::chrono::milliseconds((int) (3000))) {
+			Robot::GetRobot()->drivetrain.Drive(0.3, 0.3)
+
+		}
+	}
+	//TODO: this is going to be replaced with a toggle eventually
+	if (false) {
 		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
 	}
 
 	//TODO: this is going to be replaced with a toggle eventually
-	if (true) {	
+	if (false) {	
+		// counts so that it activates every half second
 		testing_tick_counter++ ;
-		if (testing_tick_counter == 25) {
+		if (testing_tick_counter %25 = 0) {
 			std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
 			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3);
-			testing_tick_counter = 0;
 		}
 	}
+	frc::shuffleboard::update()
 }
 
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
+
+/**
+ * 
+ * DONT WORRY ABOUT IT, ILL FIRGURE THIS PART OUT EVENTUALLY...
+//calls value
+ AutonMode primary_objective = (AutonMode) primary_objective_select.GetSelected();
+
+//something
+ void setupObjectiveChooser(frc::SendableChooser<AutonMode>* chooser, std::string name) {
+
+	// space in beginning for alphabetical ordering
+	chooser->AddDefault(" " + name + " default: Cross line", AutonMode::crossLine);
+	chooser->AddObject("do nothing", AutonMode::nothing);
+	chooser->AddObject("Switch (either)", AutonMode::eitherSwitch);
+	chooser->AddObject("Switch (left)", AutonMode::leftSwitch);
+	chooser->AddObject("Switch (right)", AutonMode::rightSwitch);
+	chooser->AddObject("Switch (side)", AutonMode::sideSwitch);
+	//chooser->AddObject("Scale (either)", AutonMode::eitherScale);
+	//chooser->AddObject("Scale (left)", AutonMode::leftScale);
+	//chooser->AddObject("Scale (right)", AutonMode::rightScale);
+	frc::SmartDashboard::PutData(name, chooser);
+
+//something
+frc::SendableChooser<AutonMode> primary_objective_select;
+
+//something
+enum struct test_options {
+
+
+
+
+}
+
+encoders and motors are the same direction
+kinematics
+
+encoder object - get distance
+
+
+frc::Encoder* const leftEncoder = new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1]);
+	frc::Encoder* const rightEncoder = new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1]);
+*/

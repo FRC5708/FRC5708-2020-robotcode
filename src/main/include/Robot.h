@@ -10,6 +10,7 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 #include <frc/Joystick.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include "subsystems/Drivetrain.h"
 #include "commands/DriveWithJoystick.h"
@@ -36,4 +37,5 @@ class Robot : public frc::TimedRobot {
 	DriveWithJoystick driveCommand;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
+	//frc::SendableChooser<test_options> primary_objective_select;
 };
