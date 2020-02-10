@@ -109,7 +109,7 @@ void Robot::TestPeriodic() {
 			if (std::chrono::steady_clock::now() == TestingTime + std::chrono::milliseconds((int) (2000))) {
 				std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
 				// CURRENT PROBLEM - cant figure out how to correctly refrence the encoder in it's class...
-				std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (Drivetrain::leftEncoder -> getdistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (Drivetrain::rightEncoder -> getdistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (Drivetrain::leftEncoder -> getdistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (Drivetrain::rightEncoder -> getdistance() > 1)) ? "Good :)" : "BAD!!!!");
+				std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!");
 				}
 			}
 		}
