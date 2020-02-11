@@ -35,9 +35,12 @@ class Robot : public frc::TimedRobot {
 	frc::Joystick DriveJoystick{0};
 	Drivetrain drivetrain;
 	int testing_tick_counter = 0;
+	bool testing_first_motor_test = true;
 	DriveWithJoystick driveCommand;
 	std::chrono::steady_clock::time_point TestingTime;
+	std::chrono::steady_clock::time_point MotorTestStartTime;
+	frc::SendableChooser<char> TestToRun;
+	frc::SendableChooser<bool> OutputMotorValues;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
-	//frc::SendableChooser<test_options> primary_objective_select;
 };

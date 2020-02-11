@@ -92,34 +92,44 @@ void Robot::TeleopPeriodic() {}
 
 
 //TESTING THINGS
-
+//TODO: add text box that explains what the heck all the sendable chooser boxes mean...
 void Robot::TestInit() {
 testing_tick_counter = 0;
 TestingTime = std::chrono::steady_clock::now();
+TestToRun.SetDefaultOption("None", 'N');
+TestToRun.AddOption("ACTIVATES MOTORS - Test Motor/Encoder sync", 'M');
+TestToRun.AddOption("ACTIVATES MOTORS - Run all wheels forward", 'F');
+OutputMotorValues.SetDefaultOption("No", false);
+OutputMotorValues.AddOption("Yes", true);
+frc::SmartDashboard::PutData("Test To Run", &TestToRun);
+frc::SmartDashboard::PutData("Output Motor Values?", &OutputMotorValues);
 } 
 
 //This function is called periodically during test mode.
 void Robot::TestPeriodic() {
-	//TODO: this is going to be replaced with a toggle eventually, hopefully
-	if (true) {
+	if (TestToRun.GetSelected() == 'M') {
+		if (testing_first_motor_test == true) {
+			MotorTestStartTime = std::chrono::steady_clock::now();
+			testing_first_motor_test = false;
+		}
 		//checks if 3 seconds have passed since Robot::TestInit was run
-		if (std::chrono::steady_clock::now() < TestingTime + std::chrono::milliseconds((int) (3000))) {
+		if (std::chrono::steady_clock::now() < MotorTestStartTime + std::chrono::milliseconds((int) (3000))) {
 			Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
 			//runs once when 2 seconds have passed
-			if (std::chrono::steady_clock::now() == TestingTime + std::chrono::milliseconds((int) (2000))) {
+			if (std::chrono::steady_clock::now() == MotorTestStartTime + std::chrono::milliseconds((int) (2000))) {
 				std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
-				// CURRENT PROBLEM - cant figure out how to correctly refrence the encoder in it's class...
 				std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!");
-				}
 			}
 		}
-	//TODO: this is going to be replaced with a toggle eventually
-	if (false) {
+	}
+	if (TestToRun.GetSelected() == 'F') {
+		testing_first_motor_test = true;
 		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
 	}
-
-	//TODO: this is going to be replaced with a toggle eventually
-	if (false) {	
+	if (TestToRun.GetSelected() == 'N') {
+		testing_first_motor_test = true;
+	}
+	if (OutputMotorValues.GetSelected() == true) {	
 		// counts so that it activates every half second
 		testing_tick_counter++ ;
 		if (testing_tick_counter %25 == 0) {
@@ -128,7 +138,6 @@ void Robot::TestPeriodic() {
 		}
 	}
 }
-
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
@@ -136,41 +145,5 @@ int main() { return frc::StartRobot<Robot>(); }
 /**
  * 
  * DONT WORRY ABOUT IT, ILL FIRGURE THIS PART OUT EVENTUALLY...
-//calls value
- AutonMode primary_objective = (AutonMode) primary_objective_select.GetSelected();
-
-//something
- void setupObjectiveChooser(frc::SendableChooser<AutonMode>* chooser, std::string name) {
-
-	// space in beginning for alphabetical ordering
-	chooser->AddDefault(" " + name + " default: Cross line", AutonMode::crossLine);
-	chooser->AddObject("do nothing", AutonMode::nothing);
-	chooser->AddObject("Switch (either)", AutonMode::eitherSwitch);
-	chooser->AddObject("Switch (left)", AutonMode::leftSwitch);
-	chooser->AddObject("Switch (right)", AutonMode::rightSwitch);
-	chooser->AddObject("Switch (side)", AutonMode::sideSwitch);
-	//chooser->AddObject("Scale (either)", AutonMode::eitherScale);
-	//chooser->AddObject("Scale (left)", AutonMode::leftScale);
-	//chooser->AddObject("Scale (right)", AutonMode::rightScale);
-	frc::SmartDashboard::PutData(name, chooser);
-
-//something
-frc::SendableChooser<AutonMode> primary_objective_select;
-
-//something
-enum struct test_options {
-
-
-
-
-}
-
-encoders and motors are the same direction
-kinematics
-
-encoder object - get distance
-
-
-frc::Encoder* const leftEncoder = new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1]);
-	frc::Encoder* const rightEncoder = new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1]);
+ * (also known as notes/code that i will hopefully use later)
 */
