@@ -11,10 +11,10 @@ class Drivetrain : protected frc2::SubsystemBase {
 	private:
 	frc::Encoder* const leftEncoder = new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1]);
 	frc::Encoder* const rightEncoder = new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1]);
-	TalonSRX FLMotor = {frontLeftMotorChannel};
-	TalonSRX FRMotor = {frontRightMotorChannel};
-	TalonSRX BLMotor = {backLeftMotorChannel};
-	TalonSRX BRMotor = {backRightMotorChannel};
+	TalonSRX* FLMotor = new TalonSRX(frontLeftMotorChannel);
+	TalonSRX* FRMotor = new TalonSRX(frontRightMotorChannel);
+	TalonSRX* BLMotor = new TalonSRX(backLeftMotorChannel);
+	TalonSRX* BRMotor = new TalonSRX(backRightMotorChannel);
 	public:
 	Drivetrain();
 	void Drive(double left, double right);

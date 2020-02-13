@@ -21,10 +21,10 @@ Drivetrain::Drivetrain() {
 void Drivetrain::Drive(const double left,const double right){
 	double bounded_left=boundValue(left,1.0);
 	double bounded_right=boundValue(right,1.0);
-	FLMotor.Set(TalonSRXControlMode::PercentOutput,bounded_left);
-	BLMotor.Set(TalonSRXControlMode::PercentOutput,bounded_left);
-	FRMotor.Set(TalonSRXControlMode::PercentOutput,-1*bounded_right); 
-	BRMotor.Set(TalonSRXControlMode::PercentOutput,-1*bounded_right);
+	FLMotor->Set(TalonSRXControlMode::PercentOutput,bounded_left);
+	BLMotor->Set(TalonSRXControlMode::PercentOutput,bounded_left);
+	FRMotor->Set(TalonSRXControlMode::PercentOutput,-1*bounded_right); 
+	BRMotor->Set(TalonSRXControlMode::PercentOutput,-1*bounded_right);
 }
 void Drivetrain::DrivePolar(const double power, const double turn){
 	double bounded_power = boundValue(power, 1.0);
