@@ -104,8 +104,9 @@ OutputMotorValues.AddOption("Yes", true);
 frc::SmartDashboard::PutData("Test To Run", &TestToRun);
 frc::SmartDashboard::PutData("Output Motor Values?", &OutputMotorValues);
 } 
-
-//This function is called periodically during test mode.
+/*
+*This function is called periodically during test mode.
+*/
 void Robot::TestPeriodic() {
 	if (TestToRun.GetSelected() == 'M') {
 		if (testing_first_motor_test == true) {
