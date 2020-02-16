@@ -16,15 +16,27 @@ double Drivetrain::boundValue(const double value, const double bound){
 
 Drivetrain::Drivetrain() {
 	//Set encoder and spark parameters here
+	if (Drivetrain::usingTalons) {
+		FLMotor = new WPI_TalonSRX(frontLeftMotorChannel);
+		BLMotor = new WPI_TalonSRX(backLeftMotorChannel);
+		FRMotor = new WPI_TalonSRX(frontRightMotorChannel);
+		BRMotor = new WPI_TalonSRX(backRightMotorChannel);
+	}
+	else {
+		FLMotor = new WPI_VictorSPX(frontLeftMotorChannel);
+		BLMotor = new WPI_VictorSPX(backLeftMotorChannel);
+		FRMotor = new WPI_VictorSPX(frontRightMotorChannel);
+		BRMotor = new WPI_VictorSPX(backRightMotorChannel);
+	}
 }
 
 void Drivetrain::Drive(const double left,const double right){
 	double bounded_left=boundValue(left,1.0);
 	double bounded_right=boundValue(right,1.0);
-	FLMotor->Set(TalonSRXControlMode::PercentOutput,bounded_left);
-	BLMotor->Set(TalonSRXControlMode::PercentOutput,bounded_left);
-	FRMotor->Set(TalonSRXControlMode::PercentOutput,-1*bounded_right); 
-	BRMotor->Set(TalonSRXControlMode::PercentOutput,-1*bounded_right);
+	FLMotor->Set(bounded_left);
+	BLMotor->Set(bounded_left);
+	FRMotor->Set(-1*bounded_right); 
+	BRMotor->Set(-1*bounded_right);
 }
 void Drivetrain::DrivePolar(const double power, const double turn){
 	double bounded_power = boundValue(power, 1.0);
