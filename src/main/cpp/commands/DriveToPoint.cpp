@@ -7,7 +7,7 @@ DriveToPoint::DriveToPoint() {
 }
 
 void DriveToPoint::Initialize() {
-    // Get position from Odometry
+    // TODO: Get position from Odometry
     // For now, these magic numbers will do fine
     // Make sure that the angles are 0-360 not -180 to 180
     DriveToPoint::position = {0,0};
@@ -18,18 +18,33 @@ void DriveToPoint::Initialize() {
 }
 
 void DriveToPoint::Execute() {
-    DriveToPoint::position = {0,0};
+    DriveToPoint::position = {0,0}; // TODO: update position and heading from odometry
     DriveToPoint::heading = 0;
+    // Get absolute angle from robot's position to target' position
     float absAngleToTarget = atan2((DriveToPoint::position.y-DriveToPoint::destination.y), (DriveToPoint::position.x-DriveToPoint::destination.x));
     absAngleToTarget *= 180.0 / PI;
+    // Get reletive angle from front of robot to target (0-360, 0 forward)
     float angleToTarget = absAngleToTarget - DriveToPoint::heading;
-    
-    if (angleToTarget <= 90 && angleToTarget >= 5 || angleToTarget <= 270 && angleToTarget >= 185) {
-        drive.DrivePolar(1, -1); // Turn left
+    // Get reletive angle from front of robot to target (180 to -180, 0 forward)
+    float angleToTarget2;
+    if (angleToTarget > 180){
+        angleToTarget2 = (angleToTarget-180)*-1;
     }
-    else if (angleToTarget > 90 && angleToTarget <= 175 || angleToTarget > 270 && angleToTarget <= 355) {
-        drive.DrivePolar(1, 1); // Turn right
+    else {
+        angleToTarget2 = angleToTarget;
     }
+    // Get rate of turning, depending on angle to target
+    float turnRate = sqrt(fabs(angleToTarget2))/sqrt(180);
+    if (angleToTarget <= 180 && angleToTarget >= 5) {
+        drive.DrivePolar(1, -turnRate); // Turn left
+    }
+    else if (angleToTarget > 180 && angleToTarget <= 355) {
+        drive.DrivePolar(1, turnRate); // Turn right
+    }
+    else {
+        drive.Drive(1,1);
+    }
+    // TODO: if close to point, or if gone more than total distance to point, stop.
 }
 
 bool DriveToPoint::IsFinished() {
@@ -37,5 +52,5 @@ bool DriveToPoint::IsFinished() {
 }
 
 void DriveToPoint::End() {
-    
+
 }
