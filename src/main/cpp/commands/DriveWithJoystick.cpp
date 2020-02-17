@@ -44,7 +44,6 @@ void powerRampup(double input, double* outputVar) {
 }
 void DriveWithJoystick::Initialize() {
 	std::cout << "drive with joystick initialized" << std::endl;
-	manipulator.ManipInit();
 }
 // TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 

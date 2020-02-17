@@ -1,10 +1,7 @@
 #include "subsystems/Manipulators.h"
 
 Manipulators::Manipulators() {
-}
-
-void Manipulators::ManipInit() {
-    SRMotor->ConfigFactoryDefault();
+	SRMotor->ConfigFactoryDefault();
     /* first choose the sensor */
 	SRMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, kTimeoutMs);
 	SRMotor->SetSensorPhase(true);
@@ -42,7 +39,7 @@ void Manipulators::SetShooterWheels(int power) {
 }
 
 void Manipulators::SetShooterCAM(int power) {
-    SCMotor->Set(TalonSRXControlMode::PercentOutput,power);
+    SCMotor->Set(power);
 }
 
 void Manipulators::SetIntakeWheels(int power) {

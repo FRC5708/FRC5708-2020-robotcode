@@ -11,7 +11,7 @@ class Manipulators : protected frc2::SubsystemBase {
 	private:
 	TalonSRX* SRMotor = new TalonSRX(RightShooterMotorChannel);
     TalonSRX* SLMotor = new TalonSRX(LeftShooterMotorChannel);
-    TalonSRX* SCMotor = new TalonSRX(ShooterCAMChannel);
+    frc::SpeedController* SCMotor = new frc::Victor(ShooterCAMChannel);
     frc::SpeedController* const IMotor = new frc::Victor(IntakeMotorChannel);
     enum Constants {
 	    /**
