@@ -51,6 +51,14 @@ void DriveWithJoystick::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void DriveWithJoystick::Execute() {
+	doIntake();
+	doShooter();
+	doDrivetrain();
+	
+}
+	
+void DriveWithJoystick::doDrivetrain() {
+	
 	double turn = 0;
 	double power = 0;
 

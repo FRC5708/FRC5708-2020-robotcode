@@ -21,6 +21,7 @@ public:
 	DriveWithJoystick();
 	void doIntake();
 	void doShooter();
+	void doDrivetrain();
 	void Initialize() override;
 	void Execute() override;
 	bool IsFinished() override;
