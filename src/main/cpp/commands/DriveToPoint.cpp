@@ -44,11 +44,18 @@ void DriveToPoint::Execute() {
     else {
         drive.Drive(1,1);
     }
-    // TODO: if close to point, or if gone more than total distance to point, stop.
 }
 
 bool DriveToPoint::IsFinished() {
-    return true;
+    // TODO: Convert hitbox to hitcircle
+    if (fabs(position.x - destination.x) < endDistance && fabs(position.y - destination.y) < endDistance) {
+        drive.Drive(0,0);
+        return true;
+    }
+    else {
+        return false;
+    }
+
 }
 
 void DriveToPoint::End() {
