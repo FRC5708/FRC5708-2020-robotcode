@@ -11,6 +11,9 @@
 #include <frc2/command/Command.h>
 
 #include "subsystems/Drivetrain.h"
+#include <frc/interfaces/Gyro.h>
+#include <frc/AnalogGyro.h>
+#include <frc/ADXRS450_Gyro.h>
 
 extern const bool IS_PROD;
 
