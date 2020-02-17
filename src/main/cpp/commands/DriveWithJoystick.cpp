@@ -81,6 +81,7 @@ void DriveWithJoystick::Execute() {
 	//powerRampup(right, &currentRightPower);
 	
 	Robot::GetRobot()->drivetrain.Drive(left, right);
+	doShooter();
 }
 
 void DriveWithJoystick::doShooter() {
