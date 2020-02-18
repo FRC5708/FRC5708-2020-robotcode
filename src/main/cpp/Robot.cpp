@@ -133,8 +133,9 @@ void Robot::TestPeriodic() {
 		Robot::GetRobot()->drivetrain.Drive(0, 0);
 
 	}
-	if (OutputMotorValues.GetSelected() == true) {	
-		// counts so that it activates every half second
+	if (OutputMotorValues.GetSelected()) {
+		std::cout << "test me"	<< std::endl;
+		//counts so that it activates every half second
 		testing_tick_counter++ ;
 		if (testing_tick_counter %25 == 0) {
 			std::vector<double> vect=Robot::GetRobot()->drivetrain.getMotorPowers();
