@@ -44,7 +44,6 @@ void powerRampup(double input, double* outputVar) {
 }
 void DriveWithJoystick::Initialize() {
 	std::cout << "drive with joystick initialized" << std::endl;
-	manipulator.ManipInit();
 }
 // TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 
@@ -97,29 +96,29 @@ void DriveWithJoystick::doShooter() {
 	if (controller.GetXButtonReleased()) {
 		if (!pressed){
 			pressed = true;
-			manipulator.SetShooterWheels(1);
+			Robot::GetRobot()->shooter.setShooterWheels(1);
 		}
 		else {
 			pressed = false;
-			manipulator.SetShooterWheels(0);
+			Robot::GetRobot()->shooter.setShooterWheels(0);
 		}
 	}
 
-	// Controls CAM
+	// Controls shooter loader
 	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		manipulator.SetShooterCAM(1);
+		Robot::GetRobot()->shooter.setLoader(Shooter::loader::extended);
 	}
 	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		manipulator.SetShooterCAM(0);
+		Robot::GetRobot()->shooter.setLoader(Shooter::loader::retracted);
 	}
 }
 
 void DriveWithJoystick::doIntake() {
 	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		manipulator.SetIntakeWheels(1);
+		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::intake);
 	}
 	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		manipulator.SetIntakeWheels(0);
+		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::off);
 	}
 }
 

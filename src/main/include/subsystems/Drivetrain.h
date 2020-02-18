@@ -10,10 +10,11 @@
 
 class Drivetrain : protected frc2::SubsystemBase {
 	private:
-	frc::SpeedController* const FLMotor = new frc::Victor(frontLeftMotorChannel);
-	frc::SpeedController* const FRMotor = new frc::Victor(frontRightMotorChannel);
-	frc::SpeedController* const BLMotor = new frc::Victor(backLeftMotorChannel);
-	frc::SpeedController* const BRMotor = new frc::Victor(backRightMotorChannel);
+	const static bool usingTalons=false;
+	frc::SpeedController* FLMotor;
+	frc::SpeedController* FRMotor;
+	frc::SpeedController* BLMotor;
+	frc::SpeedController* BRMotor;
 	public:
 	Drivetrain();
 	void Drive(double left, double right);

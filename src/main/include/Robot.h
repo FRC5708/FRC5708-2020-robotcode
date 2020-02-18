@@ -15,6 +15,8 @@
 
 #include "subsystems/Drivetrain.h"
 #include "commands/DriveWithJoystick.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Shooter.h"
 
 extern const bool IS_PROD;
 
@@ -33,6 +35,8 @@ class Robot : public frc::TimedRobot {
 	void TestInit() override;
 	static Robot* GetRobot();
 	Drivetrain drivetrain;
+	Shooter shooter;
+	Intake intake;
 	int testing_tick_counter = 0;
 	bool testing_first_motor_test = true;
 	DriveWithJoystick driveCommand;
