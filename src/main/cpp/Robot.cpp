@@ -129,6 +129,8 @@ void Robot::TestPeriodic() {
 	}
 	if (TestToRun.GetSelected() == 'N') {
 		testing_first_motor_test = true;
+		Robot::GetRobot()->drivetrain.Drive(0, 0);
+
 	}
 	if (OutputMotorValues.GetSelected() == true) {	
 		// counts so that it activates every half second

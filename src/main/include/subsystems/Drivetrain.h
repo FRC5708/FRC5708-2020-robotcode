@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include "frc/Encoder.h"
 #include <vector>
 #include <frc/Victor.h>
 #include <frc/Encoder.h>

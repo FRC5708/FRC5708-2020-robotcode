@@ -35,4 +35,5 @@ public:
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
 	void setShooterWheels(double velocity);
 	void setLoader(loader position); //TODO: IMPLEMENT ME!
+    void ConfigureMotor(TalonSRX* theMotor);
 };

@@ -96,7 +96,7 @@ void DriveWithJoystick::doShooter() {
 	if (controller.GetXButtonReleased()) {
 		if (!pressed){
 			pressed = true;
-			Robot::GetRobot()->shooter.setShooterWheels(1);
+			Robot::GetRobot()->shooter.setShooterWheels(16);
 		}
 		else {
 			pressed = false;
