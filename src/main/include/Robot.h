@@ -18,7 +18,7 @@
 #include "subsystems/Drivetrain.h"
 #include "commands/DriveWithJoystick.h"
 #include "subsystems/VisionReceiver.h"
-#include "commands/AutoDrive.h"
+#include "commands/VisionDrive.h"
 
 extern const bool IS_PROD;
 
@@ -43,7 +43,7 @@ class Robot : public frc::TimedRobot {
 	bool testing_first_motor_test = true;
 	DriveWithJoystick driveCommand;
 	
-	AutoDrive autoDrive;
+	VisionDrive autoDrive;
 	std::chrono::steady_clock::time_point TestingTime;
 	std::chrono::steady_clock::time_point MotorTestStartTime;
 	frc::SendableChooser<char> TestToRun;

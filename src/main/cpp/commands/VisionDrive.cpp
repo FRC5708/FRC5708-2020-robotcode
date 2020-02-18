@@ -1,4 +1,4 @@
-#include "commands/AutoDrive.h"
+#include "commands/VisionDrive.h"
 #include "Robot.h"
 
 #include <algorithm>
@@ -9,7 +9,7 @@
 #include <functional>
 #include <frc2/command/CommandScheduler.h>
 
-AutoDrive::AutoDrive()
+VisionDrive::VisionDrive()
  : PIDCommand(frc2::PIDController(0.05, 0.001, 0.0), 
     [this](){return this->currentRotation;},
     [this](){return this->targetRotation;},
@@ -18,7 +18,7 @@ AutoDrive::AutoDrive()
     GetController().SetTolerance(1);
 }
 
-void AutoDrive::Initialize(){
+void VisionDrive::Initialize(){
 
     currentRotation = 0.0;
     targetRotation = 0.0;
@@ -29,7 +29,7 @@ void AutoDrive::Initialize(){
     }
 }
 
-void AutoDrive::Execute(){
+void VisionDrive::Execute(){
     //set current and target rotations in here and they will automatically be
     //tracked by the PIDCommand
 
@@ -42,6 +42,6 @@ void AutoDrive::Execute(){
     }
 }
 
-void AutoDrive::End(bool interrupted){
+void VisionDrive::End(bool interrupted){
     targetRotation = 0;
 }

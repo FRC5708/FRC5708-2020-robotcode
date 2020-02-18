@@ -18,7 +18,7 @@ public:
     bool IsFinished() override;
 };
 
-class AutoDrive : public frc2::PIDCommand {
+class VisionDrive : public frc2::PIDCommand {
 private:
     VisionReceiver::PossibleTarget currentTarget;
 public:
@@ -30,7 +30,7 @@ public:
     double targetRotation = 0.0;
     double currentRotation = 0.0;
 
-    AutoDrive();
+    VisionDrive();
     void Initialize() override;
 	void Execute() override;
     void End(bool interrupted) override;
