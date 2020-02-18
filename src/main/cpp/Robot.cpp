@@ -113,14 +113,14 @@ void Robot::TestPeriodic() {
 		if (testing_first_motor_test == true) {
 			MotorTestStartTime = std::chrono::steady_clock::now();
 			testing_first_motor_test = false;
-		}
-		//checks if 3 seconds have passed since Robot::TestInit was run
-		if (std::chrono::steady_clock::now() < MotorTestStartTime + std::chrono::milliseconds((int) (3000))) {
-			Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
-			//runs once when 2 seconds have passed
-			if (std::chrono::steady_clock::now() == MotorTestStartTime + std::chrono::milliseconds((int) (2000))) {
-				std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
-				std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
+			//checks if 3 seconds have passed since Robot::TestInit was run
+			if (std::chrono::steady_clock::now() < MotorTestStartTime + std::chrono::milliseconds((int) (3000))) {
+				Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
+				//runs once when 2 seconds have passed
+				if (std::chrono::steady_clock::now() == MotorTestStartTime + std::chrono::milliseconds((int) (2000))) {
+					std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+					std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
+				}
 			}
 		}
 	}
@@ -134,7 +134,6 @@ void Robot::TestPeriodic() {
 
 	}
 	if (OutputMotorValues.GetSelected()) {
-		std::cout << "test me"	<< std::endl;
 		//counts so that it activates every half second
 		testing_tick_counter++ ;
 		if (testing_tick_counter %25 == 0) {
