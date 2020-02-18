@@ -13,7 +13,7 @@
 
 enum JoystickMode {SINGLE_JOY, XBOX};
 
-class DriveWithJoystick : public  frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
+class DriveWithJoystick : public frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
 public:
 	JoystickMode joyMode = XBOX;
 

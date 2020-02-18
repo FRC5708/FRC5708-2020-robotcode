@@ -10,9 +10,13 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 #include <frc/Joystick.h>
+#include <frc2/command/button/JoystickButton.h>
+#include <frc/XboxController.h>
 
 #include "subsystems/Drivetrain.h"
 #include "commands/DriveWithJoystick.h"
+#include "subsystems/VisionReceiver.h"
+#include "commands/AutoDrive.h"
 
 extern const bool IS_PROD;
 
@@ -31,9 +35,13 @@ class Robot : public frc::TimedRobot {
 	void TestInit() override;
 	static Robot* GetRobot();
 	frc::Joystick DriveJoystick{0};
+
 	Drivetrain drivetrain;
+	VisionReceiver visionReceiver;
+
 	int testing_tick_counter = 0;
 	DriveWithJoystick driveCommand;
+	AutoDrive autoDrive;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
 };

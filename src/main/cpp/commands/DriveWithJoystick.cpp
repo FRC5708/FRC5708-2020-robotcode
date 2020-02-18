@@ -78,21 +78,20 @@ void DriveWithJoystick::Execute() {
 	power = inputTransform(power, 0.15, 0.03);
 
     // I don't understand what this does, so I'm leaving it out until the big-brain programmers figure it out
-
-/* 	if (Robot::autoDrive.commandUsing != nullptr) {
+	if(Robot::GetRobot()->autoDrive.IsScheduled()){
 		if (fabs(power) < 0.3 && fabs(turn) < 0.3) return;
 		else {
 			std::cout << "cancelling auto drive" << std::endl;
-			cancelCommand(Robot::autoDrive.commandUsing);
-		} 
-	} */
+			Robot::GetRobot()->autoDrive.Cancel();
+		}
+	}
 
 	//Robot::drivetrain.DrivePolar(power, turn);
 	double v = (1-fabs(turn)) * (power) + power;
 	double w = (1-fabs(power)) * (turn) + turn;
 	double right = (v+w)/2;
 	double left = (v-w)/2;
-	
+
 	//powerRampup(left, &currentLeftPower);
 	//powerRampup(right, &currentRightPower);
 	
