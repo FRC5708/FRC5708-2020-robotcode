@@ -57,14 +57,12 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-	visionReceiver.sendControlHeartbeat();
 }
 
 void Robot::DisabledPeriodic() {}
 
 
 void Robot::AutonomousInit() {
-	visionReceiver.sendControlHeartbeat();
 	if (m_autonomousCommand != nullptr) {
 		m_autonomousCommand->Schedule();
 	}
@@ -77,15 +75,10 @@ void Robot::TeleopInit() {
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
 	// this line or comment it out.
-	visionReceiver.sendControlHeartbeat();
 	if (m_autonomousCommand != nullptr) {
 		m_autonomousCommand->Cancel();
 		m_autonomousCommand = nullptr;
 	}
-
-	//add the magic button trigger
-	frc2::JoystickButton magicButton = frc2::JoystickButton(&DriveJoystick, (int)frc::XboxController::Button::kX);
-	magicButton.WhenPressed(autoDrive);
 
 	driveCommand.Schedule();
 }

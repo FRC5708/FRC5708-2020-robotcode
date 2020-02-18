@@ -5,19 +5,19 @@
 #include <sstream>
 #include <vector>
 #include <sys/socket.h>
-#include "Angle.h"
+#include <units/units.h>
 
 class VisionReceiver : public frc2::SubsystemBase {
 public:
 	struct TargetData {
 			TargetData()
-			 : distance(0), tapeAngle(Radian(0)), robotAngle(Radian(0)) {}
-			TargetData(double _distance, Radian _tapeAngle, Radian _robotAngle) 
+			 : distance(0), tapeAngle(0), robotAngle(0) {}
+			TargetData(units::inch_t _distance, units::radian_t _tapeAngle, units::radian_t _robotAngle) 
 			 : distance(_distance), tapeAngle(_tapeAngle), robotAngle(_robotAngle) {}
 
-			double distance;
+			units::inch_t distance;
 			// see 2020-vision/vision.hpp for descriptions
-			Radian tapeAngle, robotAngle;
+			units::radian_t tapeAngle, robotAngle;
 	};
 
 	struct PossibleTarget {
@@ -41,8 +41,6 @@ public:
 	socklen_t clientAddrLen = sizeof(clientAddr);
 	bool clientAddrExists = false;
 
-	int ticks;
-
 	PossibleTarget bestTarget;
  public:
 
@@ -60,10 +58,4 @@ public:
 		return bestTarget;
 	}
 
-	void sendControlHeartbeat();
-	bool isActivelyDriving = false;
-	void setIsActivelyDriving(bool value) {
-		isActivelyDriving = value; 
-		sendControlHeartbeat();
-	}
 };

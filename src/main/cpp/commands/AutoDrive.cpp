@@ -19,14 +19,13 @@ AutoDrive::AutoDrive()
 }
 
 void AutoDrive::Initialize(){
-    Robot::GetRobot()->visionReceiver.setIsActivelyDriving(true);
 
     currentRotation = 0.0;
     targetRotation = 0.0;
 
     currentTarget = Robot::GetRobot()->visionReceiver.getBestTarget();
     if(currentTarget.hasTarget){
-        targetRotation = currentTarget.target.robotAngle.value;
+        targetRotation = currentTarget.target.robotAngle.value();
     }
 }
 
@@ -39,10 +38,10 @@ void AutoDrive::Execute(){
         currentTarget = Robot::GetRobot()->visionReceiver.getBestTarget();
     }
     if(currentTarget.hasTarget){
-        targetRotation = currentTarget.target.robotAngle.value;
+        targetRotation = currentTarget.target.robotAngle.value();
     }
 }
 
 void AutoDrive::End(bool interrupted){
-    Robot::GetRobot()->visionReceiver.setIsActivelyDriving(false);
+    targetRotation = 0;
 }

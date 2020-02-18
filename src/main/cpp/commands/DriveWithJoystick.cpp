@@ -45,10 +45,14 @@ void powerRampup(double input, double* outputVar) {
 void DriveWithJoystick::Initialize() {
 	std::cout << "drive with joystick initialized" << std::endl;
 	manipulator.ManipInit();
-}
+	
+	//add the magic button trigger
+	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
+	magicButton.WhenPressed(&Robot::GetRobot()->autoDrive);
 // TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 
 // Setup for joystick-activated commands go here (lift controls, manipulators, ect.)
+}
 
 // Called repeatedly when this Command is scheduled to run
 void DriveWithJoystick::Execute() {

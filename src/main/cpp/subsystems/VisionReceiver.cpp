@@ -48,17 +48,9 @@ void VisionReceiver::setupSocket() {
 	}
 }
 
-constexpr double cameraX = -11;
-constexpr double cameraY = 8;
-// clockwise = positive
-const Degree cameraTheta = 0;
-
 void VisionReceiver::Periodic() {
 	++dataAge;
-
-	if (ticks++ % 50 == 0) {
-		sendControlHeartbeat();
-	}
+	
 	//std::cout << "VisionReciever::Periodic : " << std::endl;
 	
 	std::vector<TargetData> readTapes;
@@ -79,9 +71,11 @@ void VisionReceiver::Periodic() {
 		while (std::getline(visionDataStream, line)) {
 			if (line[0] == '#') {
 				std::cout << line << std::endl;
-				TargetData data;
+				double distance, tapeAngle, robotAngle;
 				sscanf(line.c_str(), "# distance=%lf tapeAngle=%lf robotAngle=%lf",
-				&(data.tapeAngle.value), &(data.robotAngle.value));
+				&distance, &tapeAngle, &robotAngle);
+				
+				TargetData data = TargetData(units::inch_t(distance), units::radian_t(tapeAngle), units::radian_t(robotAngle));
 				readTapes.push_back(data);
 			}
 			else if(line[0] == '@') {
@@ -120,25 +114,4 @@ void VisionReceiver::Periodic() {
 	readTapes.clear();
 	//std::cout << "@CLEAR:" << std::endl;
 	//More stuff here?
-}
-
-// send "heartbeat" to rPi every second telling if robot is enabled or disabled
-void VisionReceiver::sendControlHeartbeat() {
-	std::string msg = (Robot::GetRobot()->IsEnabled() ? "ENABLE" : "DISABLE")
-		+ std::string(" ")
-		 + (isActivelyDriving ? "DRIVEON" : "DRIVEOFF");
-		 sendControlMessage(msg.c_str());
-}
-
-void VisionReceiver::sendControlMessage(const char* message) {
-	if (clientAddrExists) {
-		//std::cout << "hearbeat: " << message << std::endl;
-		int fd = socket(clientAddr.ss_family, SOCK_DGRAM, 0);
-		if (fd < 0) perror("could not open vision control message socket");
-		((sockaddr_in *) &clientAddr)->sin_port = htons(5805);
-		if (sendto(fd, message, strlen(message), 0, (struct sockaddr *) &clientAddr, clientAddrLen) < 0) {
-			perror("failed to send vision control message");
-		}
-		close(fd);
-	}
 }
