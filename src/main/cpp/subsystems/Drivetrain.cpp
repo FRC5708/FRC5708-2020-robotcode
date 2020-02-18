@@ -16,6 +16,18 @@ double Drivetrain::boundValue(const double value, const double bound){
 
 Drivetrain::Drivetrain() {
 	//Set encoder and spark parameters here
+	if (Drivetrain::usingTalons) {
+		FLMotor = new WPI_TalonSRX(frontLeftMotorChannel);
+		BLMotor = new WPI_TalonSRX(backLeftMotorChannel);
+		FRMotor = new WPI_TalonSRX(frontRightMotorChannel);
+		BRMotor = new WPI_TalonSRX(backRightMotorChannel);
+	}
+	else {
+		FLMotor = new WPI_VictorSPX(frontLeftMotorChannel);
+		BLMotor = new WPI_VictorSPX(backLeftMotorChannel);
+		FRMotor = new WPI_VictorSPX(frontRightMotorChannel);
+		BRMotor = new WPI_VictorSPX(backRightMotorChannel);
+	}
 }
 
 void Drivetrain::Drive(const double left,const double right){

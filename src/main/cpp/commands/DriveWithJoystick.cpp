@@ -2,17 +2,13 @@
 #include <iostream>
 #include <frc2/command/CommandHelper.h>
 #include "Robot.h"
-//#include "subsystems/HatchManipulator.h"
 
 // buttons on xbox:
 // 1=A, 2=B, 3=X, 4=Y, 5=left bumper, 6=right bumper, 7=Back, 8=Start, 9=left joystick, 10=right joystick
 
 
-constexpr int INTAKE_BUTTON = 5, SHOOT_BUTTON = 6;
+// constexpr int INTAKE_BUTTON = 5, 🤖 = 6;
 
-
-double currentLeftPower=0.0;
-double currentRightPower=0.0;
 DriveWithJoystick::DriveWithJoystick() {
 }
 double inputTransform(double input, double minPowerOutput, double inputDeadZone, 
@@ -47,7 +43,8 @@ void powerRampup(double input, double* outputVar) {
 	
 }
 void DriveWithJoystick::Initialize() {
-	std::cout << "drive with joystick initialized (hopefully)" << std::endl;
+	std::cout << "drive with joystick initialized" << std::endl;
+	manipulator.ManipInit();
 }
 // TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 
@@ -55,30 +52,26 @@ void DriveWithJoystick::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void DriveWithJoystick::Execute() {
+	doIntake();
+	doShooter();
+	doDrivetrain();
+	
+}
+	
+void DriveWithJoystick::doDrivetrain() {
+	
 	double turn = 0;
 	double power = 0;
 
-	switch (joyMode){
-		case SINGLE_JOY: {
-			turn = -Robot::GetRobot()->DriveJoystick.GetX();
-			power = Robot::GetRobot()->DriveJoystick.GetY();
-			turn = inputTransform(turn, 0, 0);
-			break;
-		}
-		case XBOX: {
-			turn = -Robot::GetRobot()->DriveJoystick.GetX();
-			power = Robot::GetRobot()->DriveJoystick.GetRawAxis(3)-Robot::GetRobot()->DriveJoystick.GetRawAxis(2);
-			turn = inputTransform(turn, 0, 0.1);
+	turn = -controller.GetX(frc::GenericHID::JoystickHand::kLeftHand);
+	power = controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
+	turn = inputTransform(turn, 0, 0.1);
 
-            // Call setup functions for lift and manipulator controls
-
-			break;
-		}
-	}
 	power = inputTransform(power, 0.15, 0.03);
 
     // I don't understand what this does, so I'm leaving it out until the big-brain programmers figure it out
 	if(Robot::GetRobot()->autoDrive.IsScheduled()){
+    // Auton stuff
 		if (fabs(power) < 0.3 && fabs(turn) < 0.3) return;
 		else {
 			std::cout << "cancelling auto drive" << std::endl;
@@ -96,6 +89,38 @@ void DriveWithJoystick::Execute() {
 	//powerRampup(right, &currentRightPower);
 	
 	Robot::GetRobot()->drivetrain.Drive(left, right);
+}
+
+void DriveWithJoystick::doShooter() {
+
+	// Controls shooting wheels
+	if (controller.GetXButtonReleased()) {
+		if (!pressed){
+			pressed = true;
+			manipulator.SetShooterWheels(1);
+		}
+		else {
+			pressed = false;
+			manipulator.SetShooterWheels(0);
+		}
+	}
+
+	// Controls CAM
+	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetShooterCAM(1);
+	}
+	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetShooterCAM(0);
+	}
+}
+
+void DriveWithJoystick::doIntake() {
+	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetIntakeWheels(1);
+	}
+	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+		manipulator.SetIntakeWheels(0);
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()

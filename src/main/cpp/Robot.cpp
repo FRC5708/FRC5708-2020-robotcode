@@ -8,10 +8,13 @@
 #include "Robot.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/shuffleboard/Shuffleboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandScheduler.h>
 
 #include <iostream>
 #include <sys/stat.h>
+#include <chrono>
 
 #include <vector>
 
@@ -96,29 +99,62 @@ void Robot::TeleopPeriodic() {}
 
 
 //TESTING THINGS
-
+//TODO: add text box that explains what the heck all the sendable chooser boxes mean...
 void Robot::TestInit() {
 testing_tick_counter = 0;
-}
-
-//This function is called periodically during test mode.
+TestingTime = std::chrono::steady_clock::now();
+TestToRun.SetDefaultOption("None", 'N');
+TestToRun.AddOption("ACTIVATES MOTORS - Test Motor/Encoder sync", 'M');
+TestToRun.AddOption("ACTIVATES MOTORS - Run all wheels forward", 'F');
+OutputMotorValues.SetDefaultOption("No", false);
+OutputMotorValues.AddOption("Yes", true);
+frc::SmartDashboard::PutData("Test To Run", &TestToRun);
+frc::SmartDashboard::PutData("Output Motor Values?", &OutputMotorValues);
+} 
+/*
+*This function is called periodically during test mode.
+*/
 void Robot::TestPeriodic() {
-	//TODO: this is going to be replaced with a toggle eventually
-	if (true) {
+	//std::cout << "I am not insane." << std::endl;
+	if (TestToRun.GetSelected() == 'M') {
+		if (testing_first_motor_test == true) {
+			MotorTestStartTime = std::chrono::steady_clock::now();
+			testing_first_motor_test = false;
+			//checks if 3 seconds have passed since Robot::TestInit was run
+			if (std::chrono::steady_clock::now() < MotorTestStartTime + std::chrono::milliseconds((int) (3000))) {
+				Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
+				//runs once when 2 seconds have passed
+				if (std::chrono::steady_clock::now() == MotorTestStartTime + std::chrono::milliseconds((int) (2000))) {
+					std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+					std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
+				}
+			}
+		}
+	}
+	if (TestToRun.GetSelected() == 'F') {
+		testing_first_motor_test = true;
 		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
 	}
+	if (TestToRun.GetSelected() == 'N') {
+		testing_first_motor_test = true;
+		Robot::GetRobot()->drivetrain.Drive(0, 0);
 
-	//TODO: this is going to be replaced with a toggle eventually
-	if (true) {	
+	}
+	if (OutputMotorValues.GetSelected()) {
+		//counts so that it activates every half second
 		testing_tick_counter++ ;
-		if (testing_tick_counter == 25) {
-			std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
-			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3);
-			testing_tick_counter = 0;
+		if (testing_tick_counter %25 == 0) {
+			std::vector<double> vect=Robot::GetRobot()->drivetrain.getMotorPowers();
+			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3) << std::endl;
 		}
 	}
 }
-
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
+
+/**
+ * 
+ * DONT WORRY ABOUT IT, ILL FIRGURE THIS PART OUT EVENTUALLY...
+ * (also known as notes/code that i will hopefully use later)
+*/

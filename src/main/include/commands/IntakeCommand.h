@@ -4,29 +4,17 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
-#pragma once
-
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/Joystick.h>
-#include <frc/XboxController.h>
-#include "subsystems/Manipulators.h"
 
-
-
-class DriveWithJoystick : public frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
+class IntakeCommand : public frc2::CommandHelper<frc2::CommandBase, IntakeCommand> {
 public:
-	frc::XboxController controller = frc::XboxController(0);
-	DriveWithJoystick();
-	void doIntake();
-	void doShooter();
-	void doDrivetrain();
+	IntakeCommand();
+	
 	void Initialize() override;
 	void Execute() override;
-	bool IsFinished() override;
-	void End();
+	bool IsFinished() override; 
+	
 private:
-	bool pressed = false;
-	Manipulators manipulator;
+	std::chrono::steady_clock::time_point startTime;
 };
