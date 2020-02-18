@@ -13,14 +13,16 @@ void DriveToPoint::Initialize() {
     DriveToPoint::position = {0,0};
     DriveToPoint::heading = 0;
 
-    // Get the destinaton point from whatever (subject to revison)
+    // TODO: Get the destinaton point from wherever (subject to revison)
     DriveToPoint::destination = {5,5};
 }
 
 void DriveToPoint::Execute() {
     DriveToPoint::position = {0,0}; // TODO: update position and heading from odometry
     DriveToPoint::heading = 0;
-    // Get absolute angle from robot's position to target' position
+    // Degree difference -> turning power ratio
+    double kTurning = 0.1;
+    // Get absolute angle from robot's position to target's position TODO: make sure this actually works
     float absAngleToTarget = atan2((DriveToPoint::position.y-DriveToPoint::destination.y), (DriveToPoint::position.x-DriveToPoint::destination.x));
     absAngleToTarget *= 180.0 / PI;
     // Get reletive angle from front of robot to target (0-360, 0 forward)
@@ -34,8 +36,8 @@ void DriveToPoint::Execute() {
         angleToTarget2 = angleToTarget;
     }
     // Get rate of turning, depending on angle to target
-    float turnRate = sqrt(fabs(angleToTarget2))/sqrt(180);
-    if (angleToTarget <= 180 && angleToTarget >= 5) {
+    float turnRate = angleToTarget * kTurning;
+/*     if (angleToTarget <= 180 && angleToTarget >= 5) {
         drive.DrivePolar(1, -turnRate); // Turn left
     }
     else if (angleToTarget > 180 && angleToTarget <= 355) {
@@ -43,12 +45,17 @@ void DriveToPoint::Execute() {
     }
     else {
         drive.Drive(1,1);
+    } */
+    if (fabs(angleToTarget) > 1) {
+        drive.DrivePolar(1, turnRate);
+    }
+    else {
+        drive.Drive(1,1);
     }
 }
 
 bool DriveToPoint::IsFinished() {
-    // TODO: Convert hitbox to hitcircle
-    if (fabs(position.x - destination.x) < endDistance && fabs(position.y - destination.y) < endDistance) {
+    if (sqrt(pow(position.x - destination.x, 2) + pow(position.y - destination.y, 2)) < endDistance) {
         drive.Drive(0,0);
         return true;
     }
