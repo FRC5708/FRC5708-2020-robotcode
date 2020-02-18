@@ -25,16 +25,18 @@ void DriveToPoint::Execute() {
     // Get absolute angle from robot's position to target's position TODO: make sure this actually works
     float absAngleToTarget = atan2((DriveToPoint::position.y-DriveToPoint::destination.y), (DriveToPoint::position.x-DriveToPoint::destination.x));
     absAngleToTarget *= 180.0 / PI;
-    // Get reletive angle from front of robot to target (0-360, 0 forward)
+    // Get reletive angle from front of robot to target
     float angleToTarget = absAngleToTarget - DriveToPoint::heading;
-    // Get reletive angle from front of robot to target (180 to -180, 0 forward)
-    float angleToTarget2;
-    if (angleToTarget > 180){
-        angleToTarget2 = (angleToTarget-180)*-1;
-    }
-    else {
-        angleToTarget2 = angleToTarget;
-    }
+    // Convert to 180 - -179
+    // reduce the angle  
+    angleToTarget =  fmod(angleToTarget, 360); 
+
+    // force it to be the positive remainder, so that 0 <= angle < 360  
+    angleToTarget = fmod((angleToTarget + 360), 360);  
+
+    // force into the minimum absolute value residue class, so that -180 < angle <= 180  
+    if (angleToTarget > 180)  
+        angleToTarget -= 360;
     // Get rate of turning, depending on angle to target
     float turnRate = angleToTarget * kTurning;
 /*     if (angleToTarget <= 180 && angleToTarget >= 5) {
@@ -46,12 +48,7 @@ void DriveToPoint::Execute() {
     else {
         drive.Drive(1,1);
     } */
-    if (fabs(angleToTarget) > 1) {
-        drive.DrivePolar(1, turnRate);
-    }
-    else {
-        drive.Drive(1,1);
-    }
+    drive.DrivePolar(1, turnRate);
 }
 
 bool DriveToPoint::IsFinished() {
