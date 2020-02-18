@@ -34,7 +34,8 @@ class Manipulators : protected frc2::SubsystemBase {
 	public:
 	Manipulators();
     void ManipInit();
-	void SetShooterWheels(int);
+	void ConfigShooterMotor(TalonSRX* theMotor);
+	void SetShooterWheels(int speed);
     void SetShooterCAM(int);
     void SetIntakeWheels(int);
 };

@@ -97,7 +97,7 @@ void DriveWithJoystick::doShooter() {
 	if (controller.GetXButtonReleased()) {
 		if (!pressed){
 			pressed = true;
-			manipulator.SetShooterWheels(1);
+			manipulator.SetShooterWheels(16);
 		}
 		else {
 			pressed = false;
