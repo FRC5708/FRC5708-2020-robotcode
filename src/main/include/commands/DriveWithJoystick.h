@@ -11,7 +11,6 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
-#include "subsystems/Manipulators.h"
 
 
 
@@ -28,5 +27,4 @@ public:
 	void End();
 private:
 	bool pressed = false;
-	Manipulators manipulator;
 };
