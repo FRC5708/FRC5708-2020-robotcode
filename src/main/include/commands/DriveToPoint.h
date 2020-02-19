@@ -15,6 +15,8 @@ class DriveToPoint : public  frc2::CommandHelper<frc2::CommandBase, DriveToPoint
         float y;
     };
     point position;
+    // Distance (in meters) that the robot will stop from the target
+    float endDistance = 0.2;
     float heading;
     point destination;
     Drivetrain drive;
