@@ -13,7 +13,7 @@ class Odometry : public frc2::SubsystemBase {
     frc::DifferentialDriveOdometry m_odometry{frc::Rotation2d {units::degree_t(gyro->GetAngle())},
     frc::Pose2d{units::meter_t(0),units::meter_t(0), frc::Rotation2d {units::degree_t(0)}}};
     frc::Gyro* const gyro = new frc::ADXRS450_Gyro();
-    //frc::DifferentialDriveOdometry CurrentPos; trying to create a variable with the pose 2d (maybe?) type
+    frc::Pose2d currentPos;
 
 private:
 };
