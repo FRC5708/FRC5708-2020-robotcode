@@ -9,11 +9,15 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
+#include <frc/Joystick.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <chrono>
 
 #include "subsystems/Drivetrain.h"
 #include <frc/interfaces/Gyro.h>
 #include <frc/AnalogGyro.h>
 #include <frc/ADXRS450_Gyro.h>
+#include "commands/DriveWithJoystick.h"
 
 extern const bool IS_PROD;
 
@@ -29,9 +33,16 @@ class Robot : public frc::TimedRobot {
 	void TeleopInit() override;
 	void TeleopPeriodic() override;
 	void TestPeriodic() override;
-
+	void TestInit() override;
+	static Robot* GetRobot();
+	Drivetrain drivetrain;
+	int testing_tick_counter = 0;
+	bool testing_first_motor_test = true;
+	DriveWithJoystick driveCommand;
+	std::chrono::steady_clock::time_point TestingTime;
+	std::chrono::steady_clock::time_point MotorTestStartTime;
+	frc::SendableChooser<char> TestToRun;
+	frc::SendableChooser<bool> OutputMotorValues;
  private:
 	frc2::Command* m_autonomousCommand = nullptr;
-
-	Drivetrain drivetrain;
 };
