@@ -16,6 +16,9 @@
 #include <chrono>
 
 #include "subsystems/Drivetrain.h"
+#include <frc/interfaces/Gyro.h>
+#include <frc/AnalogGyro.h>
+#include <frc/ADXRS450_Gyro.h>
 #include "commands/DriveWithJoystick.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
