@@ -14,7 +14,7 @@
 
 
 
-class DriveWithJoystick : public  frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
+class DriveWithJoystick : public frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
 public:
 	frc::XboxController controller = frc::XboxController(0);
 	DriveWithJoystick();
