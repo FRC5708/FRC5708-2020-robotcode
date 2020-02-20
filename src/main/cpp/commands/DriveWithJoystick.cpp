@@ -112,3 +112,22 @@ void DoIntake::Execute() {
 		intake->setIntake(Intake::intake_mode::off);
 	}
 }
+/* bool InterruptableByController::IsFinished()
+** Returns true if any input is pressed on the controller, ending the command
+*/ 
+bool InterruptableByController::IsFinished(){
+	frc::XboxController* controller = &Robot::GetRobot()->controller;
+	return (controller->GetAButtonPressed() 
+	|| controller->GetBButtonPressed() 
+	|| controller->GetBackButtonPressed()
+	|| controller->GetXButtonPressed()
+	|| controller->GetYButtonPressed()
+	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)
+	|| controller->GetStartButtonPressed() 
+	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kLeftHand) 
+	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)) > .3
+	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	);
+}

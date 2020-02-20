@@ -15,7 +15,7 @@
 
 class Drivetrain;
 
-class TurnToAngle : public frc2::PIDCommand {
+class TurnToAngle : public frc2::PIDCommand, DriveWithJoystick::InterruptableByController {
 protected:
 	Drivetrain* drivetrain;
 public:
