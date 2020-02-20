@@ -12,7 +12,7 @@
 
 // constexpr int INTAKE_BUTTON = 5, 🤖 = 6;
 
-using namespace DriveWithJoystick;
+namespace DriveWithJoystick {
 
 double inputTransform(double input, double minPowerOutput, double inputDeadZone, 
 		 double inputChangePosition = 0.75, double outputChangePosition = 0.5) {
@@ -130,4 +130,6 @@ bool CheckJoystickForInterrupt() {
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)) > .3
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)) > .3
 	);
+}
+
 }
