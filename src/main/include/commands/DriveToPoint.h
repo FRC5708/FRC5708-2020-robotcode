@@ -5,13 +5,14 @@
 
 class DriveToPoint : public  frc2::CommandHelper<frc2::CommandBase, DriveToPoint> {
 public:
-    DriveToPoint();
+    DriveToPoint(frc::Translation2d targetPoint, bool stopAfter = false);
     void Initialize() override;
     void Execute() override;
     void End();
     bool IsFinished() override;
     
     frc::Translation2d targetPoint;
+    bool stopAfter;
 private:
     frc::Translation2d startingPoint;
     
