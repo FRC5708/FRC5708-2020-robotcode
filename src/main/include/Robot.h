@@ -24,7 +24,7 @@
 #include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
 #include "subsystems/VisionReceiver.h"
-#include "commands/VisionDrive.h"
+#include "commands/TurnToAngle.h"
 #include "subsystems/Odometry.h"
 
 extern const bool IS_PROD;
@@ -57,7 +57,7 @@ class Robot : public frc::TimedRobot {
 	int testing_tick_counter = 0;
 	bool testing_first_motor_test = true;
 	
-	VisionDrive autoDrive;
+	VisionDrive visionDrive;
 	std::chrono::steady_clock::time_point TestingTime;
 	std::chrono::steady_clock::time_point MotorTestStartTime;
 	frc::SendableChooser<char> TestToRun;

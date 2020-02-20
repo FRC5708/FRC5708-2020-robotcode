@@ -41,7 +41,7 @@ void Robot::RobotInit() {
 	theRobotInstance = this;
 	
 	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
-	magicButton.WhenPressed(&Robot::GetRobot()->autoDrive);
+	magicButton.WhenPressed(&Robot::GetRobot()->visionDrive);
 }
 
 /**

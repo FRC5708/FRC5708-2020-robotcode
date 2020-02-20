@@ -6,7 +6,7 @@
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include "Robot.h"
 
-Odometry::Odometry() : m_odometry{frc::Rotation2d {units::degree_t(Robot::GetRobot()->drivetrain.gyro->GetAngle())},
+Odometry::Odometry() : m_odometry{frc::Rotation2d {units::degree_t(Robot::GetRobot()->drivetrain.GetGyroAngle())},
     frc::Pose2d{units::meter_t(0),units::meter_t(0), frc::Rotation2d {units::degree_t(0)}}} {
     
 }
@@ -32,7 +32,7 @@ units::angle::degree_t Odometry::getRobotdeg() {
 
 
 void Odometry::Periodic() {
-    frc::Rotation2d gyroAngle{units::degree_t(Robot::GetRobot()->drivetrain.gyro->GetAngle())};
+    frc::Rotation2d gyroAngle{units::degree_t(Robot::GetRobot()->drivetrain.GetGyroAngle())};
 
     currentPos = m_odometry.Update(gyroAngle,
          units::meter_t(Robot::GetRobot()->drivetrain.leftEncoder->GetDistance()),
