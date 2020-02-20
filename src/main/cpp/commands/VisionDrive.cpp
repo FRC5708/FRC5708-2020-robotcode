@@ -9,12 +9,13 @@
 #include <functional>
 #include <frc2/command/CommandScheduler.h>
 
-VisionDrive::VisionDrive()
- : PIDCommand(frc2::PIDController(0.05, 0.001, 0.0), 
+VisionDrive::VisionDrive() : PIDCommand(
+    frc2::PIDController(0.05, 0.001, 0.0), 
     [this](){return this->currentRotation;},
     [this](){return this->targetRotation;},
-    [=](double d){Robot::GetRobot()->drivetrain.DrivePolar(0, d);}) {
-
+    [=](double d){Robot::GetRobot()->drivetrain.DrivePolar(0, d);}
+){
+    AddRequirements({&Robot::GetRobot()->drivetrain});
     GetController().SetTolerance(1);
 }
 
