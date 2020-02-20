@@ -3,6 +3,7 @@
 #include "subsystems/Odometry.h"
 #include "commands/TurnToAngle.h"
 #include "Robot.h"
+#include <frc2/command/ParallelRaceGroup.h>
 
 
 using namespace units;
@@ -17,6 +18,23 @@ AutonomousCommand::AutonomousCommand() {
 	whetherToTrenchRun.AddOption("No", false);
 	
 }
+
+
+class ContinuousIntakeCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousIntakeCommand> {
+public:
+	ContinuousIntakeCommand() {
+		AddRequirements(&Robot::GetRobot()->intake);
+	}
+protected:
+	void Execute() override {
+		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::intake);
+	}
+	void End(bool interrupted) override {
+		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::off);
+	}
+};
+
+
 
 // For positions: pefer to game manual and https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
 void AutonomousCommand::Initialize() {
@@ -50,12 +68,14 @@ void AutonomousCommand::Initialize() {
 		frc::Translation2d trench2{inch_t(138), inch_t(190)};
 		AddCommands(DriveToPoint(trench2, true));
 		
-		// TODO: activate intake
-		
 		// Charge the trench run
 		frc::Translation2d trenchEnd{trench2.X(), inch_t(430)};
 		// We turn while stationary as there's not enough clearance to make a wide turn by the trench run
-		AddCommands(TurnToPoint(trenchEnd), DriveToPoint(trenchEnd));
+		// Activate intake while in trench
+		AddCommands(frc2::ParallelRaceGroup(
+			ContinuousIntakeCommand(), 
+			SequentialCommandGroup(TurnToPoint(trenchEnd), DriveToPoint(trenchEnd)
+		)));
 	}
 	else {
 		// Exit initiation line
