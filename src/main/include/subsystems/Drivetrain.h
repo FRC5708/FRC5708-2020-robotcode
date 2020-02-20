@@ -9,7 +9,7 @@
 
 #include "DIOMaps.h"
 
-class Drivetrain : protected frc2::SubsystemBase {
+class Drivetrain : public frc2::SubsystemBase {
 	private:
 	const static bool usingTalons=false;
 	frc::SpeedController* FLMotor;

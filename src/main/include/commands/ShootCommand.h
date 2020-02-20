@@ -7,6 +7,7 @@
 /* class ShootCommand : public frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> 
 **  
 **/
-class ShootCommand : public frc2::SequentialCommandGroup {
+class ShootCommand : public frc2::CommandHelper<frc2::SequentialCommandGroup,ShootCommand> {
     ShootCommand(double power=1.0);
 };
+ 

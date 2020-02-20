@@ -7,7 +7,7 @@
 
 #include "DIOMaps.h"
 
-class Intake : protected frc2::SubsystemBase {
+class Intake : public frc2::SubsystemBase {
 private:
     frc::SpeedController* const intakeMotor = new frc::Victor(IntakeMotorChannel);
     frc::SpeedController* const magazineMotor = new frc::Victor(IntakeMotorChannel);
