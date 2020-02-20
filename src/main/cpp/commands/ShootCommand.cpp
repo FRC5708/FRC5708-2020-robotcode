@@ -2,13 +2,8 @@
 #include "Robot.h"
 
 ShootCommand::ShootCommand(double power){
-   // AddRequirements(Robot::GetRobot()->shooter);
-
-   std::initializer_list<frc2::Subsystem*> requirements {
-       &Robot::GetRobot()->shooter
-    };
-
-   AddRequirements(requirements);
+   AddRequirements(&Robot::GetRobot()->shooter);
+   
     //TODO: FIXME!
     //TODO: IMPLEMENT ME!
 }

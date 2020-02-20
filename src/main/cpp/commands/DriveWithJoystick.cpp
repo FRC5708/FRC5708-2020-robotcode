@@ -59,8 +59,8 @@ void DoDrivetrain::Execute() {
 
 	turn = -controller.GetX(frc::GenericHID::JoystickHand::kLeftHand);
 	power = controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
+	
 	turn = inputTransform(turn, 0, 0.1);
-
 	power = inputTransform(power, 0.15, 0.03);
 
     // Auton stuff
@@ -72,17 +72,8 @@ void DoDrivetrain::Execute() {
 			cancelCommand(Robot::autoDrive.commandUsing);
 		} 
 	} */
-
-	//Robot::drivetrain.DrivePolar(power, turn);
-	double v = (1-fabs(turn)) * (power) + power;
-	double w = (1-fabs(power)) * (turn) + turn;
-	double right = (v+w)/2;
-	double left = (v-w)/2;
 	
-	//powerRampup(left, &currentLeftPower);
-	//powerRampup(right, &currentRightPower);
-	
-	drivetrain->Drive(left, right);
+	drivetrain->DrivePolar(power, turn);
 }
 void DoDrivetrain::End() {
 	drivetrain->Drive(0, 0);
