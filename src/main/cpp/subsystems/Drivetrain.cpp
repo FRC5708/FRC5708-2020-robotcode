@@ -28,6 +28,10 @@ Drivetrain::Drivetrain() {
 		FRMotor = new WPI_VictorSPX(frontRightMotorChannel);
 		BRMotor = new WPI_VictorSPX(backRightMotorChannel);
 	}
+	
+	constexpr double metersPerPulse = units::meter_t(units::inch_t(6.0)).value() * M_PI / 360.0;
+	leftEncoder->SetDistancePerPulse(metersPerPulse);
+	rightEncoder->SetDistancePerPulse(metersPerPulse);
 }
 
 void Drivetrain::Drive(const double left,const double right){
