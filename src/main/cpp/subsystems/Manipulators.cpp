@@ -16,8 +16,8 @@ void Manipulators::ConfigShooterMotor(TalonSRX* theMotor) {
 	/* set the peak and nominal outputs */
 	theMotor->ConfigNominalOutputForward(0.3, kTimeoutMs);
 	theMotor->ConfigNominalOutputReverse(-0.3, kTimeoutMs);
-	theMotor->ConfigPeakOutputForward(1, kTimeoutMs);
-	theMotor->ConfigPeakOutputReverse(-1, kTimeoutMs);
+	theMotor->ConfigPeakOutputForward(0.55, kTimeoutMs);
+	theMotor->ConfigPeakOutputReverse(-0.55, kTimeoutMs);
 	/* set closed loop gains in slot0 */
 	theMotor->Config_kF(kPIDLoopIdx, 0, kTimeoutMs);
 	theMotor->Config_kP(kPIDLoopIdx, 100000000, kTimeoutMs);
