@@ -2,9 +2,11 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <memory>
 
 
-class AutonomousCommand : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutonomousCommand> {
+// It turns out that CommandHelper adds problems and isn't really necessary... Just don't use WithTimeout(), BeforeStarting(), and friends.
+class AutonomousCommand : public frc2::SequentialCommandGroup {
 	
 	AutonomousCommand();
 	
@@ -14,10 +16,3 @@ class AutonomousCommand : public frc2::CommandHelper<frc2::SequentialCommandGrou
 	frc::SendableChooser<bool> whetherToTrenchRun;
 };
 
-
-
-class Autonomous {
-	
-	Autonomous();
-	
-};

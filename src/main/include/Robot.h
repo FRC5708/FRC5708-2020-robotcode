@@ -24,6 +24,7 @@
 #include "subsystems/Intake.h"
 #include "subsystems/VisionReceiver.h"
 #include "commands/VisionDrive.h"
+#include "subsystems/Odometry.h"
 
 extern const bool IS_PROD;
 
@@ -44,6 +45,8 @@ class Robot : public frc::TimedRobot {
 	Drivetrain drivetrain;
 	Shooter shooter;
 	Intake intake;
+	
+	Odometry odometry; // MUST be declared after drivetrain
     
 	VisionReceiver visionReceiver;
 
