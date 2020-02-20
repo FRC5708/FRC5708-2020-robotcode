@@ -39,7 +39,7 @@ void AutonomousCommand::Initialize() {
 	frc::Translation2d targetPos{inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66), inch_t(0)};
 	AddCommands(TurnToAngle(
 		&Robot::GetRobot()->drivetrain, 
-		units::math::atan2(targetPos.X() - start.X(), targetPos.Y() - start.Y())
+		degree_t(360) - units::math::atan2(targetPos.X() - start.X(), targetPos.Y() - start.Y())
 	));
 	
 	// TODO: Shoot	

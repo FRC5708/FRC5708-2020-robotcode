@@ -26,7 +26,7 @@ TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation)
 	GetController().SetTolerance(1);
 }
 
-TurnToAngle::TurnToAngle(TurnToAngle& otherMe) 
+TurnToAngle::TurnToAngle(const TurnToAngle& otherMe) 
 : TurnToAngle(otherMe.drivetrain, otherMe.targetRotation) {
 	
 }

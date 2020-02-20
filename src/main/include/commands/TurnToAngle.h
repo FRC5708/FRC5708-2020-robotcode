@@ -24,7 +24,7 @@ public:
 	 bool IsFinished() override;
 	
 	// When copying, must change lambdas so that they refer to the correct this
-	TurnToAngle(TurnToAngle& otherMe);
+	TurnToAngle(const TurnToAngle& otherMe);
 };
 
 class VisionDrive : public TurnToAngle {
