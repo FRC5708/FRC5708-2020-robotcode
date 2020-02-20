@@ -57,7 +57,7 @@ class Robot : public frc::TimedRobot {
 	int testing_tick_counter = 0;
 	bool testing_first_motor_test = true;
 	
-	VisionDrive visionDrive;
+	DriveWithJoystick::InterruptableByController<VisionDrive> visionDrive;
 	std::chrono::steady_clock::time_point TestingTime;
 	std::chrono::steady_clock::time_point MotorTestStartTime;
 	frc::SendableChooser<char> TestToRun;

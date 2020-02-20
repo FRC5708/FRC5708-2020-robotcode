@@ -112,10 +112,10 @@ void DoIntake::Execute() {
 		intake->setIntake(Intake::intake_mode::off);
 	}
 }
-/* bool InterruptableByController::IsFinished()
+/* bool CheckJoystickForInterrupt()
 ** Returns true if any input is pressed on the controller, ending the command
 */ 
-bool InterruptableByController::IsFinished(){
+bool CheckJoystickForInterrupt() {
 	frc::XboxController* controller = &Robot::GetRobot()->controller;
 	return (controller->GetAButtonPressed() 
 	|| controller->GetBButtonPressed() 

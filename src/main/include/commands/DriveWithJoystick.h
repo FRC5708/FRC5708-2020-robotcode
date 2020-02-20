@@ -43,8 +43,15 @@ namespace DriveWithJoystick{
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
 	};
-	//This class should be extended from by Commands that should be cancelled by any controller input.
-	class InterruptableByController{
-		bool IsFinished();
+	
+	
+	bool CheckJoystickForInterrupt();
+	template<class T, 
+	typename = std::enable_if_t<std::is_base_of_v<frc2::Command, T>>>
+	class InterruptableByController : public T {
+		protected:
+		bool IsFinished() override {
+			return T::IsFinished() || CheckJoystickForInterrupt();
+		}
 	};
 }
