@@ -1,6 +1,8 @@
 #include "commands/Autonomous.h"
 #include "commands/DriveToPoint.h"
 #include "subsystems/Odometry.h"
+#include "commands/TurnToAngle.h"
+#include "Robot.h"
 
 
 using namespace units;
@@ -33,7 +35,13 @@ void AutonomousCommand::Initialize() {
 		case 'C': start = { inch_t(0), yStart }; break;
 	}
 	
-	// TODO: Turn towards shooter with precise angle
+	// Turn towards shooter with precise angle
+	frc::Translation2d targetPos{inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66), inch_t(0)};
+	AddCommands(TurnToAngle(
+		&Robot::GetRobot()->drivetrain, 
+		units::math::atan2(targetPos.X() - start.X(), targetPos.Y() - start.Y())
+	));
+	
 	// TODO: Shoot	
 	
 	if (whetherToTrenchRun.GetSelected()) {
