@@ -11,14 +11,9 @@
 
 
 #include "subsystems/VisionReceiver.h"
+#include "commands/DriveWithJoystick.h"
 
-class MyPIDCommand : public frc2::PIDCommand {
-public:
-    MyPIDCommand(std::function<double()> measure, std::function<double()> setpoint, std::function<void(double)> useOut);
-    bool IsFinished() override;
-};
-
-class VisionDrive : public frc2::PIDCommand {
+class VisionDrive : public frc2::PIDCommand,DriveWithJoystick::InterruptableByController{
 private:
     VisionReceiver::PossibleTarget currentTarget;
 public:
