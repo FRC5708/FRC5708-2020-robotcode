@@ -14,6 +14,9 @@ class Odometry : public frc2::SubsystemBase {
     frc::Pose2d{units::meter_t(0),units::meter_t(0), frc::Rotation2d {units::degree_t(0)}}};
     frc::Gyro* const gyro = new frc::ADXRS450_Gyro();
     frc::Pose2d currentPos;
+    units::length::meter_t getRobotx();
+    units::length::meter_t getRoboty();
+    units::angle::degree_t getRobotdeg();
 
 private:
 };
