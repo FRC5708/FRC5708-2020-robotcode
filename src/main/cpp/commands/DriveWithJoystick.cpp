@@ -81,7 +81,7 @@ DoShooter::DoShooter(Shooter* shooter) : shooter(shooter){
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (Robot::GetRobot()->controller.GetXButtonReleased()) {
+	if (Robot::GetRobot()->controller.GetXButtonPressed()) {
 		if (!pressed){
 			pressed = true;
 			shooter->setShooterWheels(16);
@@ -105,10 +105,10 @@ DoIntake::DoIntake(Intake* intake) : intake(intake){
    AddRequirements({intake});
 }
 void DoIntake::Execute() {
-	if (Robot::GetRobot()->controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (Robot::GetRobot()->controller.GetBumper(frc::GenericHID::JoystickHand::kRightHand)) {
 		intake->setIntake(Intake::intake_mode::intake);
 	}
-	if (Robot::GetRobot()->controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+	else {
 		intake->setIntake(Intake::intake_mode::off);
 	}
 }

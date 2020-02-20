@@ -14,7 +14,7 @@ void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();
     /* first choose the sensor */
 	theMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, kTimeoutMs);
-	theMotor->SetSensorPhase(true);
+	theMotor->SetSensorPhase(false);
 
 	// Must be in coast mode for bang-bang control to function
 	theMotor->SetNeutralMode(NeutralMode::Coast);

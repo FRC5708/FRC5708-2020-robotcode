@@ -3,6 +3,8 @@
 
 Intake::Intake(){
     SetDefaultCommand(DriveWithJoystick::DoIntake(this));
+
+    magazineMotor->SetInverted(true);
 }
 
 void Intake::setIntake(intake_mode mode){
