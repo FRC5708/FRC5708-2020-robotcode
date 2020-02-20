@@ -1,5 +1,9 @@
 #include "subsystems/shooter.h"
 
+// Talons measure speed in encoder ticks per 100 ms
+constexpr double speedMultiplier = 256.0*0.1;
+
+
 Shooter::Shooter(){
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
@@ -23,9 +27,10 @@ void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 	theMotor->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
 }
 
-void Shooter::setShooterWheels(double velocity){
-	rightShooterMotor->Set(TalonSRXControlMode::Velocity,velocity);
-	leftShooterMotor->Set(TalonSRXControlMode::Velocity,velocity);
+void Shooter::setShooterWheels(double speed){
+	speed *= speedMultiplier;
+	rightShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+	leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
 }
 void Shooter::setLoader(loader position){
 	//TODO: IMPLEMENT ME!
