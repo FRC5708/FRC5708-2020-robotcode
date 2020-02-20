@@ -29,6 +29,10 @@ Drivetrain::Drivetrain() {
 		BRMotor = new WPI_VictorSPX(backRightMotorChannel);
 	}
 	SetDefaultCommand(DriveWithJoystick::DoDrivetrain(this));
+	
+	constexpr double metersPerPulse = units::meter_t(units::inch_t(6.0)).value() * M_PI / 360.0;
+	leftEncoder->SetDistancePerPulse(metersPerPulse);
+	rightEncoder->SetDistancePerPulse(metersPerPulse);
 }
 
 void Drivetrain::Drive(const double left,const double right){
