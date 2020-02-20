@@ -43,4 +43,8 @@ namespace DriveWithJoystick{
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
 	};
+	//This class should be extended from by Commands that should be cancelled by any controller input.
+	class InterruptableByController{
+		bool IsFinished();
+	};
 }
