@@ -13,7 +13,7 @@ class Drivetrain : protected frc2::SubsystemBase {
 	private:
 	const static bool usingTalons=false;
 	frc::SpeedController* FLMotor;
-	frc::SpeedController* FRMotor;
+	frc::SpeedController* FRMotor;	
 	frc::SpeedController* BLMotor;
 	frc::SpeedController* BRMotor;
 	public:
