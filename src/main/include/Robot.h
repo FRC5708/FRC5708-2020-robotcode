@@ -14,7 +14,6 @@
 #include <chrono>
 
 #include "subsystems/Drivetrain.h"
-#include "commands/DriveWithJoystick.h"
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
 
@@ -39,7 +38,6 @@ class Robot : public frc::TimedRobot {
 	Intake intake;
 	int testing_tick_counter = 0;
 	bool testing_first_motor_test = true;
-	DriveWithJoystick driveCommand;
 	std::chrono::steady_clock::time_point TestingTime;
 	std::chrono::steady_clock::time_point MotorTestStartTime;
 	frc::SendableChooser<char> TestToRun;

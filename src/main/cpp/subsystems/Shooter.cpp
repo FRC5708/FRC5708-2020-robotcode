@@ -4,6 +4,7 @@ Shooter::Shooter(){
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
+	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
 }
 void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();

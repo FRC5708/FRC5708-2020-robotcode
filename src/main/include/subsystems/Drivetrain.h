@@ -8,9 +8,10 @@
 #include <ctre/Phoenix.h>
 
 #include "DIOMaps.h"
+#include "commands/DriveWithJoystick.h"
 
 class Drivetrain : public frc2::SubsystemBase {
-	private:
+	protected:
 	const static bool usingTalons=false;
 	frc::SpeedController* FLMotor;
 	frc::SpeedController* FRMotor;

@@ -1,7 +1,8 @@
-#include "commands/DriveWithJoystick.h"
 #include <iostream>
+
 #include <frc2/command/CommandHelper.h>
-#include "Robot.h"
+
+#include "commands/DriveWithJoystick.h"
 
 // buttons on xbox:
 // 1=A, 2=B, 3=X, 4=Y, 5=left bumper, 6=right bumper, 7=Back, 8=Start, 9=left joystick, 10=right joystick
@@ -9,8 +10,10 @@
 
 // constexpr int INTAKE_BUTTON = 5, 🤖 = 6;
 
-DriveWithJoystick::DriveWithJoystick() {
-}
+using namespace DriveWithJoystick;
+
+frc::XboxController controller = frc::XboxController(0);
+
 double inputTransform(double input, double minPowerOutput, double inputDeadZone, 
 		 double inputChangePosition = 0.75, double outputChangePosition = 0.5) {
 
@@ -42,23 +45,15 @@ void powerRampup(double input, double* outputVar) {
 	*outputVar += 0.1*sign;
 	
 }
-void DriveWithJoystick::Initialize() {
-	std::cout << "drive with joystick initialized" << std::endl;
-}
+
 // TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 
 // Setup for joystick-activated commands go here (lift controls, manipulators, ect.)
 
-// Called repeatedly when this Command is scheduled to run
-void DriveWithJoystick::Execute() {
-	doIntake();
-	doShooter();
-	doDrivetrain();
-	
+DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain){
+   AddRequirements({drivetrain});
 }
-	
-void DriveWithJoystick::doDrivetrain() {
-	
+void DoDrivetrain::Execute() {
 	double turn = 0;
 	double power = 0;
 
@@ -87,47 +82,46 @@ void DriveWithJoystick::doDrivetrain() {
 	//powerRampup(left, &currentLeftPower);
 	//powerRampup(right, &currentRightPower);
 	
-	Robot::GetRobot()->drivetrain.Drive(left, right);
+	drivetrain->Drive(left, right);
+}
+void DoDrivetrain::End() {
+	drivetrain->Drive(0, 0);
 }
 
-void DriveWithJoystick::doShooter() {
+DoShooter::DoShooter(Shooter* shooter) : shooter(shooter){
+   AddRequirements({shooter});
+}
+void DoShooter::Execute() {
 
 	// Controls shooting wheels
 	if (controller.GetXButtonReleased()) {
 		if (!pressed){
 			pressed = true;
-			Robot::GetRobot()->shooter.setShooterWheels(16);
+			shooter->setShooterWheels(16);
 		}
 		else {
 			pressed = false;
-			Robot::GetRobot()->shooter.setShooterWheels(0);
+			shooter->setShooterWheels(0);
 		}
 	}
 
 	// Controls shooter loader
 	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->shooter.setLoader(Shooter::loader::extended);
+		shooter->setLoader(Shooter::loader::extended);
 	}
 	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->shooter.setLoader(Shooter::loader::retracted);
+		shooter->setLoader(Shooter::loader::retracted);
 	}
 }
 
-void DriveWithJoystick::doIntake() {
+DoIntake::DoIntake(Intake* intake) : intake(intake){
+   AddRequirements({intake});
+}
+void DoIntake::Execute() {
 	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::intake);
+		intake->setIntake(Intake::intake_mode::intake);
 	}
 	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::off);
+		intake->setIntake(Intake::intake_mode::off);
 	}
-}
-
-// Make this return true when this Command no longer needs to run execute()
-bool DriveWithJoystick::IsFinished() {
-	return false;
-}
-
-// Called once after isFinished returns true
-void DriveWithJoystick::End() {
-	Robot::GetRobot()->drivetrain.Drive(0, 0);
 }

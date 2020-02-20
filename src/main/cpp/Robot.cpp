@@ -79,8 +79,6 @@ void Robot::TeleopInit() {
 		m_autonomousCommand->Cancel();
 		m_autonomousCommand = nullptr;
 	}
-
-	driveCommand.Schedule();
 }
 
 /**

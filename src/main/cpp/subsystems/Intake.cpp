@@ -1,5 +1,10 @@
 #include "subsystems/Intake.h"
 
+
+Intake::Intake(){
+    SetDefaultCommand(DriveWithJoystick::DoIntake(this));
+}
+
 void Intake::setIntake(intake_mode mode){
     switch(mode){
         case intake_mode::intake:
@@ -15,4 +20,4 @@ void Intake::setIntake(intake_mode mode){
             magazineMotor->Set(-1);
             break;
     }
-}
+}  

@@ -6,6 +6,7 @@
 #include <ctre/Phoenix.h>
 
 #include "DIOMaps.h"
+#include "commands/DriveWithJoystick.h"
 
 enum Constants {
     /**
