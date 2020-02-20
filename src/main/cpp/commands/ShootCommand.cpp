@@ -1,8 +1,8 @@
 #include "commands/ShootCommand.h"
-#include "Robot.h"
 
-ShootCommand::ShootCommand(double power){
-   AddRequirements(&Robot::GetRobot()->shooter);
+
+ShootCommand::ShootCommand(Shooter* shooter, double power) : shooter(shooter){
+   AddRequirements({shooter});
    
     //TODO: FIXME!
     //TODO: IMPLEMENT ME!
