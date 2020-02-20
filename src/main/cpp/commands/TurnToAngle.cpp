@@ -33,6 +33,20 @@ TurnToAngle::TurnToAngle(const TurnToAngle& otherMe)
 
 bool TurnToAngle::IsFinished() { return GetController().AtSetpoint(); }
 
+
+TurnToPoint::TurnToPoint(frc::Translation2d point) : 
+TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)), targetPoint(point) {
+	
+}
+void TurnToPoint::Initialize() {
+	frc::Translation2d here = Robot::GetRobot()->odometry.currentPos.Translation();
+	targetRotation = units::degree_t(360) - units::math::atan2(targetPoint.X() - here.X(), targetPoint.Y() - here.Y());
+}
+
+VisionDrive::VisionDrive() : TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)) {
+	
+}
+
 void VisionDrive::Initialize(){
 
 	currentTarget = Robot::GetRobot()->visionReceiver.getBestTarget();

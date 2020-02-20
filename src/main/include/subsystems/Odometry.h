@@ -13,6 +13,8 @@ public:
     units::length::meter_t getRobotx();
     units::length::meter_t getRoboty();
     units::angle::degree_t getRobotdeg();
+    
+    void Reset(frc::Pose2d newPose);
 
 private:
 };

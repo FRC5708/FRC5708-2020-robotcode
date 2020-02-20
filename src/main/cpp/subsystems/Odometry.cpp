@@ -40,3 +40,11 @@ void Odometry::Periodic() {
     );
     std::cout << "X: " << currentPos.Translation().X() << ", Y: " << currentPos.Translation().Y() << ", ROT: " << currentPos.Rotation().Degrees() << std::endl;
 }
+
+void Odometry::Reset(frc::Pose2d newPose) {
+    
+    Robot::GetRobot()->drivetrain.leftEncoder->Reset();
+    Robot::GetRobot()->drivetrain.rightEncoder->Reset();
+    
+    m_odometry.ResetPosition(newPose, frc::Rotation2d {units::degree_t(Robot::GetRobot()->drivetrain.GetGyroAngle())});
+}

@@ -32,28 +32,33 @@ void AutonomousCommand::Initialize() {
 		case 'L': start = { -xStart, yStart }; break;
 		default: 
 		std::cout << "Bad locationSelect" << std::endl;
+		[[fallthrough]]; // Suppresses the "implicit fallthrough" warning
 		case 'C': start = { inch_t(0), yStart }; break;
 	}
 	
+	Robot::GetRobot()->odometry.Reset(frc::Pose2d(start, frc::Rotation2d(degree_t(0))));
+	
 	// Turn towards shooter with precise angle
 	frc::Translation2d targetPos{inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66), inch_t(0)};
-	AddCommands(TurnToAngle(
-		&Robot::GetRobot()->drivetrain, 
-		degree_t(360) - units::math::atan2(targetPos.X() - start.X(), targetPos.Y() - start.Y())
-	));
+	AddCommands(TurnToPoint(targetPos));
 	
 	// TODO: Shoot	
 	
 	if (whetherToTrenchRun.GetSelected()) {
 		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(0), inch_t(40)};
+		AddCommands(DriveToPoint(trench1));
 		frc::Translation2d trench2{inch_t(138), inch_t(190)};
+		AddCommands(DriveToPoint(trench2, true));
 		
 		// TODO: activate intake
+		
 		// Charge the trench run
 		frc::Translation2d trenchEnd{trench2.X(), inch_t(430)};
+		// We turn while stationary as there's not enough clearance to make a wide turn by the trench run
+		AddCommands(TurnToPoint(trenchEnd), DriveToPoint(trenchEnd));
 	}
 	else {
 		// Exit initiation line
-		frc::Translation2d exiter = start + frc::Translation2d{inch_t(0), inch_t(30)};
+		AddCommands(DriveToPoint(start + frc::Translation2d{inch_t(0), inch_t(30)}));
 	}
 }

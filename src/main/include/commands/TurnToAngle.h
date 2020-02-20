@@ -8,6 +8,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/PIDCommand.h>
+#include <frc/geometry/Translation2d.h>
 
 #include "subsystems/VisionReceiver.h"
 #include <units/units.h>
@@ -26,6 +27,15 @@ public:
 	// When copying, must change lambdas so that they refer to the correct this
 	TurnToAngle(const TurnToAngle& otherMe);
 };
+
+class TurnToPoint : public TurnToAngle {
+public:
+	frc::Translation2d targetPoint;
+	TurnToPoint(frc::Translation2d point);
+protected:
+	void Initialize() override;
+};
+
 
 class VisionDrive : public TurnToAngle {
 private:
