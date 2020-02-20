@@ -10,12 +10,18 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 #include <frc/Joystick.h>
+#include <frc2/command/button/JoystickButton.h>
+#include <frc/XboxController.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <chrono>
 
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Intake.h"
+#include "commands/DriveWithJoystick.h"
 #include "subsystems/Shooter.h"
+#include "subsystems/Intake.h"
+#include "subsystems/VisionReceiver.h"
+#include "commands/VisionDrive.h"
 
 extern const bool IS_PROD;
 
@@ -33,11 +39,19 @@ class Robot : public frc::TimedRobot {
 	void TestPeriodic() override;
 	void TestInit() override;
 	static Robot* GetRobot();
+	
+	frc::XboxController controller = frc::XboxController(0);
+	
 	Drivetrain drivetrain;
 	Shooter shooter;
 	Intake intake;
+    
+	VisionReceiver visionReceiver;
+
 	int testing_tick_counter = 0;
 	bool testing_first_motor_test = true;
+	
+	VisionDrive autoDrive;
 	std::chrono::steady_clock::time_point TestingTime;
 	std::chrono::steady_clock::time_point MotorTestStartTime;
 	frc::SendableChooser<char> TestToRun;

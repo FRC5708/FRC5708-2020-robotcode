@@ -39,6 +39,9 @@ Robot* Robot::GetRobot() {
 
 void Robot::RobotInit() {
 	theRobotInstance = this;
+	
+	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
+	magicButton.WhenPressed(&Robot::GetRobot()->autoDrive);
 }
 
 /**
@@ -56,13 +59,13 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+}
 
 void Robot::DisabledPeriodic() {}
 
 
 void Robot::AutonomousInit() {
-
 	if (m_autonomousCommand != nullptr) {
 		m_autonomousCommand->Schedule();
 	}
@@ -106,19 +109,14 @@ frc::SmartDashboard::PutData("Output Motor Values?", &OutputMotorValues);
 *This function is called periodically during test mode.
 */
 void Robot::TestPeriodic() {
+	//std::cout << "I am not insane." << std::endl;
 	if (TestToRun.GetSelected() == 'M') {
-		if (testing_first_motor_test == true) {
-			MotorTestStartTime = std::chrono::steady_clock::now();
-			testing_first_motor_test = false;
-		}
-		//checks if 3 seconds have passed since Robot::TestInit was run
-		if (std::chrono::steady_clock::now() < MotorTestStartTime + std::chrono::milliseconds((int) (3000))) {
-			Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
-			//runs once when 2 seconds have passed
-			if (std::chrono::steady_clock::now() == MotorTestStartTime + std::chrono::milliseconds((int) (2000))) {
-				std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
-				std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!");
-			}
+		testing_tick_counter++;
+		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
+		//runs every 50 ticks (1 sec)
+		if (testing_tick_counter %50 == 0) {
+			std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+			std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
 		}
 	}
 	if (TestToRun.GetSelected() == 'F') {
@@ -130,12 +128,12 @@ void Robot::TestPeriodic() {
 		Robot::GetRobot()->drivetrain.Drive(0, 0);
 
 	}
-	if (OutputMotorValues.GetSelected() == true) {	
-		// counts so that it activates every half second
-		testing_tick_counter++ ;
+	if (OutputMotorValues.GetSelected()) {
+		//counsts so that it activates every half second
+		testing_tick_counter++;
 		if (testing_tick_counter %25 == 0) {
 			std::vector<double> vect=Robot::GetRobot()->drivetrain.getMotorPowers();
-			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3);
+			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3) << std::endl;
 		}
 	}
 }
@@ -147,4 +145,5 @@ int main() { return frc::StartRobot<Robot>(); }
  * 
  * DONT WORRY ABOUT IT, ILL FIRGURE THIS PART OUT EVENTUALLY...
  * (also known as notes/code that i will hopefully use later)
+ * what angle -->
 */

@@ -1,5 +1,9 @@
 #include "subsystems/shooter.h"
 
+// Talons measure speed in encoder ticks per 100 ms
+constexpr double speedMultiplier = 256.0*0.1;
+
+
 Shooter::Shooter(){
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
@@ -9,8 +13,11 @@ Shooter::Shooter(){
 void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();
     /* first choose the sensor */
-	theMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, kTimeoutMs);
+	theMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, kTimeoutMs);
 	theMotor->SetSensorPhase(true);
+
+	// Must be in coast mode for bang-bang control to function
+	theMotor->SetNeutralMode(NeutralMode::Coast);
 
 	/* set the peak and nominal outputs */
 	theMotor->ConfigNominalOutputForward(0.3, kTimeoutMs);
@@ -19,14 +26,16 @@ void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 	theMotor->ConfigPeakOutputReverse(-1, kTimeoutMs);
 	/* set closed loop gains in slot0 */
 	theMotor->Config_kF(kPIDLoopIdx, 0, kTimeoutMs);
+	// Very large P value has effect of applying minimum power when going faster than set speed, and maximum when going slower.
 	theMotor->Config_kP(kPIDLoopIdx, 100000000, kTimeoutMs);
 	theMotor->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
 	theMotor->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
 }
 
-void Shooter::setShooterWheels(double velocity){
-	rightShooterMotor->Set(TalonSRXControlMode::Velocity,velocity);
-	leftShooterMotor->Set(TalonSRXControlMode::Velocity,velocity);
+void Shooter::setShooterWheels(double speed){
+	speed *= speedMultiplier;
+	rightShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+	leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
 }
 void Shooter::setLoader(loader position){
 	//TODO: IMPLEMENT ME!

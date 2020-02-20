@@ -13,29 +13,33 @@ void DriveToPoint::Initialize() {
     DriveToPoint::position = {0,0};
     DriveToPoint::heading = 0;
 
-    // Get the destinaton point from whatever (subject to revison)
+    // TODO: Get the destinaton point from wherever (subject to revison)
     DriveToPoint::destination = {5,5};
 }
 
 void DriveToPoint::Execute() {
     DriveToPoint::position = {0,0}; // TODO: update position and heading from odometry
     DriveToPoint::heading = 0;
-    // Get absolute angle from robot's position to target' position
+    // Degree difference -> turning power ratio
+    double kTurning = 0.1;
+    // Get absolute angle from robot's position to target's position TODO: make sure this actually works
     float absAngleToTarget = atan2((DriveToPoint::position.y-DriveToPoint::destination.y), (DriveToPoint::position.x-DriveToPoint::destination.x));
     absAngleToTarget *= 180.0 / PI;
-    // Get reletive angle from front of robot to target (0-360, 0 forward)
+    // Get reletive angle from front of robot to target
     float angleToTarget = absAngleToTarget - DriveToPoint::heading;
-    // Get reletive angle from front of robot to target (180 to -180, 0 forward)
-    float angleToTarget2;
-    if (angleToTarget > 180){
-        angleToTarget2 = (angleToTarget-180)*-1;
-    }
-    else {
-        angleToTarget2 = angleToTarget;
-    }
+    // Convert to 180 - -179
+    // reduce the angle  
+    angleToTarget =  fmod(angleToTarget, 360); 
+
+    // force it to be the positive remainder, so that 0 <= angle < 360  
+    angleToTarget = fmod((angleToTarget + 360), 360);  
+
+    // force into the minimum absolute value residue class, so that -180 < angle <= 180  
+    if (angleToTarget > 180)  
+        angleToTarget -= 360;
     // Get rate of turning, depending on angle to target
-    float turnRate = sqrt(fabs(angleToTarget2))/sqrt(180);
-    if (angleToTarget <= 180 && angleToTarget >= 5) {
+    float turnRate = angleToTarget * kTurning;
+/*     if (angleToTarget <= 180 && angleToTarget >= 5) {
         drive.DrivePolar(1, -turnRate); // Turn left
     }
     else if (angleToTarget > 180 && angleToTarget <= 355) {
@@ -43,12 +47,19 @@ void DriveToPoint::Execute() {
     }
     else {
         drive.Drive(1,1);
-    }
-    // TODO: if close to point, or if gone more than total distance to point, stop.
+    } */
+    drive.DrivePolar(1, turnRate);
 }
 
 bool DriveToPoint::IsFinished() {
-    return true;
+    if (sqrt(pow(position.x - destination.x, 2) + pow(position.y - destination.y, 2)) < endDistance) {
+        drive.Drive(0,0);
+        return true;
+    }
+    else {
+        return false;
+    }
+
 }
 
 void DriveToPoint::End() {

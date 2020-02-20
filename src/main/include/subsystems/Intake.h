@@ -11,7 +11,8 @@
 class Intake : public frc2::SubsystemBase {
 private:
     frc::SpeedController* const intakeMotor = new frc::Victor(IntakeMotorChannel);
-    frc::SpeedController* const magazineMotor = new frc::Victor(IntakeMotorChannel);
+    frc::SpeedController* const magazineMotor = new frc::Victor(MagazineMotorChannel);
+    
 public:
 	Intake();
     enum intake_mode{intake,off,reverse};
