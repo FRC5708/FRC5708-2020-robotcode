@@ -28,6 +28,7 @@ Drivetrain::Drivetrain() {
 		FRMotor = new WPI_VictorSPX(frontRightMotorChannel);
 		BRMotor = new WPI_VictorSPX(backRightMotorChannel);
 	}
+	SetDefaultCommand(DriveWithJoystick::DoDrivetrain(this));
 }
 
 void Drivetrain::Drive(const double left,const double right){

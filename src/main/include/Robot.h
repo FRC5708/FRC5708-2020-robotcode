@@ -19,6 +19,7 @@
 #include <frc/interfaces/Gyro.h>
 #include <frc/AnalogGyro.h>
 #include <frc/ADXRS450_Gyro.h>
+#include "subsystems/Intake.h"
 #include "commands/DriveWithJoystick.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
@@ -42,6 +43,9 @@ class Robot : public frc::TimedRobot {
 	void TestPeriodic() override;
 	void TestInit() override;
 	static Robot* GetRobot();
+	
+	frc::XboxController controller = frc::XboxController(0);
+	
 	Drivetrain drivetrain;
 	Shooter shooter;
 	Intake intake;
@@ -52,7 +56,6 @@ class Robot : public frc::TimedRobot {
 
 	int testing_tick_counter = 0;
 	bool testing_first_motor_test = true;
-	DriveWithJoystick driveCommand;
 	
 	VisionDrive autoDrive;
 	std::chrono::steady_clock::time_point TestingTime;

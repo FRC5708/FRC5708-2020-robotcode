@@ -9,9 +9,10 @@
 #include <frc/ADXRS450_Gyro.h>
 
 #include "DIOMaps.h"
+#include "commands/DriveWithJoystick.h"
 
-class Drivetrain : protected frc2::SubsystemBase {
-	private:
+class Drivetrain : public frc2::SubsystemBase {
+	protected:
 	const static bool usingTalons=false;
 	frc::SpeedController* FLMotor;
 	frc::SpeedController* FRMotor;	

@@ -39,6 +39,9 @@ Robot* Robot::GetRobot() {
 
 void Robot::RobotInit() {
 	theRobotInstance = this;
+	
+	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
+	magicButton.WhenPressed(&Robot::GetRobot()->autoDrive);
 }
 
 /**
@@ -79,8 +82,6 @@ void Robot::TeleopInit() {
 		m_autonomousCommand->Cancel();
 		m_autonomousCommand = nullptr;
 	}
-
-	driveCommand.Schedule();
 }
 
 /**
