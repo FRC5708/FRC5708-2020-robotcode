@@ -96,7 +96,7 @@ DoIntake::DoIntake(Intake* intake) : intake(intake),controller(&Robot::GetRobot(
    AddRequirements({intake});
 }
 void DoIntake::Execute() {
-	if (controller->GetBumper(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (controller->GetBumper(frc::GenericHID::JoystickHand::kLeftHand)) {
 		intake->setIntake(Intake::intake_mode::intake);
 	}
 	else {
