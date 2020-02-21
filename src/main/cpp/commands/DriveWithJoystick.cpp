@@ -116,16 +116,12 @@ void DoIntake::Execute() {
 */ 
 bool CheckJoystickForInterrupt() {
 	frc::XboxController* controller = &Robot::GetRobot()->controller;
-	return (controller->GetAButtonPressed() 
-	|| controller->GetBButtonPressed() 
-	|| controller->GetBackButtonPressed()
-	|| controller->GetXButtonPressed()
-	|| controller->GetYButtonPressed()
-	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)
-	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)
-	|| controller->GetStartButtonPressed() 
-	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kRightHand)
-	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kLeftHand) 
+	return (controller->GetBackButton()
+	|| controller->GetBumper(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetBumper(frc::GenericHID::JoystickHand::kLeftHand)
+	|| controller->GetStartButton() 
+	|| controller->GetStickButton(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetStickButton(frc::GenericHID::JoystickHand::kLeftHand) 
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)) > .3
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)) > .3
 	);
