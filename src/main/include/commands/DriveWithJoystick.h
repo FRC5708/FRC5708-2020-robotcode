@@ -34,7 +34,7 @@ namespace DriveWithJoystick{
 		private:
 			Drivetrain* drivetrain;
 			void Execute() override;
-			void End(); //VScode lies, it does override.
+			void End(); 
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
 	};

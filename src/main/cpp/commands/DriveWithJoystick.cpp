@@ -56,6 +56,7 @@ void DoDrivetrain::Execute() {
 	turn = inputTransform(turn, 0, 0.1);
 	power = inputTransform(power, 0.15, 0.03);
 	
+
 	drivetrain->DrivePolar(power, turn);
 }
 void DoDrivetrain::End() {
@@ -111,6 +112,10 @@ bool CheckJoystickForInterrupt() {
 	|| controller->GetStickButton(frc::GenericHID::JoystickHand::kLeftHand) 
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)) > .3
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	|| fabs(controller->GetX(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	|| fabs(controller->GetY(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	|| fabs(controller->GetX(frc::GenericHID::JoystickHand::kRightHand)) > .3
+	|| fabs(controller->GetY(frc::GenericHID::JoystickHand::kRightHand)) > .3
 	);
 }
 
