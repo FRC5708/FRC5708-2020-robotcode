@@ -9,6 +9,7 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/XboxController.h>
 
 class Intake; // Defined within subsystems/Intake.h
 class Shooter; // Defined within subsystems/Shooter.h
@@ -17,6 +18,7 @@ class Drivetrain; // Defined within subsystems/Drivetrain.h
 namespace DriveWithJoystick{
 	class DoIntake : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
+			frc2::XboxController* controller;
 			Intake* intake;
 			void Execute() override;
 		public:
@@ -24,6 +26,7 @@ namespace DriveWithJoystick{
 	};
 	class DoShooter : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
+			frc2::XboxController* controller;
 			Shooter* shooter;
 			void Execute() override;
 			bool pressed = false;
@@ -32,6 +35,7 @@ namespace DriveWithJoystick{
 	};
 	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
+			frc2::XboxController* controller;
 			Drivetrain* drivetrain;
 			void Execute() override;
 			void End(); 

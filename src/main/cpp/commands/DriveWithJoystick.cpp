@@ -43,15 +43,15 @@ void powerRampup(double input, double* outputVar) {
 	
 }
 
-DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain){
+DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain),controller(&Robot::GetRobot()->controller){
    AddRequirements({drivetrain});
 }
 void DoDrivetrain::Execute() {
 	double turn = 0;
 	double power = 0;
 
-	turn = -Robot::GetRobot()->controller.GetX(frc::GenericHID::JoystickHand::kLeftHand);
-	power = Robot::GetRobot()->controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-Robot::GetRobot()->controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
+	turn = -controller->GetX(frc::GenericHID::JoystickHand::kLeftHand);
+	power = controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
 	
 	turn = inputTransform(turn, 0, 0.1);
 	power = inputTransform(power, 0.15, 0.03);
@@ -63,13 +63,13 @@ void DoDrivetrain::End() {
 	drivetrain->Drive(0, 0);
 }
 
-DoShooter::DoShooter(Shooter* shooter) : shooter(shooter){
+DoShooter::DoShooter(Shooter* shooter) : shooter(shooter),controller(&Robot::GetRobot()->controller){
    AddRequirements({shooter});
 }
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (Robot::GetRobot()->controller.GetXButtonReleased()) {
+	if (controller->GetXButtonReleased()) {
 		pressed = !pressed;
 	}
 	if (pressed){
@@ -80,19 +80,19 @@ void DoShooter::Execute() {
 	}
 
 	// Controls shooter loader
-	if (Robot::GetRobot()->controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
 		shooter->setLoader(Shooter::loader::extended);
 	}
-	if (Robot::GetRobot()->controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (controller->GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
 		shooter->setLoader(Shooter::loader::retracted);
 	}
 }
 
-DoIntake::DoIntake(Intake* intake) : intake(intake){
+DoIntake::DoIntake(Intake* intake) : intake(intake),controller(&Robot::GetRobot()->controller){
    AddRequirements({intake});
 }
 void DoIntake::Execute() {
-	if (Robot::GetRobot()->controller.GetBumper(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (controller->GetBumper(frc::GenericHID::JoystickHand::kRightHand)) {
 		intake->setIntake(Intake::intake_mode::intake);
 	}
 	else {
