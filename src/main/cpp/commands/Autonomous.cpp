@@ -65,7 +65,7 @@ void AutonomousCommand::Initialize() {
 	inch_t yStart((52*12 + 5 + 1.0/4.0) / 2.0 - 4*12 + 7 + 1.0/2.0); // Aligned with outside of trench run
 	inch_t xStart(10*12); // Centered on initiation line
 	frc::Translation2d start;
-	
+
 	switch (startSelect.GetSelected()) {
 		case 'R': start = { xStart, -yStart }; break;
 		case 'L': start = { xStart, yStart }; break;
@@ -80,10 +80,8 @@ void AutonomousCommand::Initialize() {
 	// Turn towards shooter with precise angle
 	frc::Translation2d targetPos{inch_t(0), -inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66)};
 	AddCommands(TurnToPoint(targetPos));
-	
 	// TODO: correct timing
 	AddCommands(frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(5.0)), ContinuousShooterCommand()));
-	
 	if (whetherToTrenchRun.GetSelected()) {
 		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(40), inch_t(0)};
 		AddCommands(DriveToPoint(trench1));
@@ -103,4 +101,6 @@ void AutonomousCommand::Initialize() {
 		// Exit initiation line
 		AddCommands(DriveToPoint(start + frc::Translation2d{inch_t(30), inch_t(0)}));
 	}
+	
+	SequentialCommandGroup::Initialize();
 }
