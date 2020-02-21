@@ -1,4 +1,4 @@
-#include "subsystems/shooter.h"
+#include "subsystems/Shooter.h"
 #include <ctre/Phoenix.h>
 #include "commands/DriveWithJoystick.h"
 #include "DIOMaps.h"
@@ -8,14 +8,14 @@ constexpr double speedMultiplier = 256.0*0.1;
 
 
 Shooter::Shooter() : 
-	rightShooterMotor(new TalonSRX(RightShooterMotorChannel)),
-    leftShooterMotor(new TalonSRX(LeftShooterMotorChannel)) {
+	rightShooterMotor(new WPI_TalonSRX(RightShooterMotorChannel)),
+    leftShooterMotor(new WPI_TalonSRX(LeftShooterMotorChannel)) {
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
 	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
 }
-void Shooter::ConfigureMotor(TalonSRX* theMotor) {
+void Shooter::ConfigureMotor(WPI_TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();
     /* first choose the sensor */
 	theMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, kTimeoutMs);
