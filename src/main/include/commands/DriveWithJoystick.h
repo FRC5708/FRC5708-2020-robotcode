@@ -11,20 +11,47 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
+//#include "subsystems/Drivetrain.h"
+//#include "subsystems/Intake.h"
+//#include "subsystems/Shooter.h"
 
+class Intake; // Defined within subsystems/Intake.h
+class Shooter; // Defined within subsystems/Shooter.h
+class Drivetrain; // Defined within subsystems/Drivetrain.h
 
-
-class DriveWithJoystick : public frc2::CommandHelper<frc2::CommandBase, DriveWithJoystick> {
-public:
-	frc::XboxController controller = frc::XboxController(0);
-	DriveWithJoystick();
-	void doIntake();
-	void doShooter();
-	void doDrivetrain();
-	void Initialize() override;
-	void Execute() override;
-	bool IsFinished() override;
-	void End();
-private:
-	bool pressed = false;
-};
+namespace DriveWithJoystick{
+	class DoIntake : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+		private:
+			Intake* intake;
+			void Execute() override;
+		public:
+			DoIntake(Intake* intake);
+	};
+	class DoShooter : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+		private:
+			Shooter* shooter;
+			void Execute() override;
+			bool pressed = false;
+		public:
+			DoShooter(Shooter* shooter);
+	};
+	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+		private:
+			Drivetrain* drivetrain;
+			void Execute() override;
+			void End(); //VScode lies, it does override.
+		public:
+			DoDrivetrain(Drivetrain* drivetrain);
+	};
+	
+	
+	bool CheckJoystickForInterrupt();
+	template<class T, 
+	typename = std::enable_if_t<std::is_base_of_v<frc2::Command, T>>>
+	class InterruptableByController : public T {
+		protected:
+		bool IsFinished() override {
+			return T::IsFinished() || CheckJoystickForInterrupt();
+		}
+	};
+}

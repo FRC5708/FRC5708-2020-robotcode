@@ -1,59 +1,74 @@
 #include "commands/DriveToPoint.h"
+#include "Robot.h"
 #include <cmath>
 
-#define PI 3.1415926
+using namespace units;
 
-DriveToPoint::DriveToPoint() {    
+DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter) : 
+targetPoint(targetPoint) {   
+    // I'm too lazy to do dependency injection
+    drivetrain = &Robot::GetRobot()->drivetrain;
+    odometry = &Robot::GetRobot()->odometry;
+    
+    AddRequirements(drivetrain); 
 }
 
 void DriveToPoint::Initialize() {
-    // TODO: Get position from Odometry
-    // For now, these magic numbers will do fine
-    // Make sure that the angles are 0-360 not -180 to 180
-    DriveToPoint::position = {0,0};
-    DriveToPoint::heading = 0;
-
-    // TODO: Get the destinaton point from wherever (subject to revison)
-    DriveToPoint::destination = {5,5};
+    
 }
 
+constexpr double TOP_POWER = 1,
+MIN_POWER = 0.3,
+maxCentripetal = 3; // m/s^2
+
 void DriveToPoint::Execute() {
-    DriveToPoint::position = {0,0}; // TODO: update position and heading from odometry
-    DriveToPoint::heading = 0;
+    
     // Degree difference -> turning power ratio
-    double kTurning = 0.1;
+    constexpr double kTurning = 0.1,
+    // This is multiplied by the m/s^2 of centripetal acceleration over the limit, then fed into some s**t-f**kery
+	 kTurnReduction = 2,
+     // Motor power per meter of distance away from target
+	 kForwardPower = 2;
+     
     // Get absolute angle from robot's position to target's position TODO: make sure this actually works
-    float absAngleToTarget = atan2((DriveToPoint::position.y-DriveToPoint::destination.y), (DriveToPoint::position.x-DriveToPoint::destination.x));
-    absAngleToTarget *= 180.0 / PI;
+    degree_t absAngleToTarget = units::math::atan2(targetPoint.Y() - odometry->getRoboty(), targetPoint.X() - odometry->getRobotx());
+    
     // Get reletive angle from front of robot to target
-    float angleToTarget = absAngleToTarget - DriveToPoint::heading;
+    degree_t angleToTarget = absAngleToTarget - degree_t(drivetrain->GetGyroAngle());
+    
     // Convert to 180 - -179
     // reduce the angle  
-    angleToTarget =  fmod(angleToTarget, 360); 
-
+    angleToTarget =  units::math::fmod(angleToTarget, degree_t(360)); 
     // force it to be the positive remainder, so that 0 <= angle < 360  
-    angleToTarget = fmod((angleToTarget + 360), 360);  
-
+    angleToTarget = units::math::fmod((angleToTarget + degree_t(360)), degree_t(360));  
     // force into the minimum absolute value residue class, so that -180 < angle <= 180  
-    if (angleToTarget > 180)  
-        angleToTarget -= 360;
+    if (angleToTarget > degree_t(180)) angleToTarget -= degree_t(360);
+        
+        
     // Get rate of turning, depending on angle to target
-    float turnRate = angleToTarget * kTurning;
-/*     if (angleToTarget <= 180 && angleToTarget >= 5) {
-        drive.DrivePolar(1, -turnRate); // Turn left
+    double turnPower = angleToTarget.value() * kTurning;
+    
+    // Don't turn too much
+    // It's awful, but it worked OK last year so I'm putting it in here this year.
+    double currentSpeed = (drivetrain->leftEncoder->GetRate() + drivetrain->rightEncoder->GetRate()) / 2.0;
+    double currentCentripetal = fabs(drivetrain->gyro->GetRate() * currentSpeed);
+	if (currentCentripetal > maxCentripetal) {
+		turnPower /= pow(2, (currentCentripetal - maxCentripetal) * kTurnReduction);
+	}
+    
+    double forwardPower = TOP_POWER;
+    if (stopAfter) {
+        forwardPower = std::max(MIN_POWER,
+         std::min(TOP_POWER, kForwardPower * odometry->currentPos.Translation().Distance(targetPoint).value()));
     }
-    else if (angleToTarget > 180 && angleToTarget <= 355) {
-        drive.DrivePolar(1, turnRate); // Turn right
-    }
-    else {
-        drive.Drive(1,1);
-    } */
-    drive.DrivePolar(1, turnRate);
+    
+    drivetrain->DrivePolar(forwardPower, turnPower);
 }
 
 bool DriveToPoint::IsFinished() {
-    if (sqrt(pow(position.x - destination.x, 2) + pow(position.y - destination.y, 2)) < endDistance) {
-        drive.Drive(0,0);
+    if (odometry->currentPos.Translation().Distance(targetPoint) < endDistance
+    || odometry->currentPos.Translation().Distance(startingPoint) > targetPoint.Distance(startingPoint)) {
+        drivetrain->Drive(0,0);
         return true;
     }
     else {

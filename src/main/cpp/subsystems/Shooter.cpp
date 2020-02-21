@@ -8,12 +8,13 @@ Shooter::Shooter(){
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
+	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
 }
 void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();
     /* first choose the sensor */
 	theMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, kTimeoutMs);
-	theMotor->SetSensorPhase(true);
+	theMotor->SetSensorPhase(false);
 
 	// Must be in coast mode for bang-bang control to function
 	theMotor->SetNeutralMode(NeutralMode::Coast);
@@ -21,8 +22,8 @@ void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 	/* set the peak and nominal outputs */
 	theMotor->ConfigNominalOutputForward(0.3, kTimeoutMs);
 	theMotor->ConfigNominalOutputReverse(-0.3, kTimeoutMs);
-	theMotor->ConfigPeakOutputForward(1, kTimeoutMs);
-	theMotor->ConfigPeakOutputReverse(-1, kTimeoutMs);
+	theMotor->ConfigPeakOutputForward(0.55, kTimeoutMs);
+	theMotor->ConfigPeakOutputReverse(-0.55, kTimeoutMs);
 	/* set closed loop gains in slot0 */
 	theMotor->Config_kF(kPIDLoopIdx, 0, kTimeoutMs);
 	// Very large P value has effect of applying minimum power when going faster than set speed, and maximum when going slower.
@@ -32,9 +33,15 @@ void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 }
 
 void Shooter::setShooterWheels(double speed){
-	speed *= speedMultiplier;
-	rightShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
-	leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+	if (speed == 0) {
+		rightShooterMotor->Set(TalonSRXControlMode::Disabled, 0);
+		leftShooterMotor->Set(TalonSRXControlMode::Disabled, 0);
+	}
+	else {	
+		speed *= speedMultiplier;
+		rightShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+		leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+	}
 }
 void Shooter::setLoader(loader position){
 	//TODO: IMPLEMENT ME!

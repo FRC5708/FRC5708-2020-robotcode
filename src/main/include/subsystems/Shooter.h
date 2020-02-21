@@ -6,6 +6,7 @@
 #include <ctre/Phoenix.h>
 
 #include "DIOMaps.h"
+#include "commands/DriveWithJoystick.h"
 
 enum Constants {
     /**
@@ -26,7 +27,7 @@ enum Constants {
     kTimeoutMs = 30
 };
 
-class Shooter : protected frc2::SubsystemBase {
+class Shooter : public frc2::SubsystemBase {
 private:
 	TalonSRX* rightShooterMotor = new TalonSRX(RightShooterMotorChannel);
     TalonSRX* leftShooterMotor = new TalonSRX(LeftShooterMotorChannel);

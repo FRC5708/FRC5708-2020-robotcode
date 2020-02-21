@@ -1,6 +1,9 @@
-#include "commands/DriveWithJoystick.h"
 #include <iostream>
+
 #include <frc2/command/CommandHelper.h>
+
+#include "commands/DriveWithJoystick.h"
+
 #include "Robot.h"
 
 // buttons on xbox:
@@ -9,8 +12,8 @@
 
 // constexpr int INTAKE_BUTTON = 5, 🤖 = 6;
 
-DriveWithJoystick::DriveWithJoystick() {
-}
+namespace DriveWithJoystick {
+
 double inputTransform(double input, double minPowerOutput, double inputDeadZone, 
 		 double inputChangePosition = 0.75, double outputChangePosition = 0.5) {
 
@@ -42,96 +45,90 @@ void powerRampup(double input, double* outputVar) {
 	*outputVar += 0.1*sign;
 	
 }
-void DriveWithJoystick::Initialize() {
-	std::cout << "drive with joystick initialized" << std::endl;
-	
-	//add the magic button trigger
-	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
-	magicButton.WhenPressed(&Robot::GetRobot()->autoDrive);
-// TODO: CancelCommand (Requires CommandGroup, which does not exist currently)
 
-// Setup for joystick-activated commands go here (lift controls, manipulators, ect.)
+DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain){
+   AddRequirements({drivetrain});
 }
-
-// Called repeatedly when this Command is scheduled to run
-void DriveWithJoystick::Execute() {
-	doIntake();
-	doShooter();
-	doDrivetrain();
-	
-}
-	
-void DriveWithJoystick::doDrivetrain() {
-	
+void DoDrivetrain::Execute() {
 	double turn = 0;
 	double power = 0;
 
-	turn = -controller.GetX(frc::GenericHID::JoystickHand::kLeftHand);
-	power = controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
+	turn = -Robot::GetRobot()->controller.GetX(frc::GenericHID::JoystickHand::kLeftHand);
+	power = Robot::GetRobot()->controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-Robot::GetRobot()->controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
+	
 	turn = inputTransform(turn, 0, 0.1);
-
 	power = inputTransform(power, 0.15, 0.03);
 
-    // I don't understand what this does, so I'm leaving it out until the big-brain programmers figure it out
-	if(Robot::GetRobot()->autoDrive.IsScheduled()){
+	// TODO: Re-implement this in VisionDrive
+	/*if(Robot::GetRobot()->autoDrive.IsScheduled()){
     // Auton stuff
 		if (fabs(power) < 0.3 && fabs(turn) < 0.3) return;
 		else {
 			std::cout << "cancelling auto drive" << std::endl;
-			Robot::GetRobot()->autoDrive.Cancel();
-		}
-	}
-
-	//Robot::drivetrain.DrivePolar(power, turn);
-	double v = (1-fabs(turn)) * (power) + power;
-	double w = (1-fabs(power)) * (turn) + turn;
-	double right = (v+w)/2;
-	double left = (v-w)/2;
-
-	//powerRampup(left, &currentLeftPower);
-	//powerRampup(right, &currentRightPower);
+			cancelCommand(Robot::autoDrive.commandUsing);
+		} 
+	}*/
 	
-	Robot::GetRobot()->drivetrain.Drive(left, right);
+	drivetrain->DrivePolar(power, turn);
+}
+void DoDrivetrain::End() {
+	drivetrain->Drive(0, 0);
 }
 
-void DriveWithJoystick::doShooter() {
+DoShooter::DoShooter(Shooter* shooter) : shooter(shooter){
+   AddRequirements({shooter});
+}
+void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (controller.GetXButtonReleased()) {
-		if (!pressed){
-			pressed = true;
-			Robot::GetRobot()->shooter.setShooterWheels(16);
-		}
-		else {
-			pressed = false;
-			Robot::GetRobot()->shooter.setShooterWheels(0);
-		}
+	if (Robot::GetRobot()->controller.GetXButtonReleased()) {
+		pressed = !pressed;
+	}
+	if (pressed){
+		shooter->setShooterWheels(16);
+	}
+	else {
+		shooter->setShooterWheels(0);
 	}
 
 	// Controls shooter loader
-	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->shooter.setLoader(Shooter::loader::extended);
+	if (Robot::GetRobot()->controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+		shooter->setLoader(Shooter::loader::extended);
 	}
-	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->shooter.setLoader(Shooter::loader::retracted);
-	}
-}
-
-void DriveWithJoystick::doIntake() {
-	if (controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::intake);
-	}
-	if (controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::off);
+	if (Robot::GetRobot()->controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+		shooter->setLoader(Shooter::loader::retracted);
 	}
 }
 
-// Make this return true when this Command no longer needs to run execute()
-bool DriveWithJoystick::IsFinished() {
-	return false;
+DoIntake::DoIntake(Intake* intake) : intake(intake){
+   AddRequirements({intake});
+}
+void DoIntake::Execute() {
+	if (Robot::GetRobot()->controller.GetBumper(frc::GenericHID::JoystickHand::kRightHand)) {
+		intake->setIntake(Intake::intake_mode::intake);
+	}
+	else {
+		intake->setIntake(Intake::intake_mode::off);
+	}
+}
+/* bool CheckJoystickForInterrupt()
+** Returns true if any input is pressed on the controller, ending the command
+*/ 
+bool CheckJoystickForInterrupt() {
+	frc::XboxController* controller = &Robot::GetRobot()->controller;
+	return (controller->GetAButtonPressed() 
+	|| controller->GetBButtonPressed() 
+	|| controller->GetBackButtonPressed()
+	|| controller->GetXButtonPressed()
+	|| controller->GetYButtonPressed()
+	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)
+	|| controller->GetStartButtonPressed() 
+	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kLeftHand) 
+	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)) > .3
+	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	);
 }
 
-// Called once after isFinished returns true
-void DriveWithJoystick::End() {
-	Robot::GetRobot()->drivetrain.Drive(0, 0);
 }
