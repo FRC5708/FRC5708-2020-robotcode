@@ -31,7 +31,7 @@ TurnToAngle::TurnToAngle(const TurnToAngle& otherMe)
 	
 }
 
-void TurnToAngle::End() {
+void TurnToAngle::End(bool interrupted) {
 	std::cout << "Ending turntoangle" << std::endl;
 }
 

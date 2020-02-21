@@ -23,7 +23,7 @@ public:
 	units::degree_t targetRotation;
 	
 	bool IsFinished() override;
-	void End() override;
+	void End(bool interrupted) override;
 	
 	// When copying, must change lambdas so that they refer to the correct this
 	TurnToAngle(const TurnToAngle& otherMe);
