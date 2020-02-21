@@ -14,7 +14,7 @@ targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards) {
 }
 
 void DriveToPoint::Initialize() {
-    
+    std::cout << "starting driveToPoint to X:" << targetPoint.X() << " Y:" << targetPoint.Y() << std::endl;
 }
 
 constexpr double TOP_POWER = 1,
@@ -80,5 +80,5 @@ bool DriveToPoint::IsFinished() {
 }
 
 void DriveToPoint::End() {
-
+    std::cout << "Ended drivetopoint" << std::endl;
 }

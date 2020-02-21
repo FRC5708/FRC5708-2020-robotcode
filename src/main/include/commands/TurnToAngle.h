@@ -22,7 +22,8 @@ public:
 	TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation);
 	units::degree_t targetRotation;
 	
-	 bool IsFinished() override;
+	bool IsFinished() override;
+	void End() override;
 	
 	// When copying, must change lambdas so that they refer to the correct this
 	TurnToAngle(const TurnToAngle& otherMe);
