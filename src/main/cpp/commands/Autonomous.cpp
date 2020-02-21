@@ -4,6 +4,7 @@
 #include "commands/TurnToAngle.h"
 #include "Robot.h"
 #include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/WaitCommand.h>
 
 
 using namespace units;
@@ -31,6 +32,20 @@ protected:
 	}
 	void End(bool interrupted) override {
 		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::off);
+	}
+};
+
+class ContinuousShooterCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
+public:
+	ContinuousShooterCommand() {
+		AddRequirements(&Robot::GetRobot()->shooter);
+	}
+protected:
+	void Execute() override {
+		Robot::GetRobot()->shooter.setShooterWheels(0);
+	}
+	void End(bool interrupted) override {
+		Robot::GetRobot()->shooter.setShooterWheels(Shooter::defaultSpeed);
 	}
 };
 
@@ -63,7 +78,8 @@ void AutonomousCommand::Initialize() {
 	frc::Translation2d targetPos{inch_t(0), -inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66)};
 	AddCommands(TurnToPoint(targetPos));
 	
-	// TODO: Shoot	
+	// TODO: correct timing
+	AddCommands(frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(5.0)), ContinuousShooterCommand()));
 	
 	if (whetherToTrenchRun.GetSelected()) {
 		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(40), inch_t(0)};

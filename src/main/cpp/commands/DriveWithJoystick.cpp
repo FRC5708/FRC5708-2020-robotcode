@@ -85,7 +85,7 @@ void DoShooter::Execute() {
 		pressed = !pressed;
 	}
 	if (pressed){
-		shooter->setShooterWheels(16);
+		shooter->setShooterWheels(Shooter::defaultSpeed);
 	}
 	else {
 		shooter->setShooterWheels(0);

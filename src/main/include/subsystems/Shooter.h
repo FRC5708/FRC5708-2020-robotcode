@@ -24,7 +24,7 @@ enum Constants {
         * set to zero to skip waiting for confirmation, set to nonzero to wait
         * and report to DS if action fails.
         */
-    kTimeoutMs = 30
+    kTimeoutMs = 30,
 };
 
 class Shooter : public frc2::SubsystemBase {
@@ -32,6 +32,8 @@ private:
 	TalonSRX* rightShooterMotor = new TalonSRX(RightShooterMotorChannel);
     TalonSRX* leftShooterMotor = new TalonSRX(LeftShooterMotorChannel);
 public:
+    // rotations per second
+    static constexpr double defaultSpeed = 16; // rotations per second
 	enum loader{extended,retracted};
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
 	void setShooterWheels(double velocity);
