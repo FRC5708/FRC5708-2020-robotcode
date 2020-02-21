@@ -4,8 +4,8 @@
 
 using namespace units;
 
-DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter) : 
-targetPoint(targetPoint) {   
+DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter, bool backwards) : 
+targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards) {   
     // I'm too lazy to do dependency injection
     drivetrain = &Robot::GetRobot()->drivetrain;
     odometry = &Robot::GetRobot()->odometry;
@@ -35,6 +35,7 @@ void DriveToPoint::Execute() {
     
     // Get reletive angle from front of robot to target
     degree_t angleToTarget = absAngleToTarget - degree_t(drivetrain->GetGyroAngle());
+    if (backwards) angleToTarget += degree_t(180);
     
     // Convert to 180 - -179
     // reduce the angle  
@@ -62,6 +63,7 @@ void DriveToPoint::Execute() {
          std::min(TOP_POWER, kForwardPower * odometry->currentPos.Translation().Distance(targetPoint).value()));
     }
     
+    if (backwards) forwardPower = -forwardPower;
     drivetrain->DrivePolar(forwardPower, turnPower);
 }
 

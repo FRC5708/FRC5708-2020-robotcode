@@ -31,7 +31,8 @@ public:
 class TurnToPoint : public TurnToAngle {
 public:
 	frc::Translation2d targetPoint;
-	TurnToPoint(frc::Translation2d point);
+	bool backwards;
+	TurnToPoint(frc::Translation2d point, bool backwards = false);
 protected:
 	void Initialize() override;
 };
