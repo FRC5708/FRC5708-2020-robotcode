@@ -47,6 +47,8 @@ void Odometry::Reset(frc::Pose2d newPose) {
     
     Robot::GetRobot()->drivetrain.leftEncoder->Reset();
     Robot::GetRobot()->drivetrain.rightEncoder->Reset();
+    // Note: This IS necessary, despite DifferentialDriveOdometry saying it isn't, because of the way TurnToPoint is implemented 
+    Robot::GetRobot()->drivetrain.gyro->Reset();
     
     m_odometry.ResetPosition(newPose, frc::Rotation2d {units::degree_t(Robot::GetRobot()->drivetrain.GetGyroAngle())});
 }
