@@ -18,16 +18,16 @@ class Drivetrain; // Defined within subsystems/Drivetrain.h
 namespace DriveWithJoystick{
 	class DoIntake : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			frc2::XboxController* controller;
 			Intake* intake;
+			frc::XboxController* controller;
 			void Execute() override;
 		public:
 			DoIntake(Intake* intake);
 	};
 	class DoShooter : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			frc2::XboxController* controller;
 			Shooter* shooter;
+			frc::XboxController* controller;
 			void Execute() override;
 			bool pressed = false;
 		public:
@@ -35,8 +35,8 @@ namespace DriveWithJoystick{
 	};
 	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			frc2::XboxController* controller;
 			Drivetrain* drivetrain;
+			frc::XboxController* controller;
 			void Execute() override;
 			void End(); 
 		public:
