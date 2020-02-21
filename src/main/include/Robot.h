@@ -25,9 +25,10 @@
 
 extern const bool IS_PROD;
 
-
+enum robotPOV{ShooterPOV, IntakePOV};
 class Robot : public frc::TimedRobot {
  public:
+	robotPOV POV=ShooterPOV; // POV of DRIVER CONTROLS. POV does not affect anything other than manual control.
 	void RobotInit() override;
 	void RobotPeriodic() override;
 	void DisabledInit() override;

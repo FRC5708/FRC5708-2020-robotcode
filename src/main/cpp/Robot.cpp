@@ -11,6 +11,7 @@
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc2/command/Command.h>
 #include <frc2/command/button/JoystickButton.h>
 
 #include <iostream>
@@ -43,6 +44,19 @@ void Robot::RobotInit() {
 	
 	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
 	magicButton.WhenPressed(&Robot::GetRobot()->visionDrive);
+
+	frc2::CommandScheduler::GetInstance().OnCommandInterrupt(
+		[](const frc2::Command& command){
+			std::cout << "Command " << command.GetName() << " cancelled." << std::endl;
+		}
+	);
+	frc2::JoystickButton POVButton = frc2::JoystickButton(&controller, (int) frc::XboxController::Button::kA);
+	POVButton.WhenPressed([this](){ // Toggle POV
+		if(POV==robotPOV::IntakePOV) POV=robotPOV::ShooterPOV;
+		else POV=robotPOV::IntakePOV;
+		//TODO: Send control message to pi, so that some sort of POV indicator shows up on the stream?
+	});
+
 }
 
 /**

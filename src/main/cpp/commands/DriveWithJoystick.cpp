@@ -47,6 +47,7 @@ DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain),cont
    AddRequirements({drivetrain});
 }
 void DoDrivetrain::Execute() {
+	//Default POV is Shooter.
 	double turn = 0;
 	double power = 0;
 
@@ -56,9 +57,12 @@ void DoDrivetrain::Execute() {
 	turn = inputTransform(turn, 0, 0.1);
 	power = inputTransform(power, 0.15, 0.03);
 	
-	if(controller->GetYButton()){
+	if(controller->GetYButton()){ //If we're in creep mode
 		turn *= creepRate;
 		power *= creepRate;
+	}
+	if(Robot::GetRobot()->POV==robotPOV::IntakePOV){
+		power = -power; //Switch forwards and backwards.
 	}
 
 	drivetrain->DrivePolar(power, turn);
