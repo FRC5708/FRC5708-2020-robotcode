@@ -33,9 +33,15 @@ void Shooter::ConfigureMotor(TalonSRX* theMotor) {
 }
 
 void Shooter::setShooterWheels(double speed){
-	speed *= speedMultiplier;
-	rightShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
-	leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+	if (speed == 0) {
+		rightShooterMotor->Set(TalonSRXControlMode::Disabled, 0);
+		leftShooterMotor->Set(TalonSRXControlMode::Disabled, 0);
+	}
+	else {	
+		speed *= speedMultiplier;
+		rightShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+		leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
+	}
 }
 void Shooter::setLoader(loader position){
 	//TODO: IMPLEMENT ME!

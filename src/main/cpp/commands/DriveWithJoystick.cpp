@@ -81,15 +81,14 @@ DoShooter::DoShooter(Shooter* shooter) : shooter(shooter){
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (Robot::GetRobot()->controller.GetXButtonPressed()) {
-		if (!pressed){
-			pressed = true;
-			shooter->setShooterWheels(16);
-		}
-		else {
-			pressed = false;
-			shooter->setShooterWheels(0);
-		}
+	if (Robot::GetRobot()->controller.GetXButtonReleased()) {
+		pressed = !pressed;
+	}
+	if (pressed){
+		shooter->setShooterWheels(16);
+	}
+	else {
+		shooter->setShooterWheels(0);
 	}
 
 	// Controls shooter loader
