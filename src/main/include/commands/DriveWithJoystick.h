@@ -18,16 +18,18 @@ class Drivetrain; // Defined within subsystems/Drivetrain.h
 namespace DriveWithJoystick{
 	class DoIntake : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			Intake* intake;
-			frc::XboxController* controller;
+			Intake* intake; //Initialized within member initialization list
+			frc::XboxController* controller; //Initialized within member initialization list
+
 			void Execute() override;
 		public:
 			DoIntake(Intake* intake);
 	};
 	class DoShooter : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			Shooter* shooter;
-			frc::XboxController* controller;
+			Shooter* shooter; //Initialized within member initialization list
+			frc::XboxController* controller; //Initialized within member initialization list
+
 			void Execute() override;
 			bool pressed = false;
 		public:
@@ -35,8 +37,10 @@ namespace DriveWithJoystick{
 	};
 	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			Drivetrain* drivetrain;
-			frc::XboxController* controller;
+			Drivetrain* drivetrain; //Initialized within member initialization list
+			frc::XboxController* controller; //Initialized within member initialization list
+
+			double creepRate=0.5; //The slowdown multiplier while holding the creep button.
 			void Execute() override;
 			void End(); 
 		public:

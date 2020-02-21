@@ -56,6 +56,10 @@ void DoDrivetrain::Execute() {
 	turn = inputTransform(turn, 0, 0.1);
 	power = inputTransform(power, 0.15, 0.03);
 	
+	if(controller->GetYButton()){
+		turn *= creepRate;
+		power *= creepRate;
+	}
 
 	drivetrain->DrivePolar(power, turn);
 }
