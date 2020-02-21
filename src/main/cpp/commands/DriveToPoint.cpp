@@ -31,7 +31,7 @@ void DriveToPoint::Execute() {
 	 kForwardPower = 2;
      
     // Get absolute angle from robot's position to target's position TODO: make sure this actually works
-    degree_t absAngleToTarget = degree_t(360) - units::math::atan2(targetPoint.X() - odometry->getRobotx(), targetPoint.Y() - odometry->getRoboty());
+    degree_t absAngleToTarget = units::math::atan2(targetPoint.Y() - odometry->getRoboty(), targetPoint.X() - odometry->getRobotx());
     
     // Get reletive angle from front of robot to target
     degree_t angleToTarget = absAngleToTarget - degree_t(drivetrain->GetGyroAngle());

@@ -38,7 +38,9 @@ void Odometry::Periodic() {
          units::meter_t(Robot::GetRobot()->drivetrain.leftEncoder->GetDistance()),
          units::meter_t(Robot::GetRobot()->drivetrain.rightEncoder->GetDistance())
     );
-    //std::cout << "X: " << currentPos.Translation().X() << ", Y: " << currentPos.Translation().Y() << ", ROT: " << currentPos.Rotation().Degrees() << std::endl;
+    static int ticks = 0;
+    ++ticks;
+    if (ticks % 50 == 0) std::cout << "X: " << currentPos.Translation().X() << ", Y: " << currentPos.Translation().Y() << ", ROT: " << currentPos.Rotation().Degrees() << std::endl;
 }
 
 void Odometry::Reset(frc::Pose2d newPose) {

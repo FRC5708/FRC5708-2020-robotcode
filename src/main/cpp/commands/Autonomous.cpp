@@ -40,36 +40,39 @@ protected:
 void AutonomousCommand::Initialize() {
 	
 	// Set starting position
+	// Y is SIDEWAYS, X is FORWARDS
+	// Left is positive Y, forwards is positive X
+	// 0,0 is at the back center of the opponent's SECTOR (behind the starting point)
 	
-	inch_t xStart((52*12 + 5 + 1.0/4.0) / 2.0 - 4*12 + 7 + 1.0/2.0); // Aligned with outside of trench run
-	inch_t yStart(10*12); // Centered on initiation line
+	inch_t yStart((52*12 + 5 + 1.0/4.0) / 2.0 - 4*12 + 7 + 1.0/2.0); // Aligned with outside of trench run
+	inch_t xStart(10*12); // Centered on initiation line
 	frc::Translation2d start;
 	
 	switch (startSelect.GetSelected()) {
-		case 'R': start = { xStart, yStart }; break;
-		case 'L': start = { -xStart, yStart }; break;
+		case 'R': start = { xStart, -yStart }; break;
+		case 'L': start = { xStart, yStart }; break;
 		default: 
 		std::cout << "Bad locationSelect" << std::endl;
 		[[fallthrough]]; // Suppresses the "implicit fallthrough" warning
-		case 'C': start = { inch_t(0), yStart }; break;
+		case 'C': start = { xStart, inch_t(0) }; break;
 	}
 	
 	Robot::GetRobot()->odometry.Reset(frc::Pose2d(start, frc::Rotation2d(degree_t(0))));
 	
 	// Turn towards shooter with precise angle
-	frc::Translation2d targetPos{inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66), inch_t(0)};
+	frc::Translation2d targetPos{inch_t(0), -inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66)};
 	AddCommands(TurnToPoint(targetPos));
 	
 	// TODO: Shoot	
 	
 	if (whetherToTrenchRun.GetSelected()) {
-		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(0), inch_t(40)};
+		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(40), inch_t(0)};
 		AddCommands(DriveToPoint(trench1));
-		frc::Translation2d trench2{inch_t(138), inch_t(190)};
+		frc::Translation2d trench2{ inch_t(138), inch_t(190) };
 		AddCommands(DriveToPoint(trench2, true));
 		
 		// Charge the trench run
-		frc::Translation2d trenchEnd{trench2.X(), inch_t(430)};
+		frc::Translation2d trenchEnd{inch_t(430), trench2.Y()};
 		// We turn while stationary as there's not enough clearance to make a wide turn by the trench run
 		// Activate intake while in trench
 		AddCommands(frc2::ParallelRaceGroup(
@@ -79,6 +82,6 @@ void AutonomousCommand::Initialize() {
 	}
 	else {
 		// Exit initiation line
-		AddCommands(DriveToPoint(start + frc::Translation2d{inch_t(0), inch_t(30)}));
+		AddCommands(DriveToPoint(start + frc::Translation2d{inch_t(30), inch_t(0)}));
 	}
 }

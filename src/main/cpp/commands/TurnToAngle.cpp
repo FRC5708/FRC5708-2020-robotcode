@@ -40,7 +40,7 @@ TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)), targetPoint(poi
 }
 void TurnToPoint::Initialize() {
 	frc::Translation2d here = Robot::GetRobot()->odometry.currentPos.Translation();
-	targetRotation = units::degree_t(360) - units::math::atan2(targetPoint.X() - here.X(), targetPoint.Y() - here.Y());
+	targetRotation = units::math::atan2(targetPoint.Y() - here.Y(), targetPoint.X() - here.X());
 }
 
 VisionDrive::VisionDrive() : TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)) {
