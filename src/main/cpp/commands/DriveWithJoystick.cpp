@@ -1,6 +1,6 @@
+#include "commands/DriveWithJoystick.h"
 #include <iostream>
 #include <frc2/command/CommandHelper.h>
-#include "commands/DriveWithJoystick.h"
 #include "Robot.h"
 
 // buttons on xbox:

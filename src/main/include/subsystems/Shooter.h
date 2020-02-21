@@ -2,8 +2,9 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc/Encoder.h>
-#include <ctre/Phoenix.h>
+#include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
 
+using ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
 enum Constants {
     /**
@@ -26,8 +27,8 @@ enum Constants {
 
 class Shooter : public frc2::SubsystemBase {
 private:
-	TalonSRX* rightShooterMotor;
-    TalonSRX* leftShooterMotor;
+	WPI_TalonSRX* rightShooterMotor;
+    WPI_TalonSRX* leftShooterMotor;
 public:
     // rotations per second
     static constexpr double defaultSpeed = 16; // rotations per second
@@ -35,5 +36,5 @@ public:
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
 	void setShooterWheels(double velocity);
 	void setLoader(loader position); //TODO: IMPLEMENT ME!
-    void ConfigureMotor(TalonSRX* theMotor);
+    void ConfigureMotor(WPI_TalonSRX* theMotor);
 };
