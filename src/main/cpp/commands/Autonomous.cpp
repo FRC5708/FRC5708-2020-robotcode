@@ -3,6 +3,7 @@
 #include "subsystems/Odometry.h"
 #include "commands/TurnToAngle.h"
 #include "Robot.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
 
@@ -14,10 +15,12 @@ AutonomousCommand::AutonomousCommand() {
 	startSelect.SetDefaultOption("Center", 'C');
 	startSelect.AddOption("Left", 'L');
 	startSelect.AddOption("Right", 'R');
+	frc::SmartDashboard::PutData("Starting Pos", &startSelect);
 	
 	whetherToTrenchRun.SetDefaultOption("Yes", true);
 	whetherToTrenchRun.AddOption("No", false);
 	
+	frc::SmartDashboard::PutData("Trench Run?", &whetherToTrenchRun);
 }
 
 

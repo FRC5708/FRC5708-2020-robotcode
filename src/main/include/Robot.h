@@ -26,6 +26,7 @@
 #include "subsystems/VisionReceiver.h"
 #include "commands/TurnToAngle.h"
 #include "subsystems/Odometry.h"
+#include "commands/Autonomous.h"
 
 extern const bool IS_PROD;
 
@@ -63,5 +64,5 @@ class Robot : public frc::TimedRobot {
 	frc::SendableChooser<char> TestToRun;
 	frc::SendableChooser<bool> OutputMotorValues;
  private:
-	frc2::Command* m_autonomousCommand = nullptr;
+	AutonomousCommand autonomous;
 };
