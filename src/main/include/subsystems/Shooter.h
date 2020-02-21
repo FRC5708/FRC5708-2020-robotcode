@@ -1,12 +1,9 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/Victor.h>
 #include <frc/Encoder.h>
 #include <ctre/Phoenix.h>
 
-#include "DIOMaps.h"
-#include "commands/DriveWithJoystick.h"
 
 enum Constants {
     /**
@@ -29,8 +26,8 @@ enum Constants {
 
 class Shooter : public frc2::SubsystemBase {
 private:
-	TalonSRX* rightShooterMotor = new TalonSRX(RightShooterMotorChannel);
-    TalonSRX* leftShooterMotor = new TalonSRX(LeftShooterMotorChannel);
+	TalonSRX* rightShooterMotor;
+    TalonSRX* leftShooterMotor;
 public:
     // rotations per second
     static constexpr double defaultSpeed = 16; // rotations per second

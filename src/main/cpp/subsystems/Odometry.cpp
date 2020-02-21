@@ -1,8 +1,8 @@
+#include "subsystems/Odometry.h"
 
 #include <iostream>
 
 #include "subsystems/Drivetrain.h"
-#include "subsystems/Odometry.h"
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include "Robot.h"
 

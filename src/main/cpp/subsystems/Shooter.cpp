@@ -1,10 +1,15 @@
 #include "subsystems/shooter.h"
+#include <ctre/Phoenix.h>
+#include "commands/DriveWithJoystick.h"
+#include "DIOMaps.h"
 
 // Talons measure speed in encoder ticks per 100 ms
 constexpr double speedMultiplier = 256.0*0.1;
 
 
-Shooter::Shooter(){
+Shooter::Shooter() : 
+	rightShooterMotor(new TalonSRX(RightShooterMotorChannel)),
+    leftShooterMotor(new TalonSRX(LeftShooterMotorChannel)) {
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);

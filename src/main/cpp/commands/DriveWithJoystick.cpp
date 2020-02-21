@@ -1,9 +1,6 @@
 #include <iostream>
-
 #include <frc2/command/CommandHelper.h>
-
 #include "commands/DriveWithJoystick.h"
-
 #include "Robot.h"
 
 // buttons on xbox:
@@ -58,16 +55,6 @@ void DoDrivetrain::Execute() {
 	
 	turn = inputTransform(turn, 0, 0.1);
 	power = inputTransform(power, 0.15, 0.03);
-
-	// TODO: Re-implement this in VisionDrive
-	/*if(Robot::GetRobot()->autoDrive.IsScheduled()){
-    // Auton stuff
-		if (fabs(power) < 0.3 && fabs(turn) < 0.3) return;
-		else {
-			std::cout << "cancelling auto drive" << std::endl;
-			cancelCommand(Robot::autoDrive.commandUsing);
-		} 
-	}*/
 	
 	drivetrain->DrivePolar(power, turn);
 }

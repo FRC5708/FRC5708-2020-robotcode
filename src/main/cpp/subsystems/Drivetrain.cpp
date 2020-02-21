@@ -1,4 +1,8 @@
 #include "subsystems/Drivetrain.h"
+#include "DIOMaps.h"
+#include <ctre/Phoenix.h>
+#include <frc/ADXRS450_Gyro.h>
+#include <commands/DriveWithJoystick.h>
 #include <iostream>
 
 double Drivetrain::boundValue(const double value, const double bound){
@@ -14,7 +18,10 @@ double Drivetrain::boundValue(const double value, const double bound){
 
 
 
-Drivetrain::Drivetrain() {
+Drivetrain::Drivetrain() :
+gyro(new frc::ADXRS450_Gyro()),
+leftEncoder(new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1])),
+rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1])) {
 	//Set encoder and spark parameters here
 	if (Drivetrain::usingTalons) {
 		FLMotor = new WPI_TalonSRX(frontLeftMotorChannel);

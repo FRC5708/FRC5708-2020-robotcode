@@ -1,17 +1,14 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/Victor.h>
-#include <frc/Encoder.h>
-#include <ctre/Phoenix.h>
+#include <frc/SpeedController.h>
 
-#include "DIOMaps.h"
 #include "commands/DriveWithJoystick.h"
 
 class Intake : public frc2::SubsystemBase {
 private:
-    frc::SpeedController* const intakeMotor = new WPI_TalonSRX(IntakeMotorChannel);
-    frc::SpeedController* const magazineMotor =  new WPI_TalonSRX(MagazineMotorChannel);
+    frc::SpeedController* const intakeMotor;
+    frc::SpeedController* const magazineMotor;
     
 public:
 	Intake();

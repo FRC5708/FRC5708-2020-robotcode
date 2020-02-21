@@ -1,9 +1,13 @@
 #include "subsystems/Intake.h"
+#include <ctre/Phoenix.h>
+#include "DIOMaps.h"
 
-
-Intake::Intake(){
+Intake::Intake() :
+    intakeMotor(new WPI_TalonSRX(IntakeMotorChannel)),
+    magazineMotor(new WPI_TalonSRX(MagazineMotorChannel)) {
+    
     SetDefaultCommand(DriveWithJoystick::DoIntake(this));
-
+    
     magazineMotor->SetInverted(true);
 }
 

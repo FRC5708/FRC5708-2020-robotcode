@@ -11,6 +11,7 @@
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc2/command/button/JoystickButton.h>
 
 #include <iostream>
 #include <sys/stat.h>

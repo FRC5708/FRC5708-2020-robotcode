@@ -9,16 +9,11 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
-#include <frc/Joystick.h>
-#include <frc2/command/button/JoystickButton.h>
-#include <frc/XboxController.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/XboxController.h>
 #include <chrono>
 
 #include "subsystems/Drivetrain.h"
-#include <frc/interfaces/Gyro.h>
-#include <frc/AnalogGyro.h>
-#include <frc/ADXRS450_Gyro.h>
 #include "subsystems/Intake.h"
 #include "commands/DriveWithJoystick.h"
 #include "subsystems/Shooter.h"

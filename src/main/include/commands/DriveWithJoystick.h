@@ -9,11 +9,6 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/Joystick.h>
-#include <frc/XboxController.h>
-//#include "subsystems/Drivetrain.h"
-//#include "subsystems/Intake.h"
-//#include "subsystems/Shooter.h"
 
 class Intake; // Defined within subsystems/Intake.h
 class Shooter; // Defined within subsystems/Shooter.h
