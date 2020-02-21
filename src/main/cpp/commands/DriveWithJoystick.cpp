@@ -69,8 +69,8 @@ DoShooter::DoShooter(Shooter* shooter) : shooter(shooter),controller(&Robot::Get
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (controller->GetXButtonReleased()) {
-		pressed = !pressed;
+	if (controller->GetXButtonPressed()) {
+		pressed = !pressed; //Toggle shooter state
 	}
 	if (pressed){
 		shooter->setShooterWheels(Shooter::defaultSpeed);
