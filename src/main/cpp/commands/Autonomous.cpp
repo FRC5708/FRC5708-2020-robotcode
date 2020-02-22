@@ -51,6 +51,20 @@ protected:
 		Robot::GetRobot()->shooter.setShooterWheels(0);
 	}
 };
+class ContinuousDriveCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
+public:
+	double power;
+	ContinuousDriveCommand(double power) : power(power) {
+		AddRequirements(&Robot::GetRobot()->drivetrain);
+	}
+protected:
+	void Execute() override {
+		Robot::GetRobot()->drivetrain.Drive(power, power);
+	}
+	void End(bool interrupted) override {
+		Robot::GetRobot()->drivetrain.Drive(0, 0);
+	}
+};
 
 
 
@@ -101,7 +115,11 @@ void AutonomousCommand::SetupAuton() {
 	}
 	else {
 		// Exit initiation line
-		frc::Translation2d endPoint = start + frc::Translation2d{inch_t(30), inch_t(0)};
-		AddCommands(TurnToPoint(endPoint, false), DriveToPoint(endPoint, true, false));
+		//frc::Translation2d endPoint = start + frc::Translation2d{inch_t(30), inch_t(0)};
+		//AddCommands(TurnToPoint(endPoint, true), DriveToPoint(endPoint, true, true));
+		
+		// Stop-gap timing based auton: halt after one second
+		AddCommands(TurnToAngle(&Robot::GetRobot()->drivetrain, degree_t(0)), 
+		frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(1)), ContinuousDriveCommand(-0.4)));
 	}
 }

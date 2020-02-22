@@ -24,8 +24,8 @@ double Drivetrain::boundValue(const double value, const double bound){
 
 Drivetrain::Drivetrain() :
 gyro(new frc::ADXRS450_Gyro()),
-leftEncoder(new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1], true)),
-rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], false)) {
+leftEncoder(new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1], false)),
+rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], true)) {
 	//Set encoder and spark parameters here
 	if (Drivetrain::usingTalons) {
 		FLMotor = new WPI_TalonSRX(frontLeftMotorChannel);

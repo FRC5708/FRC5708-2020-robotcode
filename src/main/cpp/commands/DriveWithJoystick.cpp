@@ -68,7 +68,7 @@ void DoDrivetrain::Execute() {
 		power = -power; //Switch forwards and backwards.
 	}
 
-	std::cout << "doDrivetrain executing" << std::endl;
+	//std::cout << "doDrivetrain executing" << std::endl;
 	drivetrain->DrivePolar(power, turn);
 }
 void DoDrivetrain::End(bool interrupted) {

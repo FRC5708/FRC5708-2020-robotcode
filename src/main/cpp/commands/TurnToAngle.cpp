@@ -13,6 +13,7 @@ TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation)
 		[drivetrain](double d){ 
 			//std::cout << "turn power: " << d << std::endl;
 			drivetrain->DrivePolar(0, std::copysign(std::max(fabs(d), 0.07), d));
+			//drivetrain->DrivePolar(0, d);
 			},
 		drivetrain),
 	
@@ -24,7 +25,7 @@ TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation)
 	// Set the controller to be continuous (because it is an angle controller)
 	m_controller.EnableContinuousInput(-180, 180);	
 	// Get within one degree
-	GetController().SetTolerance(3, 10);
+	GetController().SetTolerance(3, 50);
 }
 
 TurnToAngle::TurnToAngle(const TurnToAngle& otherMe) 
