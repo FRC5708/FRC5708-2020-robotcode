@@ -43,7 +43,7 @@ namespace DriveWithJoystick{
 			Drivetrain* drivetrain; //Initialized within member initialization list
 			frc::XboxController* controller; //Initialized within member initialization list
 
-			double creepRate=0.5; //The slowdown multiplier while holding the creep button.
+			double creepRate=0.25; //The slowdown multiplier while holding the creep button.
 			void Execute() override;
 			void Initialize() override;
 			void End(); 
