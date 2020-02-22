@@ -1,12 +1,10 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/Victor.h>
 #include <frc/Encoder.h>
-#include <ctre/Phoenix.h>
+#include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
 
-#include "DIOMaps.h"
-#include "commands/DriveWithJoystick.h"
+using ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
 enum Constants {
     /**
@@ -24,17 +22,19 @@ enum Constants {
         * set to zero to skip waiting for confirmation, set to nonzero to wait
         * and report to DS if action fails.
         */
-    kTimeoutMs = 30
+    kTimeoutMs = 30,
 };
 
 class Shooter : public frc2::SubsystemBase {
 private:
-	TalonSRX* rightShooterMotor = new TalonSRX(RightShooterMotorChannel);
-    TalonSRX* leftShooterMotor = new TalonSRX(LeftShooterMotorChannel);
+	WPI_TalonSRX* rightShooterMotor;
+    WPI_TalonSRX* leftShooterMotor;
 public:
+    // rotations per second
+    static constexpr double defaultSpeed = 60; // rotations per second
 	enum loader{extended,retracted};
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
 	void setShooterWheels(double velocity);
 	void setLoader(loader position); //TODO: IMPLEMENT ME!
-    void ConfigureMotor(TalonSRX* theMotor);
+    void ConfigureMotor(WPI_TalonSRX* theMotor);
 };

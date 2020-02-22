@@ -9,16 +9,11 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
-#include <frc/Joystick.h>
-#include <frc2/command/button/JoystickButton.h>
-#include <frc/XboxController.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/XboxController.h>
 #include <chrono>
 
 #include "subsystems/Drivetrain.h"
-#include <frc/interfaces/Gyro.h>
-#include <frc/AnalogGyro.h>
-#include <frc/ADXRS450_Gyro.h>
 #include "subsystems/Intake.h"
 #include "commands/DriveWithJoystick.h"
 #include "subsystems/Shooter.h"
@@ -26,12 +21,15 @@
 #include "subsystems/VisionReceiver.h"
 #include "commands/TurnToAngle.h"
 #include "subsystems/Odometry.h"
+#include "commands/Autonomous.h"
 
 extern const bool IS_PROD;
 
-
+enum robotPOV{ShooterPOV, IntakePOV};
 class Robot : public frc::TimedRobot {
  public:
+	robotPOV POV=ShooterPOV; // POV of DRIVER CONTROLS. POV does not affect anything other than manual control.
+	void togglePOV();
 	void RobotInit() override;
 	void RobotPeriodic() override;
 	void DisabledInit() override;
@@ -62,6 +60,7 @@ class Robot : public frc::TimedRobot {
 	std::chrono::steady_clock::time_point MotorTestStartTime;
 	frc::SendableChooser<char> TestToRun;
 	frc::SendableChooser<bool> OutputMotorValues;
+	DriveWithJoystick::MagicalGarbage povSwitcher;
  private:
-	frc2::Command* m_autonomousCommand = nullptr;
+	AutonomousCommand autonomous;
 };

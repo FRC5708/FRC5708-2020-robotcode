@@ -1,9 +1,6 @@
-#include <iostream>
-
-#include <frc2/command/CommandHelper.h>
-
 #include "commands/DriveWithJoystick.h"
-
+#include <iostream>
+#include <frc2/command/CommandHelper.h>
 #include "Robot.h"
 
 // buttons on xbox:
@@ -46,89 +43,120 @@ void powerRampup(double input, double* outputVar) {
 	
 }
 
-DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain){
+DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain),controller(&Robot::GetRobot()->controller){
    AddRequirements({drivetrain});
 }
+void DoDrivetrain::Initialize() {
+	controller = &Robot::GetRobot()->controller;
+}
 void DoDrivetrain::Execute() {
+	//Default POV is Shooter.
 	double turn = 0;
 	double power = 0;
 
-	turn = -Robot::GetRobot()->controller.GetX(frc::GenericHID::JoystickHand::kLeftHand);
-	power = Robot::GetRobot()->controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-Robot::GetRobot()->controller.GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
+	turn = -controller->GetX(frc::GenericHID::JoystickHand::kLeftHand);
+	power = controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
 	
 	turn = inputTransform(turn, 0, 0.1);
 	power = inputTransform(power, 0.15, 0.03);
-
-	// TODO: Re-implement this in VisionDrive
-	/*if(Robot::GetRobot()->autoDrive.IsScheduled()){
-    // Auton stuff
-		if (fabs(power) < 0.3 && fabs(turn) < 0.3) return;
-		else {
-			std::cout << "cancelling auto drive" << std::endl;
-			cancelCommand(Robot::autoDrive.commandUsing);
-		} 
-	}*/
 	
+	if(controller->GetYButton()){ //If we're in creep mode
+		turn *= creepRate;
+		power *= creepRate;
+	}
+	if(Robot::GetRobot()->POV==robotPOV::IntakePOV){
+		power = -power; //Switch forwards and backwards.
+	}
+
+	//std::cout << "doDrivetrain executing" << std::endl;
 	drivetrain->DrivePolar(power, turn);
 }
-void DoDrivetrain::End() {
+void DoDrivetrain::End(bool interrupted) {
+	std::cout << "doDrivetrain ending" << std::endl;
 	drivetrain->Drive(0, 0);
 }
 
-DoShooter::DoShooter(Shooter* shooter) : shooter(shooter){
+DoShooter::DoShooter(Shooter* shooter) : shooter(shooter),controller(&Robot::GetRobot()->controller){
    AddRequirements({shooter});
+}
+void DoShooter::Initialize() {
+	controller = &Robot::GetRobot()->controller;
 }
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (Robot::GetRobot()->controller.GetXButtonReleased()) {
-		pressed = !pressed;
+	if (controller->GetAButtonPressed()) {
+		isRunning = !isRunning; //Toggle shooter state
 	}
-	if (pressed){
-		shooter->setShooterWheels(16);
+	if(controller->GetStartButton()) isRunning=false;
+	if (isRunning){
+		shooter->setShooterWheels(Shooter::defaultSpeed);
 	}
 	else {
 		shooter->setShooterWheels(0);
 	}
 
 	// Controls shooter loader
-	if (Robot::GetRobot()->controller.GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
 		shooter->setLoader(Shooter::loader::extended);
 	}
-	if (Robot::GetRobot()->controller.GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (controller->GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
 		shooter->setLoader(Shooter::loader::retracted);
 	}
+}
+void DoShooter::End(bool interrupted) {
+	isRunning = false;
 }
 
 DoIntake::DoIntake(Intake* intake) : intake(intake){
    AddRequirements({intake});
 }
+void DoIntake::Initialize() {
+	controller = &Robot::GetRobot()->controller;
+}
 void DoIntake::Execute() {
-	if (Robot::GetRobot()->controller.GetBumper(frc::GenericHID::JoystickHand::kRightHand)) {
+	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)) {
+		isRunning=!isRunning;
+	}
+	if(controller->GetStartButton()) isRunning=false;
+	if(isRunning){
 		intake->setIntake(Intake::intake_mode::intake);
 	}
 	else {
 		intake->setIntake(Intake::intake_mode::off);
 	}
 }
+void DoIntake::End(bool interrupted) {
+	isRunning = false;
+}
 /* bool CheckJoystickForInterrupt()
 ** Returns true if any input is pressed on the controller, ending the command
 */ 
 bool CheckJoystickForInterrupt() {
 	frc::XboxController* controller = &Robot::GetRobot()->controller;
-	return (controller->GetAButtonPressed() 
-	|| controller->GetBButtonPressed() 
-	|| controller->GetBackButtonPressed()
-	|| controller->GetXButtonPressed()
-	|| controller->GetYButtonPressed()
-	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)
-	|| controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)
-	|| controller->GetStartButtonPressed() 
-	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kRightHand)
-	|| controller->GetStickButtonPressed(frc::GenericHID::JoystickHand::kLeftHand) 
+	return (controller->GetBackButton()
+	|| controller->GetBumper(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetBumper(frc::GenericHID::JoystickHand::kLeftHand)
+	|| controller->GetStartButton() 
+	|| controller->GetStickButton(frc::GenericHID::JoystickHand::kRightHand)
+	|| controller->GetStickButton(frc::GenericHID::JoystickHand::kLeftHand) 
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)) > .3
 	|| fabs(controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	|| fabs(controller->GetX(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	|| fabs(controller->GetY(frc::GenericHID::JoystickHand::kLeftHand)) > .3
+	|| fabs(controller->GetX(frc::GenericHID::JoystickHand::kRightHand)) > .3
+	|| fabs(controller->GetY(frc::GenericHID::JoystickHand::kRightHand)) > .3
 	);
 }
 
+void MagicalGarbage::Initialize(){
+	controller = &Robot::GetRobot()->controller;
+	std::cout << "The magical garbage has initialized." << std::endl;
+}
+void MagicalGarbage::Execute(){
+	if(controller->GetXButtonPressed()){
+		std::cout << "POV Toggle" << std::endl;
+		Robot::GetRobot()->togglePOV();
+	}
+}
 }

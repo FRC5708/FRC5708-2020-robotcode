@@ -3,7 +3,9 @@
 #include "subsystems/Odometry.h"
 #include "commands/TurnToAngle.h"
 #include "Robot.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/WaitCommand.h>
 
 
 using namespace units;
@@ -13,10 +15,12 @@ AutonomousCommand::AutonomousCommand() {
 	startSelect.SetDefaultOption("Center", 'C');
 	startSelect.AddOption("Left", 'L');
 	startSelect.AddOption("Right", 'R');
+	frc::SmartDashboard::PutData("Starting Pos", &startSelect);
 	
 	whetherToTrenchRun.SetDefaultOption("Yes", true);
 	whetherToTrenchRun.AddOption("No", false);
 	
+	frc::SmartDashboard::PutData("Trench Run?", &whetherToTrenchRun);
 }
 
 
@@ -34,10 +38,38 @@ protected:
 	}
 };
 
+class ContinuousShooterCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
+public:
+	ContinuousShooterCommand() {
+		AddRequirements(&Robot::GetRobot()->shooter);
+	}
+protected:
+	void Execute() override {
+		Robot::GetRobot()->shooter.setShooterWheels(Shooter::defaultSpeed);
+	}
+	void End(bool interrupted) override {
+		Robot::GetRobot()->shooter.setShooterWheels(0);
+	}
+};
+class ContinuousDriveCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
+public:
+	double power;
+	ContinuousDriveCommand(double power) : power(power) {
+		AddRequirements(&Robot::GetRobot()->drivetrain);
+	}
+protected:
+	void Execute() override {
+		Robot::GetRobot()->drivetrain.Drive(power, power);
+	}
+	void End(bool interrupted) override {
+		Robot::GetRobot()->drivetrain.Drive(0, 0);
+	}
+};
+
 
 
 // For positions: pefer to game manual and https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
-void AutonomousCommand::Initialize() {
+void AutonomousCommand::SetupAuton() {
 	
 	// Set starting position
 	// Y is SIDEWAYS, X is FORWARDS
@@ -47,7 +79,7 @@ void AutonomousCommand::Initialize() {
 	inch_t yStart((52*12 + 5 + 1.0/4.0) / 2.0 - 4*12 + 7 + 1.0/2.0); // Aligned with outside of trench run
 	inch_t xStart(10*12); // Centered on initiation line
 	frc::Translation2d start;
-	
+
 	switch (startSelect.GetSelected()) {
 		case 'R': start = { xStart, -yStart }; break;
 		case 'L': start = { xStart, yStart }; break;
@@ -62,8 +94,9 @@ void AutonomousCommand::Initialize() {
 	// Turn towards shooter with precise angle
 	frc::Translation2d targetPos{inch_t(0), -inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66)};
 	AddCommands(TurnToPoint(targetPos));
-	
-	// TODO: Shoot	
+	// TODO: correct timing
+	AddCommands(frc2::WaitCommand(second_t(0.5)), 
+	frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(5.0)), ContinuousShooterCommand()));
 	
 	if (whetherToTrenchRun.GetSelected()) {
 		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(40), inch_t(0)};
@@ -82,6 +115,11 @@ void AutonomousCommand::Initialize() {
 	}
 	else {
 		// Exit initiation line
-		AddCommands(DriveToPoint(start + frc::Translation2d{inch_t(30), inch_t(0)}));
+		//frc::Translation2d endPoint = start + frc::Translation2d{inch_t(30), inch_t(0)};
+		//AddCommands(TurnToPoint(endPoint, true), DriveToPoint(endPoint, true, true));
+		
+		// Stop-gap timing based auton: halt after one second
+		AddCommands(TurnToAngle(&Robot::GetRobot()->drivetrain, degree_t(0)), 
+		frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(1)), ContinuousDriveCommand(-0.4)));
 	}
 }

@@ -1,7 +1,7 @@
 #include "subsystems/VisionReceiver.h"
-#include "Robot.h"
 #include <iostream>
 #include <streambuf>
+#include <sstream>
 #include <unistd.h>
 #include <sys/types.h>
 #include <netdb.h>

@@ -1,17 +1,14 @@
 #pragma once
 
-#include <chrono>
 #include <iostream>
-#include <fstream>
-#include <functional>
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/PIDCommand.h>
 #include <frc/geometry/Translation2d.h>
+#include <units/units.h>
 #include "commands/DriveWithJoystick.h"
 #include "subsystems/VisionReceiver.h"
-#include <units/units.h>
 
 class Drivetrain;
 
@@ -22,7 +19,8 @@ public:
 	TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation);
 	units::degree_t targetRotation;
 	
-	 bool IsFinished() override;
+	bool IsFinished() override;
+	void End(bool interrupted) override;
 	
 	// When copying, must change lambdas so that they refer to the correct this
 	TurnToAngle(const TurnToAngle& otherMe);
@@ -31,7 +29,8 @@ public:
 class TurnToPoint : public TurnToAngle {
 public:
 	frc::Translation2d targetPoint;
-	TurnToPoint(frc::Translation2d point);
+	bool backwards;
+	TurnToPoint(frc::Translation2d point, bool backwards = false);
 protected:
 	void Initialize() override;
 };

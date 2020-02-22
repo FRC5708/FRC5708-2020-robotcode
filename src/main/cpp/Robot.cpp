@@ -11,6 +11,8 @@
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/button/JoystickButton.h>
 
 #include <iostream>
 #include <sys/stat.h>
@@ -39,9 +41,19 @@ Robot* Robot::GetRobot() {
 
 void Robot::RobotInit() {
 	theRobotInstance = this;
-	
-	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
-	magicButton.WhenPressed(&Robot::GetRobot()->visionDrive);
+
+	frc2::CommandScheduler::GetInstance().OnCommandInterrupt(
+		[](const frc2::Command& command){
+			std::cout << "Command " << command.GetName() << " cancelled." << std::endl;
+		}
+	);
+
+}
+void Robot::togglePOV(){
+	if(POV==robotPOV::IntakePOV) POV=robotPOV::ShooterPOV;
+	else POV=robotPOV::IntakePOV;
+	//TODO: Send control message to pi, so that some sort of POV indicator shows up on the stream?
+	std::cout << "POV switched to " << (POV==robotPOV::IntakePOV ? "Intake" : "Shooter")<< std::endl;
 }
 
 /**
@@ -66,9 +78,9 @@ void Robot::DisabledPeriodic() {}
 
 
 void Robot::AutonomousInit() {
-	if (m_autonomousCommand != nullptr) {
-		m_autonomousCommand->Schedule();
-	}
+	// Required because reasons
+	autonomous.SetupAuton();
+	autonomous.Schedule();
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -78,16 +90,15 @@ void Robot::TeleopInit() {
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
 	// this line or comment it out.
-	if (m_autonomousCommand != nullptr) {
-		m_autonomousCommand->Cancel();
-		m_autonomousCommand = nullptr;
-	}
+	autonomous.Cancel();
+	povSwitcher.Schedule();
 }
 
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+}
 
 
 

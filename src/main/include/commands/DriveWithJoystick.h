@@ -9,11 +9,7 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/Joystick.h>
 #include <frc/XboxController.h>
-//#include "subsystems/Drivetrain.h"
-//#include "subsystems/Intake.h"
-//#include "subsystems/Shooter.h"
 
 class Intake; // Defined within subsystems/Intake.h
 class Shooter; // Defined within subsystems/Shooter.h
@@ -22,26 +18,45 @@ class Drivetrain; // Defined within subsystems/Drivetrain.h
 namespace DriveWithJoystick{
 	class DoIntake : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			Intake* intake;
+			Intake* intake; //Initialized within member initialization list
+			frc::XboxController* controller; //Initialized within member initialization list
+			bool isRunning=false;
+
 			void Execute() override;
+			void Initialize() override;
+			void End(bool interrupted) override;
 		public:
 			DoIntake(Intake* intake);
 	};
 	class DoShooter : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			Shooter* shooter;
+			Shooter* shooter; //Initialized within member initialization list
+			frc::XboxController* controller; //Initialized within member initialization list
+
 			void Execute() override;
-			bool pressed = false;
+			void Initialize() override;
+			bool isRunning = false;
+			void End(bool interrupted) override;
 		public:
 			DoShooter(Shooter* shooter);
 	};
 	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
-			Drivetrain* drivetrain;
+			Drivetrain* drivetrain; //Initialized within member initialization list
+			frc::XboxController* controller; //Initialized within member initialization list
+
+			double creepRate=0.25; //The slowdown multiplier while holding the creep button.
 			void Execute() override;
-			void End(); //VScode lies, it does override.
+			void Initialize() override; 
+			void End(bool interrupted) override;
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
+	};
+	class MagicalGarbage : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+		//Because Triggers are just straight-up broken in c++.
+		frc::XboxController* controller;
+		void Initialize() override;
+		void Execute() override;
 	};
 	
 	

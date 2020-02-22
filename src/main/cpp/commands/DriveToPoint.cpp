@@ -4,8 +4,8 @@
 
 using namespace units;
 
-DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter) : 
-targetPoint(targetPoint) {   
+DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter, bool backwards) : 
+targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards) {   
     // I'm too lazy to do dependency injection
     drivetrain = &Robot::GetRobot()->drivetrain;
     odometry = &Robot::GetRobot()->odometry;
@@ -14,12 +14,16 @@ targetPoint(targetPoint) {
 }
 
 void DriveToPoint::Initialize() {
+    startingPoint = odometry->currentPos.Translation();
     
+    std::cout << "starting driveToPoint to X:" << targetPoint.X() << " Y:" << targetPoint.Y() << std::endl;
 }
 
-constexpr double TOP_POWER = 1,
+constexpr double TOP_POWER = 0.4,
 MIN_POWER = 0.3,
 maxCentripetal = 3; // m/s^2
+
+// https://stackoverflow.com/a/11498248/4062079
 
 void DriveToPoint::Execute() {
     
@@ -36,13 +40,14 @@ void DriveToPoint::Execute() {
     // Get reletive angle from front of robot to target
     degree_t angleToTarget = absAngleToTarget - degree_t(drivetrain->GetGyroAngle());
     
+    std::cout << "abs angle:" << absAngleToTarget << " difference:" << angleToTarget << std::endl;
+    if (backwards) angleToTarget += degree_t(180);
+    
     // Convert to 180 - -179
-    // reduce the angle  
-    angleToTarget =  units::math::fmod(angleToTarget, degree_t(360)); 
-    // force it to be the positive remainder, so that 0 <= angle < 360  
-    angleToTarget = units::math::fmod((angleToTarget + degree_t(360)), degree_t(360));  
-    // force into the minimum absolute value residue class, so that -180 < angle <= 180  
-    if (angleToTarget > degree_t(180)) angleToTarget -= degree_t(360);
+    angleToTarget = units::math::fmod(angleToTarget + degree_t(180.0), degree_t(360));
+    if (angleToTarget < degree_t(0))
+        angleToTarget += degree_t(360);
+    angleToTarget = angleToTarget - degree_t(180);
         
         
     // Get rate of turning, depending on angle to target
@@ -62,6 +67,7 @@ void DriveToPoint::Execute() {
          std::min(TOP_POWER, kForwardPower * odometry->currentPos.Translation().Distance(targetPoint).value()));
     }
     
+    if (backwards) forwardPower = -forwardPower;
     drivetrain->DrivePolar(forwardPower, turnPower);
 }
 
@@ -77,6 +83,6 @@ bool DriveToPoint::IsFinished() {
 
 }
 
-void DriveToPoint::End() {
-
+void DriveToPoint::End(bool interrupted) {
+    std::cout << "Ended drivetopoint" << std::endl;
 }

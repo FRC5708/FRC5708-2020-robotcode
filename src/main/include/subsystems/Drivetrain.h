@@ -1,24 +1,24 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include "frc/Encoder.h"
 #include <vector>
-#include <frc/Victor.h>
+#include <frc/SpeedController.h>
 #include <frc/Encoder.h>
-#include <ctre/Phoenix.h>
-#include <frc/ADXRS450_Gyro.h>
-
-#include "DIOMaps.h"
-#include "commands/DriveWithJoystick.h"
+#include <frc/GyroBase.h>
+#include <units/units.h>
 
 class Drivetrain : public frc2::SubsystemBase {
-	protected:
+protected:
 	const static bool usingTalons=false;
 	frc::SpeedController* FLMotor;
 	frc::SpeedController* FRMotor;	
 	frc::SpeedController* BLMotor;
 	frc::SpeedController* BRMotor;
-	public:
+	
+	bool leftEncoderGood = false, rightEncoderGood = false;
+	void checkEncoders();
+public:
+
 	Drivetrain();
 	void Drive(double left, double right);
 	void DrivePolar(double power, double turn);
@@ -27,8 +27,10 @@ class Drivetrain : public frc2::SubsystemBase {
 	// Returns counterclockwise-positive, which is the convention everywhere else in the code.
 	inline double GetGyroAngle() { return -gyro->GetAngle(); };
 	
-    frc::Gyro* const gyro = new frc::ADXRS450_Gyro();
-	frc::Encoder* const leftEncoder = new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1]);
-	frc::Encoder* const rightEncoder = new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1]);
+    frc::Gyro* const gyro;
+	frc::Encoder* const leftEncoder;
+	frc::Encoder* const rightEncoder;
+	std::pair<units::meter_t, units::meter_t> GetEncoderDistances();
+	
 	std::vector<double> getMotorPowers();
 };
