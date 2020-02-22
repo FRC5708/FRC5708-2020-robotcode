@@ -5,6 +5,11 @@
 #include <commands/DriveWithJoystick.h>
 #include <iostream>
 
+using namespace units;
+
+constexpr inch_t ROBOT_WIDTH(28);
+constexpr inch_t ROBOT_LENGTH(28.25);
+
 double Drivetrain::boundValue(const double value, const double bound){
 	/**
 	 * Bounds value to range [-bound,bound]
@@ -66,6 +71,34 @@ void Drivetrain::DrivePolar(const double power, const double turn){
 
 	Drive(leftMotorOutput,rightMotorOutput);
 }
+
+void Drivetrain::checkEncoders() {
+	if (!leftEncoderGood) leftEncoderGood = fabs(leftEncoder->GetDistance()) > 0.1;
+	if (!rightEncoderGood) rightEncoderGood = fabs(rightEncoder->GetDistance()) > 0.1;
+}
+std::pair<units::meter_t, units::meter_t> Drivetrain::GetEncoderDistances() {
+	checkEncoders();
+	meter_t leftDistance(leftEncoder->GetDistance());
+	meter_t rightDistance(rightEncoder->GetDistance());
+	
+	static int ticks = 0;
+	ticks++;
+	if (ticks % 50 == 0) std::cout << "encoder counts left:" << leftEncoder->Get() << " right:"  << rightEncoder->Get() << std::endl;
+	
+	if (!leftEncoderGood && rightEncoderGood) {
+		// emulate with gyro
+		return { -rightDistance - radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH, rightDistance };
+	}
+	else if (!rightEncoderGood && leftEncoderGood) {
+		return { leftDistance, -leftDistance + radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH };
+	}
+	else {
+		// both encoders, yay!
+		// or maybe no encoders
+		return {leftDistance, rightDistance};
+	}
+}
+
 /* std::vector<double> Drivetrain::getMotorPowers()
 ** Returns a vector with the current motor powers of drivetrain in the following order: Front-Left, Front-Right, Back-Left, Back-Right
 */
