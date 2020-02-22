@@ -22,6 +22,7 @@
 #include "commands/TurnToAngle.h"
 #include "subsystems/Odometry.h"
 #include "commands/Autonomous.h"
+#include "subsystems/ControlPacketSender.h"
 
 extern const bool IS_PROD;
 
@@ -61,6 +62,7 @@ class Robot : public frc::TimedRobot {
 	frc::SendableChooser<char> TestToRun;
 	frc::SendableChooser<bool> OutputMotorValues;
 	DriveWithJoystick::MagicalGarbage povSwitcher;
+	ControlPacketSender controlPacketSender;
  private:
 	AutonomousCommand autonomous;
 };
