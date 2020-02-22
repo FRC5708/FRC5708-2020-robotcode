@@ -39,6 +39,8 @@ void DriveToPoint::Execute() {
     
     // Get reletive angle from front of robot to target
     degree_t angleToTarget = absAngleToTarget - degree_t(drivetrain->GetGyroAngle());
+    
+    std::cout << "abs angle:" << absAngleToTarget << " difference:" << angleToTarget << std::endl;
     if (backwards) angleToTarget += degree_t(180);
     
     // Convert to 180 - -179

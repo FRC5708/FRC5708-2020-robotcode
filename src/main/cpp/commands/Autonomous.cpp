@@ -102,6 +102,6 @@ void AutonomousCommand::SetupAuton() {
 	else {
 		// Exit initiation line
 		frc::Translation2d endPoint = start + frc::Translation2d{inch_t(30), inch_t(0)};
-		AddCommands(TurnToPoint(endPoint, true), DriveToPoint(endPoint, true, true));
+		AddCommands(TurnToPoint(endPoint, false), DriveToPoint(endPoint, true, false));
 	}
 }
