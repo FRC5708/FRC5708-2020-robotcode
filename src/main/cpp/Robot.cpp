@@ -43,20 +43,22 @@ void Robot::RobotInit() {
 	theRobotInstance = this;
 	
 	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
-	magicButton.WhenPressed(&Robot::GetRobot()->visionDrive);
+	magicButton.WhenPressed(&Robot::GetRobot()->visionDrive); //Triggers are broken in c++, so this will not work. I'm too lazy to fix this right now.
+
 
 	frc2::CommandScheduler::GetInstance().OnCommandInterrupt(
 		[](const frc2::Command& command){
 			std::cout << "Command " << command.GetName() << " cancelled." << std::endl;
 		}
 	);
-	frc2::JoystickButton POVButton = frc2::JoystickButton(&controller, (int) frc::XboxController::Button::kA);
-	POVButton.WhenPressed([this](){ // Toggle POV
-		if(POV==robotPOV::IntakePOV) POV=robotPOV::ShooterPOV;
-		else POV=robotPOV::IntakePOV;
-		//TODO: Send control message to pi, so that some sort of POV indicator shows up on the stream?
-	});
+	povSwitcher.Schedule();
 
+}
+void Robot::togglePOV(){
+	if(POV==robotPOV::IntakePOV) POV=robotPOV::ShooterPOV;
+	else POV=robotPOV::IntakePOV;
+	//TODO: Send control message to pi, so that some sort of POV indicator shows up on the stream?
+	std::cout << "POV switched to " << (POV==robotPOV::IntakePOV ? "Intake" : "Shooter")<< std::endl;
 }
 
 /**

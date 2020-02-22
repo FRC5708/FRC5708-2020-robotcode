@@ -50,6 +50,12 @@ namespace DriveWithJoystick{
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
 	};
+	class MagicalGarbage : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+		//Because Triggers are just straight-up broken in c++.
+		frc::XboxController* controller;
+		void Initialize() override;
+		void Execute() override;
+	};
 	
 	
 	bool CheckJoystickForInterrupt();

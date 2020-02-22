@@ -139,4 +139,13 @@ bool CheckJoystickForInterrupt() {
 	);
 }
 
+void MagicalGarbage::Initialize(){
+	controller = &Robot::GetRobot()->controller;
+	std::cout << "The magical garbage has initialized." << std::endl;
+}
+void MagicalGarbage::Execute(){
+	if(controller->GetAButtonPressed()){
+		Robot::GetRobot()->togglePOV();
+	}
+}
 }

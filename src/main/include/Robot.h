@@ -29,6 +29,7 @@ enum robotPOV{ShooterPOV, IntakePOV};
 class Robot : public frc::TimedRobot {
  public:
 	robotPOV POV=ShooterPOV; // POV of DRIVER CONTROLS. POV does not affect anything other than manual control.
+	void togglePOV();
 	void RobotInit() override;
 	void RobotPeriodic() override;
 	void DisabledInit() override;
@@ -59,6 +60,7 @@ class Robot : public frc::TimedRobot {
 	std::chrono::steady_clock::time_point MotorTestStartTime;
 	frc::SendableChooser<char> TestToRun;
 	frc::SendableChooser<bool> OutputMotorValues;
+	DriveWithJoystick::MagicalGarbage povSwitcher;
  private:
 	AutonomousCommand autonomous;
 };
