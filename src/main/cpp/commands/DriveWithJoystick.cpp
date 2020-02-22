@@ -151,6 +151,7 @@ void MagicalGarbage::Initialize(){
 }
 void MagicalGarbage::Execute(){
 	if(controller->GetAButtonPressed()){
+		std::cout << "POV Toggle" << std::endl;
 		Robot::GetRobot()->togglePOV();
 	}
 }

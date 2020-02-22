@@ -41,17 +41,12 @@ Robot* Robot::GetRobot() {
 
 void Robot::RobotInit() {
 	theRobotInstance = this;
-	
-	frc2::JoystickButton magicButton = frc2::JoystickButton(&controller, (int)frc::XboxController::Button::kX);
-	magicButton.WhenPressed(&Robot::GetRobot()->visionDrive); //Triggers are broken in c++, so this will not work. I'm too lazy to fix this right now.
-
 
 	frc2::CommandScheduler::GetInstance().OnCommandInterrupt(
 		[](const frc2::Command& command){
 			std::cout << "Command " << command.GetName() << " cancelled." << std::endl;
 		}
 	);
-	povSwitcher.Schedule();
 
 }
 void Robot::togglePOV(){
@@ -94,12 +89,14 @@ void Robot::TeleopInit() {
 	// continue until interrupted by another command, remove
 	// this line or comment it out.
 	autonomous.Cancel();
+	povSwitcher.Schedule();
 }
 
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+}
 
 
 
