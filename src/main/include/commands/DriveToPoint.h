@@ -8,7 +8,7 @@ public:
     DriveToPoint(frc::Translation2d targetPoint, bool stopAfter = false, bool backwards = false);
     void Initialize() override;
     void Execute() override;
-    void End();
+    void End(bool isInterrupted) override;
     bool IsFinished() override;
     
     frc::Translation2d targetPoint;

@@ -11,7 +11,7 @@ class AutonomousCommand : public frc2::SequentialCommandGroup {
 public:
 	AutonomousCommand();
 	
-	void Initialize() override;
+	void SetupAuton();
 	
 private:
 	frc::SendableChooser<char> startSelect;

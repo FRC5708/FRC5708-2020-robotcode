@@ -54,6 +54,8 @@ rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], fal
 }
 
 void Drivetrain::Drive(const double left,const double right){
+	//std::cout << "Drive with left:" << left << " right:" << right << std::endl;
+	
 	double bounded_left=boundValue(left,1.0);
 	double bounded_right=boundValue(right,1.0);
 	FLMotor->Set(bounded_left);

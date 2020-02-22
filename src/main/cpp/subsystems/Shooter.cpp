@@ -4,7 +4,8 @@
 #include "DIOMaps.h"
 
 // Talons measure speed in encoder ticks per 100 ms
-constexpr double speedMultiplier = 256.0*0.1;
+// Encoder ticks based on emperical data
+constexpr double speedMultiplier = 1024*0.1;
 
 
 Shooter::Shooter() : 
@@ -26,7 +27,7 @@ void Shooter::ConfigureMotor(WPI_TalonSRX* theMotor) {
 
 	/* set the peak and nominal outputs */
 	theMotor->ConfigNominalOutputForward(0.3, kTimeoutMs);
-	theMotor->ConfigNominalOutputReverse(-0.3, kTimeoutMs);
+	theMotor->ConfigNominalOutputReverse(0.3, kTimeoutMs);
 	theMotor->ConfigPeakOutputForward(1, kTimeoutMs);
 	theMotor->ConfigPeakOutputReverse(0, kTimeoutMs);
 	/* set closed loop gains in slot0 */

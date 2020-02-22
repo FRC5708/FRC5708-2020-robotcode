@@ -45,17 +45,17 @@ public:
 	}
 protected:
 	void Execute() override {
-		Robot::GetRobot()->shooter.setShooterWheels(0);
+		Robot::GetRobot()->shooter.setShooterWheels(Shooter::defaultSpeed);
 	}
 	void End(bool interrupted) override {
-		Robot::GetRobot()->shooter.setShooterWheels(Shooter::defaultSpeed);
+		Robot::GetRobot()->shooter.setShooterWheels(0);
 	}
 };
 
 
 
 // For positions: pefer to game manual and https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
-void AutonomousCommand::Initialize() {
+void AutonomousCommand::SetupAuton() {
 	
 	// Set starting position
 	// Y is SIDEWAYS, X is FORWARDS
@@ -81,7 +81,9 @@ void AutonomousCommand::Initialize() {
 	frc::Translation2d targetPos{inch_t(0), -inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66)};
 	AddCommands(TurnToPoint(targetPos));
 	// TODO: correct timing
-	AddCommands(frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(5.0)), ContinuousShooterCommand()));
+	AddCommands(frc2::WaitCommand(second_t(0.5)), 
+	frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(5.0)), ContinuousShooterCommand()));
+	
 	if (whetherToTrenchRun.GetSelected()) {
 		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(40), inch_t(0)};
 		AddCommands(DriveToPoint(trench1));
@@ -99,8 +101,7 @@ void AutonomousCommand::Initialize() {
 	}
 	else {
 		// Exit initiation line
-		AddCommands(DriveToPoint(start + frc::Translation2d{inch_t(30), inch_t(0)}));
+		frc::Translation2d endPoint = start + frc::Translation2d{inch_t(30), inch_t(0)};
+		AddCommands(TurnToPoint(endPoint, true), DriveToPoint(endPoint, true, true));
 	}
-	
-	SequentialCommandGroup::Initialize();
 }

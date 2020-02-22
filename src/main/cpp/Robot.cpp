@@ -78,6 +78,8 @@ void Robot::DisabledPeriodic() {}
 
 
 void Robot::AutonomousInit() {
+	// Required because reasons
+	autonomous.SetupAuton();
 	autonomous.Schedule();
 }
 
