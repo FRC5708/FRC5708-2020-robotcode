@@ -17,7 +17,6 @@ double Drivetrain::boundValue(const double value, const double bound){
 
 
 
-
 Drivetrain::Drivetrain() :
 gyro(new frc::ADXRS450_Gyro()),
 leftEncoder(new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1])),
@@ -35,6 +34,13 @@ rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1])) {
 		FRMotor = new WPI_VictorSPX(frontRightMotorChannel);
 		BRMotor = new WPI_VictorSPX(backRightMotorChannel);
 	}
+	// Make sure motors are in brake mode
+	// Note: BaseMotorController is applicable to all CTRE CAN motor controllers
+	dynamic_cast<BaseMotorController *>(FLMotor)->SetNeutralMode(Brake);
+	dynamic_cast<BaseMotorController *>(BLMotor)->SetNeutralMode(Brake);
+	dynamic_cast<BaseMotorController *>(FRMotor)->SetNeutralMode(Brake);
+	dynamic_cast<BaseMotorController *>(BRMotor)->SetNeutralMode(Brake);
+	
 	SetDefaultCommand(DriveWithJoystick::DoDrivetrain(this));
 	
 	constexpr double metersPerPulse = units::meter_t(units::inch_t(6.0)).value() * M_PI / 360.0;
