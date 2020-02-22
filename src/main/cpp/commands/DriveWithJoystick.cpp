@@ -86,6 +86,7 @@ void DoShooter::Execute() {
 	if (controller->GetXButtonPressed()) {
 		isRunning = !isRunning; //Toggle shooter state
 	}
+	if(controller->GetStartButton()) isRunning=false;
 	if (isRunning){
 		shooter->setShooterWheels(Shooter::defaultSpeed);
 	}
@@ -115,6 +116,7 @@ void DoIntake::Execute() {
 	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)) {
 		isRunning=!isRunning;
 	}
+	if(controller->GetStartButton()) isRunning=false;
 	if(isRunning){
 		intake->setIntake(Intake::intake_mode::intake);
 	}

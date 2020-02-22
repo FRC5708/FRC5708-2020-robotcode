@@ -90,6 +90,7 @@
     "future": "cpp",
     "iomanip": "cpp",
     "sstream": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "__functional_03": "cpp"
   }
 }
