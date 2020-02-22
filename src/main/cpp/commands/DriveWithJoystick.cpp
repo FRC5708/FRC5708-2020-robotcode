@@ -46,6 +46,9 @@ void powerRampup(double input, double* outputVar) {
 DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain),controller(&Robot::GetRobot()->controller){
    AddRequirements({drivetrain});
 }
+void DoDrivetrain::Initialize() {
+	controller = &Robot::GetRobot()->controller;
+}
 void DoDrivetrain::Execute() {
 	//Default POV is Shooter.
 	double turn = 0;
@@ -74,6 +77,9 @@ void DoDrivetrain::End() {
 DoShooter::DoShooter(Shooter* shooter) : shooter(shooter),controller(&Robot::GetRobot()->controller){
    AddRequirements({shooter});
 }
+void DoShooter::Initialize() {
+	controller = &Robot::GetRobot()->controller;
+}
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
@@ -96,8 +102,11 @@ void DoShooter::Execute() {
 	}
 }
 
-DoIntake::DoIntake(Intake* intake) : intake(intake),controller(&Robot::GetRobot()->controller){
+DoIntake::DoIntake(Intake* intake) : intake(intake){
    AddRequirements({intake});
+}
+void DoIntake::Initialize() {
+	controller = &Robot::GetRobot()->controller;
 }
 void DoIntake::Execute() {
 	if (controller->GetBumper(frc::GenericHID::JoystickHand::kLeftHand)) {

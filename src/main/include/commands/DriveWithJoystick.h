@@ -22,6 +22,7 @@ namespace DriveWithJoystick{
 			frc::XboxController* controller; //Initialized within member initialization list
 
 			void Execute() override;
+			void Initialize() override;
 		public:
 			DoIntake(Intake* intake);
 	};
@@ -31,6 +32,7 @@ namespace DriveWithJoystick{
 			frc::XboxController* controller; //Initialized within member initialization list
 
 			void Execute() override;
+			void Initialize() override;
 			bool pressed = false;
 		public:
 			DoShooter(Shooter* shooter);
@@ -42,6 +44,7 @@ namespace DriveWithJoystick{
 
 			double creepRate=0.5; //The slowdown multiplier while holding the creep button.
 			void Execute() override;
+			void Initialize() override;
 			void End(); 
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
