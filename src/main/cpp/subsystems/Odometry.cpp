@@ -40,7 +40,7 @@ void Odometry::Periodic() {
     currentPos = m_odometry.Update(gyroAngle, encoders.first, encoders.second);
     static int ticks = 0;
     ++ticks;
-    /*if (ticks % 50 == 0)*/ std::cout << "X: " << currentPos.Translation().X() << ", Y: " << currentPos.Translation().Y() << ", ROT: " << currentPos.Rotation().Degrees() << std::endl;
+    if (ticks % 50 == 0) std::cout << "X: " << currentPos.Translation().X() << ", Y: " << currentPos.Translation().Y() << ", ROT: " << currentPos.Rotation().Degrees() << std::endl;
 }
 
 void Odometry::Reset(frc::Pose2d newPose) {
