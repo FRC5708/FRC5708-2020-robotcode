@@ -20,6 +20,7 @@ namespace DriveWithJoystick{
 		private:
 			Intake* intake; //Initialized within member initialization list
 			frc::XboxController* controller; //Initialized within member initialization list
+			bool isRunning=false;
 
 			void Execute() override;
 			void Initialize() override;

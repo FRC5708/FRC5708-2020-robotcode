@@ -109,7 +109,10 @@ void DoIntake::Initialize() {
 	controller = &Robot::GetRobot()->controller;
 }
 void DoIntake::Execute() {
-	if (controller->GetBumper(frc::GenericHID::JoystickHand::kLeftHand)) {
+	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)) {
+		isRunning=!isRunning;
+	}
+	if(isRunning){
 		intake->setIntake(Intake::intake_mode::intake);
 	}
 	else {
