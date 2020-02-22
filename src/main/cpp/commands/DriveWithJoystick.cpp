@@ -70,7 +70,7 @@ void DoDrivetrain::Execute() {
 
 	drivetrain->DrivePolar(power, turn);
 }
-void DoDrivetrain::End() {
+void DoDrivetrain::End(bool interrupted) {
 	drivetrain->Drive(0, 0);
 }
 
@@ -84,9 +84,9 @@ void DoShooter::Execute() {
 
 	// Controls shooting wheels
 	if (controller->GetXButtonPressed()) {
-		pressed = !pressed; //Toggle shooter state
+		isRunning = !isRunning; //Toggle shooter state
 	}
-	if (pressed){
+	if (isRunning){
 		shooter->setShooterWheels(Shooter::defaultSpeed);
 	}
 	else {
@@ -100,6 +100,9 @@ void DoShooter::Execute() {
 	if (controller->GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
 		shooter->setLoader(Shooter::loader::retracted);
 	}
+}
+void DoShooter::End(bool interrupted) {
+	isRunning = false;
 }
 
 DoIntake::DoIntake(Intake* intake) : intake(intake){
@@ -118,6 +121,9 @@ void DoIntake::Execute() {
 	else {
 		intake->setIntake(Intake::intake_mode::off);
 	}
+}
+void DoIntake::End(bool interrupted) {
+	isRunning = false;
 }
 /* bool CheckJoystickForInterrupt()
 ** Returns true if any input is pressed on the controller, ending the command

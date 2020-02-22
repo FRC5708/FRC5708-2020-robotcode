@@ -24,6 +24,7 @@ namespace DriveWithJoystick{
 
 			void Execute() override;
 			void Initialize() override;
+			void End(bool interrupted) override;
 		public:
 			DoIntake(Intake* intake);
 	};
@@ -34,7 +35,8 @@ namespace DriveWithJoystick{
 
 			void Execute() override;
 			void Initialize() override;
-			bool pressed = false;
+			bool isRunning = false;
+			void End(bool interrupted) override;
 		public:
 			DoShooter(Shooter* shooter);
 	};
@@ -45,8 +47,8 @@ namespace DriveWithJoystick{
 
 			double creepRate=0.25; //The slowdown multiplier while holding the creep button.
 			void Execute() override;
-			void Initialize() override;
-			void End(); 
+			void Initialize() override; 
+			void End(bool interrupted) override;
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
 	};
