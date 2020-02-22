@@ -85,7 +85,7 @@ void DoShooter::Initialize() {
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (controller->GetXButtonPressed()) {
+	if (controller->GetAButtonPressed()) {
 		isRunning = !isRunning; //Toggle shooter state
 	}
 	if(controller->GetStartButton()) isRunning=false;
