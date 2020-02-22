@@ -24,8 +24,8 @@ double Drivetrain::boundValue(const double value, const double bound){
 
 Drivetrain::Drivetrain() :
 gyro(new frc::ADXRS450_Gyro()),
-leftEncoder(new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1])),
-rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1])) {
+leftEncoder(new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1], true)),
+rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], false)) {
 	//Set encoder and spark parameters here
 	if (Drivetrain::usingTalons) {
 		FLMotor = new WPI_TalonSRX(frontLeftMotorChannel);
@@ -81,16 +81,12 @@ std::pair<units::meter_t, units::meter_t> Drivetrain::GetEncoderDistances() {
 	meter_t leftDistance(leftEncoder->GetDistance());
 	meter_t rightDistance(rightEncoder->GetDistance());
 	
-	static int ticks = 0;
-	ticks++;
-	if (ticks % 50 == 0) std::cout << "encoder counts left:" << leftEncoder->Get() << " right:"  << rightEncoder->Get() << std::endl;
-	
 	if (!leftEncoderGood && rightEncoderGood) {
 		// emulate with gyro
-		return { -rightDistance - radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH, rightDistance };
+		return { rightDistance - radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH, rightDistance };
 	}
 	else if (!rightEncoderGood && leftEncoderGood) {
-		return { leftDistance, -leftDistance + radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH };
+		return { leftDistance, leftDistance + radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH };
 	}
 	else {
 		// both encoders, yay!
