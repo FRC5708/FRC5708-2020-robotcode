@@ -31,7 +31,7 @@ private:
     WPI_TalonSRX* leftShooterMotor;
 public:
     // rotations per second
-    static constexpr double defaultSpeed = 16; // rotations per second
+    static constexpr double defaultSpeed = 35; // rotations per second
 	enum loader{extended,retracted};
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
 	void setShooterWheels(double velocity);
