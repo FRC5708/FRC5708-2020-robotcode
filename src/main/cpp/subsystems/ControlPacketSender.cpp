@@ -61,6 +61,7 @@ void ControlPacketSender::handleConnection(){
             if(!isAlive){
                 if(connect(sockfd, piSockInfo->ai_addr, piSockInfo->ai_addrlen) != -1){ 
                     isAlive = true;
+                    std::cout << "Connected to pi hopefully" << std::endl;
                     //TO DO: get connection message and only set alive if we receive it?
                 }
             }
