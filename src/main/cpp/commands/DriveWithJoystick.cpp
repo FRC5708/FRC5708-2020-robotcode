@@ -85,7 +85,7 @@ void DoShooter::Initialize() {
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (controller->GetAButtonPressed()) {
+	if (controller->GetXButtonPressed()) {
 		isRunning = !isRunning; //Toggle shooter state
 	}
 	if(controller->GetStartButton()) isRunning=false;
@@ -154,7 +154,7 @@ void MagicalGarbage::Initialize(){
 	std::cout << "The magical garbage has initialized." << std::endl;
 }
 void MagicalGarbage::Execute(){
-	if(controller->GetXButtonPressed()){
+	if(controller->GetAButtonPressed()){
 		std::cout << "POV Toggle" << std::endl;
 		Robot::GetRobot()->togglePOV();
 	}
