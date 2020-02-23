@@ -67,6 +67,7 @@ void DoDrivetrain::Execute() {
 	if(Robot::GetRobot()->POV==robotPOV::IntakePOV){
 		power = -power; //Switch forwards and backwards.
 	}
+	power *= .7; //Intentionally limit ourselves.
 
 	//std::cout << "doDrivetrain executing" << std::endl;
 	drivetrain->DrivePolar(power, turn);
@@ -118,13 +119,19 @@ void DoIntake::Execute() {
 	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)) {
 		isRunning=!isRunning;
 	}
-	if(controller->GetStartButton()) isRunning=false;
-	if(isRunning){
-		intake->setIntake(Intake::intake_mode::intake);
+	if(controller->GetStartButton()){
+		isRunning=false;
+		intake->setIntake(Intake::intake_mode::reverse);
+	} 
+	else{
+		if(isRunning){
+			intake->setIntake(Intake::intake_mode::intake);
+		}
+		else {
+			intake->setIntake(Intake::intake_mode::off);
+		}
 	}
-	else {
-		intake->setIntake(Intake::intake_mode::off);
-	}
+	if(controller->GetStartButtonReleased()) intake->setIntake(Intake::intake_mode::off);
 }
 void DoIntake::End(bool interrupted) {
 	isRunning = false;
