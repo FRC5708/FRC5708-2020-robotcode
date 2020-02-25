@@ -56,18 +56,22 @@ void DoDrivetrain::Execute() {
 
 	turn = -controller->GetX(frc::GenericHID::JoystickHand::kLeftHand);
 	power = controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand);
-	
+	std::cout << "Trigger value: " << controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kRightHand)-controller->GetTriggerAxis(frc::GenericHID::JoystickHand::kLeftHand) << std::endl;
+
 	turn = inputTransform(turn, 0, 0.1);
 	power = inputTransform(power, 0.15, 0.03);
 	
 	if(controller->GetYButton()){ //If we're in creep mode
 		turn *= creepRate;
 		power *= creepRate;
+	} else {
+		turn *= .1;
 	}
 	if(Robot::GetRobot()->POV==robotPOV::IntakePOV){
 		power = -power; //Switch forwards and backwards.
 	}
-	power *= .7; //Intentionally limit ourselves.
+	power *= .6; //Intentionally limit ourselves.
+	turn *= .1;
 
 	//std::cout << "doDrivetrain executing" << std::endl;
 	drivetrain->DrivePolar(power, turn);
