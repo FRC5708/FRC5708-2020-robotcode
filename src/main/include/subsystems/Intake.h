@@ -18,7 +18,7 @@ constexpr bool const DEBUG_INTAKE_FSM=true;
 
 class Intake : public frc2::SubsystemBase {
 public:
-    enum intake_mode{intake,off,reverse};
+    enum intake_mode{intake,off,reverse,force_intake};
     enum intake_state{none,pressing,hasBall,releasing};
 private:
     frc::SpeedController* const intakeMotor;

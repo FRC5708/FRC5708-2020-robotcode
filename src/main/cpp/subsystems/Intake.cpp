@@ -15,10 +15,26 @@ void Intake::setIntake(intake_mode mode){
 }  
 void Intake::Periodic(){
     trackPressState();
+    //TODO: Make ball count reset back to zero!
     switch(mode){
         case intake_mode::intake:
             intakeMotor->Set(1);
-            magazineMotor->Set(1);
+            switch(state){
+                case none:
+                case pressing:
+                    //The ball isn't in position yet, if it even exists.
+                    magazineMotor->Set(1);
+                    break;
+                case hasBall:
+                case releasing:
+                    if(ramp_ball_counter < RAMP_MAX_CAPACITY){
+                        //We have room for more.
+                        magazineMotor->Set(1); 
+                        break;
+                    }
+                    magazineMotor->Set(0); //We're at capacity. Hold the ball.
+                    break;
+            }
             break;
         case intake_mode::off:
             intakeMotor->Set(0);
@@ -27,6 +43,11 @@ void Intake::Periodic(){
         case intake_mode::reverse:
             intakeMotor->Set(-1);
             magazineMotor->Set(-1);
+            break;
+        case intake_mode::force_intake:
+            //Force the intake motors. Possibly ill-advised.
+            intakeMotor->Set(1);
+            magazineMotor->Set(1);
             break;
     }
 }
