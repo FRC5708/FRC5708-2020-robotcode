@@ -11,7 +11,8 @@
 
 constexpr std::chrono::milliseconds const PRESS_TIME{50}; //Time (in milliseconds) the limit switch has to be held for us to think we have a ball
 constexpr std::chrono::milliseconds const RELEASE_TIME{50}; //Time (in milliseconds) the limit switch has to be released for us to think that the ball has moved on.
-constexpr int const START_BALL_COUNT=3; //How many balls do we preload?
+constexpr unsigned short const START_BALL_COUNT=3; //How many balls do we preload?
+constexpr unsigned short const RAMP_MAX_CAPACITY=3;
 
 constexpr bool const DEBUG_INTAKE_FSM=true;
 
