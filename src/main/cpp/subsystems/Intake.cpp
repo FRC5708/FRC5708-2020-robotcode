@@ -1,5 +1,6 @@
 #include "subsystems/Intake.h"
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h> //Let's avoid the header apocalypse.
+#include <iostream>
 
 Intake::Intake() :
     intakeMotor(new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(IntakeMotorChannel)),
@@ -32,28 +33,31 @@ void Intake::Periodic(){
 }
 //Step the FSM that tracks the state of our intake. Note: this is *completely* independent of motor control.
 void Intake::trackPressState(){
-    if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM state: " << state << std::endl; 
     switch(state){
         case intake_state::none: //Nothing's currently going on.
             if(intakeLimitSwitch->Get()){
                 state=pressing; //Something's activated the limit switch.
+                if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to pressing." << std::endl;
                 press_start=timing_clock.now();
             }
             break;
         case intake_state::pressing: //Something's pressing the limit switch
             if(!intakeLimitSwitch->Get()){
                 //It's not pressing it anymore. 
+                if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to none." << std::endl;
                 state=none;
                 break;
             }
             if(timing_clock.now()-press_start > PRESS_TIME){
                 //We've had it pressed enough.
+                if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to hasBall." << std::endl;
                 state=hasBall;
             }
             break;
         case intake_state::hasBall: //We currently have a ball in.
             if(!intakeLimitSwitch->Get()){
                 state=releasing; //We aren't actively pressing the limit switch.
+                if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to releasing." << std::endl;
                 release_start=timing_clock.now();
             }
             break;
@@ -61,11 +65,13 @@ void Intake::trackPressState(){
             if(intakeLimitSwitch->Get()){
                 //False alarm. We still have the ball.
                 state=hasBall;
+                if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to hasBall." << std::endl;
                 break;
             }
             if(timing_clock.now()-release_start > RELEASE_TIME){
                 //We definitely don't have it any more. 
                 state=none;
+                if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to none." << std::endl;
                 ramp_ball_counter+=1; //Add a ball to the counter.
             }
             break;
