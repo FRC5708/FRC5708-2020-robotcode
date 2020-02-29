@@ -1,6 +1,9 @@
 #include "commands/DriveWithJoystick.h"
 #include <iostream>
 #include <frc2/command/CommandHelper.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/shuffleboard/Shuffleboard.h>
 #include "Robot.h"
 
 // buttons on xbox:
@@ -50,6 +53,44 @@ void DoDrivetrain::Initialize() {
 	controller = &Robot::GetRobot()->controller;
 }
 void DoDrivetrain::Execute() {
+	switch(driverOp.GetSelected()){
+		case 'J':
+			driveLimit = 0.7;
+			turnLimit = 0.5;
+			creepDriveLimit = 0.35;
+			creepTurnLimit = 0.25;
+			break;
+		case 'D':
+			driveLimit = 0.9;
+			turnLimit = 0.6;
+			creepDriveLimit = 0.4;
+			creepTurnLimit = 0.3;
+			break;
+		case 'I':
+			driveLimit = 0.9;
+			turnLimit = 0.6;
+			creepDriveLimit = 0.4;
+			creepTurnLimit = 0.3;
+			break;
+		case 'N':
+			driveLimit = 1;
+			turnLimit = 1;
+			creepDriveLimit = 1;
+			creepTurnLimit = 1;
+			break;
+		case 'S':
+			driveLimit = 0.2;
+			turnLimit = 0.15;
+			creepDriveLimit = 0.1;
+			creepTurnLimit = 0.1;
+			break;
+		default:
+			driveLimit = 0.2;
+			turnLimit = 0.15;
+			creepDriveLimit = 0.1;
+			creepTurnLimit = 0.1;
+			break;
+	}
 	//Default POV is Shooter.
 	double turn = 0;
 	double power = 0;

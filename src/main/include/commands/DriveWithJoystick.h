@@ -10,6 +10,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/XboxController.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 class Intake; // Defined within subsystems/Intake.h
 class Shooter; // Defined within subsystems/Shooter.h
@@ -51,6 +52,11 @@ namespace DriveWithJoystick{
 			void End(bool interrupted) override;
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
+			frc::SendableChooser<char> driverOp;
+			double driveLimit;
+			double turnLimit;
+			double creepDriveLimit;
+			double creepTurnLimit;
 	};
 	class MagicalGarbage : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		//Because Triggers are just straight-up broken in c++.
