@@ -1,10 +1,9 @@
 #include "subsystems/Intake.h"
-#include <ctre/Phoenix.h>
-#include "DIOMaps.h"
+#include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h> //Let's avoid the header apocalypse.
 
 Intake::Intake() :
-    intakeMotor(new WPI_TalonSRX(IntakeMotorChannel)),
-    magazineMotor(new WPI_TalonSRX(MagazineMotorChannel)) {
+    intakeMotor(new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(IntakeMotorChannel)),
+    magazineMotor(new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(MagazineMotorChannel)) {
     
     SetDefaultCommand(DriveWithJoystick::DoIntake(this));
     
