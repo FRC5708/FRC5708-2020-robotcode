@@ -3,6 +3,8 @@
 #include <frc2/command/SubsystemBase.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 
+constexpr bool const DEBUG_ODOMETRY=false;
+
 class Odometry : public frc2::SubsystemBase {
     void Periodic() override;
     //creating odometry object
