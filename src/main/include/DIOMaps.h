@@ -19,3 +19,5 @@ constexpr int const LeftShooterMotorChannel = 6;
 constexpr int const ShooterCAMChannel = 10;
 constexpr int const IntakeMotorChannel = 7;
 constexpr int const MagazineMotorChannel = 5;
+
+constexpr int const IntakeLimitSwitchChannel = 0;
