@@ -15,9 +15,9 @@
 
 #include "subsystems/subsystems.h"
 #include "commands/DriveWithJoystick.h"
-#include "subsystems/VisionReceiver.h"
 #include "commands/TurnToAngle.h"
 #include "commands/Autonomous.h"
+#include "DebugValues.h"
 
 extern const bool IS_PROD;
 

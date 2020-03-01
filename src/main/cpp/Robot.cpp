@@ -42,11 +42,23 @@ Robot* Robot::GetRobot() {
 void Robot::RobotInit() {
 	theRobotInstance = this;
 
-	frc2::CommandScheduler::GetInstance().OnCommandInterrupt(
-		[](const frc2::Command& command){
-			std::cout << "Command " << command.GetName() << " cancelled." << std::endl;
-		}
-	);
+	if(DEBUG_COMMAND_STATE){
+		frc2::CommandScheduler::GetInstance().OnCommandInterrupt(
+			[](const frc2::Command& command){
+				std::cout << "Command " << command.GetName() << " cancelled." << std::endl;
+			}
+		);
+		frc2::CommandScheduler::GetInstance().OnCommandInitialize(
+			[](const frc2::Command& command){
+				std::cout << "Command " << command.GetName() << " initialized." << std::endl;
+			}
+		);
+		frc2::CommandScheduler::GetInstance().OnCommandFinish(
+			[](const frc2::Command& command){
+				std::cout << "Command " << command.GetName() << " finished." << std::endl;
+			}
+		);
+	}
 
 }
 /**

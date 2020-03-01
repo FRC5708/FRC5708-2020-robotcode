@@ -32,15 +32,18 @@ void Intake::Periodic(){
                 case pressing:
                     //The ball isn't in position yet, if it even exists.
                     magazineMotor->Set(1);
+                    if(DEBUG_INTAKE_MAGAZINE) std::cout << "Magazine running (ball not in magazine hold)" << std::endl;
                     break;
                 case hasBall:
                 case releasing:
                     if(ramp_ball_counter < RAMP_MAX_CAPACITY){
                         //We have room for more.
                         magazineMotor->Set(1); 
+                        if(DEBUG_INTAKE_MAGAZINE) std::cout << "Magazine running (under ramp capacity)" << std::endl;
                         break;
                     }
                     magazineMotor->Set(0); //We're at capacity. Hold the ball.
+                    if(DEBUG_INTAKE_MAGAZINE) std::cout << "Magazine stopped (at capacity and ball in magazine hold)" << std::endl;
                     break;
             }
             break;
@@ -56,6 +59,7 @@ void Intake::Periodic(){
             //Force the intake motors. Possibly ill-advised.
             intakeMotor->Set(1);
             magazineMotor->Set(1);
+            if(DEBUG_INTAKE_MAGAZINE && (state==hasBall || state==releasing)) std::cout << "Magazine running (at max capacity, but forced!)" << std::endl;
             break;
     }
 }
