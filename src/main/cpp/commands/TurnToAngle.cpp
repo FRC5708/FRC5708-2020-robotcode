@@ -42,12 +42,12 @@ bool TurnToAngle::IsFinished() { return GetController().AtSetpoint(); }
 
 
 TurnToPoint::TurnToPoint(frc::Translation2d point, bool backwards) : 
-TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)), targetPoint(point), backwards(backwards) {
+TurnToAngle(Drivetrain::getDrivetrain(), units::degree_t(0)), targetPoint(point), backwards(backwards) {
 	
 }
 void TurnToPoint::Initialize() {
 	
-	frc::Translation2d here = Robot::GetRobot()->odometry.currentPos.Translation();
+	frc::Translation2d here = Odometry::getOdometry()->currentPos.Translation();
 	targetRotation = units::math::atan2(targetPoint.Y() - here.Y(), targetPoint.X() - here.X());
 	if (backwards) targetRotation -= units::degree_t(180);
 	
@@ -55,7 +55,7 @@ void TurnToPoint::Initialize() {
 	std::cout << "starting turntopoint to " << targetRotation << std::endl;
 }
 
-VisionDrive::VisionDrive() : TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)) {
+VisionDrive::VisionDrive() : TurnToAngle(Drivetrain::getDrivetrain(), units::degree_t(0)) {
 	
 }
 

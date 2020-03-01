@@ -7,10 +7,10 @@ using namespace units;
 DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter, bool backwards) : 
 targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards) {   
     // I'm too lazy to do dependency injection
-    drivetrain = &Robot::GetRobot()->drivetrain;
-    odometry = &Robot::GetRobot()->odometry;
+    drivetrain = Drivetrain::getDrivetrain();
+    odometry = Odometry::getOdometry();
     
-    AddRequirements(drivetrain); 
+    AddRequirements(drivetrain); //Note: odometry is intentionally not a requirement -- but we might want to adjust this, as the Reset function exists.
 }
 
 void DriveToPoint::Initialize() {

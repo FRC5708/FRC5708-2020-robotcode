@@ -27,42 +27,42 @@ AutonomousCommand::AutonomousCommand() {
 class ContinuousIntakeCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousIntakeCommand> {
 public:
 	ContinuousIntakeCommand() {
-		AddRequirements(&Robot::GetRobot()->intake);
+		AddRequirements(Intake::getIntake());
 	}
 protected:
 	void Execute() override {
-		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::intake);
+		Intake::getIntake()->setIntake(Intake::intake_mode::intake);
 	}
 	void End(bool interrupted) override {
-		Robot::GetRobot()->intake.setIntake(Intake::intake_mode::off);
+		Intake::getIntake()->setIntake(Intake::intake_mode::off);
 	}
 };
 
 class ContinuousShooterCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
 public:
 	ContinuousShooterCommand() {
-		AddRequirements(&Robot::GetRobot()->shooter);
+		AddRequirements(Shooter::getShooter());
 	}
 protected:
 	void Execute() override {
-		Robot::GetRobot()->shooter.setShooterWheels(Shooter::defaultSpeed);
+		Shooter::getShooter()->setShooterWheels(Shooter::defaultSpeed);
 	}
 	void End(bool interrupted) override {
-		Robot::GetRobot()->shooter.setShooterWheels(0);
+		Shooter::getShooter()->setShooterWheels(0);
 	}
 };
 class ContinuousDriveCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
 public:
 	double power;
 	ContinuousDriveCommand(double power) : power(power) {
-		AddRequirements(&Robot::GetRobot()->drivetrain);
+		AddRequirements(Drivetrain::getDrivetrain());
 	}
 protected:
 	void Execute() override {
-		Robot::GetRobot()->drivetrain.Drive(power, power);
+		Drivetrain::getDrivetrain()->Drive(power, power);
 	}
 	void End(bool interrupted) override {
-		Robot::GetRobot()->drivetrain.Drive(0, 0);
+		Drivetrain::getDrivetrain()->Drive(0, 0);
 	}
 };
 
@@ -89,7 +89,7 @@ void AutonomousCommand::SetupAuton() {
 		case 'C': start = { xStart, inch_t(0) }; break;
 	}
 	
-	Robot::GetRobot()->odometry.Reset(frc::Pose2d(start, frc::Rotation2d(degree_t(0))));
+	Odometry::getOdometry()->Reset(frc::Pose2d(start, frc::Rotation2d(degree_t(0))));
 	
 	// Turn towards shooter with precise angle
 	frc::Translation2d targetPos{inch_t(0), -inch_t((52*12 + 5 + 1.0/4.0) / 2.0 - 94.66)};
@@ -119,7 +119,7 @@ void AutonomousCommand::SetupAuton() {
 		//AddCommands(TurnToPoint(endPoint, true), DriveToPoint(endPoint, true, true));
 		
 		// Stop-gap timing based auton: halt after one second
-		AddCommands(TurnToAngle(&Robot::GetRobot()->drivetrain, degree_t(0)), 
+		AddCommands(TurnToAngle(Drivetrain::getDrivetrain(), degree_t(0)), 
 		frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(1)), ContinuousDriveCommand(-0.4)));
 	}
 }

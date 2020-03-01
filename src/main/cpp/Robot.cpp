@@ -120,30 +120,37 @@ frc::SmartDashboard::PutData("Output Motor Values?", &OutputMotorValues);
 *This function is called periodically during test mode.
 */
 void Robot::TestPeriodic() {
+	/*TODO: directly calling drivetrain.Drive will *not* work as intended.
+	** Because doDrivetrain is the default command associated with that subsystem, 
+	**  manual calls will clash with the values being set by that command.
+	** The cleanest way to fix this would be to create a suite of testing commands, 
+	**  which Robot::TestInit should instantiate. 
+	*/
+
 	//std::cout << "I am not insane." << std::endl;
 	if (TestToRun.GetSelected() == 'M') {
 		testing_tick_counter++;
-		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
+		Drivetrain::getDrivetrain()->Drive(0.3, 0.3);
 		//runs every 50 ticks (1 sec)
 		if (testing_tick_counter %50 == 0) {
-			std::vector<double> vect= Robot::GetRobot()->drivetrain.getMotorPowers();
+			std::vector<double> vect= Drivetrain::getDrivetrain()->getMotorPowers();
 			std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
 		}
 	}
 	if (TestToRun.GetSelected() == 'F') {
 		testing_first_motor_test = true;
-		Robot::GetRobot()->drivetrain.Drive(0.3, 0.3);
+		Drivetrain::getDrivetrain()->Drive(0.3, 0.3);
 	}
 	if (TestToRun.GetSelected() == 'N') {
 		testing_first_motor_test = true;
-		Robot::GetRobot()->drivetrain.Drive(0, 0);
+		Drivetrain::getDrivetrain()->Drive(0, 0);
 
 	}
 	if (OutputMotorValues.GetSelected()) {
 		//counsts so that it activates every half second
 		testing_tick_counter++;
 		if (testing_tick_counter %25 == 0) {
-			std::vector<double> vect=Robot::GetRobot()->drivetrain.getMotorPowers();
+			std::vector<double> vect=Drivetrain::getDrivetrain()->getMotorPowers();
 			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3) << std::endl;
 		}
 	}

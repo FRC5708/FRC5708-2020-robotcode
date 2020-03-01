@@ -47,7 +47,7 @@ DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain),cont
    AddRequirements({drivetrain});
 }
 void DoDrivetrain::Initialize() {
-	controller = &Robot::GetRobot()->controller;
+	controller = &Robot::GetRobot()->controller; //Why is this being done here? It's already happening via member intialization in the construction
 }
 void DoDrivetrain::Execute() {
 	//Default POV is Shooter.
