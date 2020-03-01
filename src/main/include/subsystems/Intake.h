@@ -36,8 +36,9 @@ private:
     unsigned short ramp_ball_counter=START_BALL_COUNT; //How many balls are currently in the ramp
 public:
 	Intake();
-
+    static Intake* getIntake(); //Get the singleton instance of the intake. 
 	void setIntake(intake_mode mode);
     unsigned short getBallCount(); //TODO: IMPLEMENT ME!
+    void resetBallCounter(){ramp_ball_counter=0;}
    
 };

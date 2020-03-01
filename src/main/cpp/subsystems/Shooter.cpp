@@ -1,4 +1,5 @@
 #include "subsystems/Shooter.h"
+#include "subsystems/Intake.h"
 #include <ctre/Phoenix.h>
 #include "commands/DriveWithJoystick.h"
 #include "DIOMaps.h"
@@ -49,6 +50,7 @@ void Shooter::setShooterWheels(double speed){
 		leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
 		//rightShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
 		//leftShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
+		Intake::getIntake()->resetBallCounter();
 	}
 }
 void Shooter::setLoader(loader position){

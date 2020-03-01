@@ -2,6 +2,8 @@
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h> //Let's avoid the header apocalypse.
 #include <iostream>
 
+Intake* intakeInstance=nullptr;
+
 Intake::Intake() :
     intakeMotor(new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(IntakeMotorChannel)),
     magazineMotor(new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(MagazineMotorChannel)) {
@@ -9,8 +11,13 @@ Intake::Intake() :
     SetDefaultCommand(DriveWithJoystick::DoIntake(this));
     
     magazineMotor->SetInverted(true);
+    assert(intakeInstance==nullptr); //We should only ever have *one* intake.
+    intakeInstance=this;
 }
-
+Intake* Intake::getIntake(){
+    assert(intakeInstance!=nullptr); 
+    return intakeInstance;
+}
 void Intake::setIntake(intake_mode mode){
     this->mode=mode;
 }  
@@ -100,4 +107,5 @@ void Intake::trackPressState(){
 }
 unsigned short Intake::getBallCount(){
     //TODO: IMPLEMENT ME!
+    return 0;
 }
