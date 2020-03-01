@@ -1,4 +1,4 @@
-#include "commands/Autonomous.h"
+  #include "commands/Autonomous.h"
 #include "commands/DriveToPoint.h"
 #include "commands/TurnToAngle.h"
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -25,44 +25,47 @@ AutonomousCommand::AutonomousCommand() {
 
 
 class ContinuousIntakeCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousIntakeCommand> {
-public:
-	ContinuousIntakeCommand() {
-		AddRequirements(Intake::getIntake());
-	}
 protected:
+	Intake* intake;
 	void Execute() override {
-		Intake::getIntake()->setIntake(Intake::intake_mode::intake);
+		intake->setIntake(Intake::intake_mode::intake);
 	}
 	void End(bool interrupted) override {
-		Intake::getIntake()->setIntake(Intake::intake_mode::off);
+		intake->setIntake(Intake::intake_mode::off);
+	}
+public:
+	ContinuousIntakeCommand() : intake(Intake::getIntake()){
+		AddRequirements(intake);
 	}
 };
 
 class ContinuousShooterCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
-public:
-	ContinuousShooterCommand() {
-		AddRequirements(Shooter::getShooter());
-	}
 protected:
+	Shooter* shooter;
 	void Execute() override {
-		Shooter::getShooter()->setShooterWheels(Shooter::defaultSpeed);
+		shooter->setShooterWheels(Shooter::defaultSpeed);
 	}
 	void End(bool interrupted) override {
-		Shooter::getShooter()->setShooterWheels(0);
+		shooter->setShooterWheels(0);
+	}
+public:
+	ContinuousShooterCommand() : shooter(Shooter::getShooter()){
+		AddRequirements(shooter);
 	}
 };
 class ContinuousDriveCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
-public:
-	double power;
-	ContinuousDriveCommand(double power) : power(power) {
-		AddRequirements(Drivetrain::getDrivetrain());
-	}
 protected:
+	double power;
+	Drivetrain* drivetrain;
 	void Execute() override {
-		Drivetrain::getDrivetrain()->Drive(power, power);
+		drivetrain->Drive(power, power);
 	}
 	void End(bool interrupted) override {
-		Drivetrain::getDrivetrain()->Drive(0, 0);
+		drivetrain->Drive(0, 0);
+	}
+public:
+	ContinuousDriveCommand(double power) : power(power),drivetrain(Drivetrain::getDrivetrain()){
+		AddRequirements(drivetrain);
 	}
 };
 
@@ -119,7 +122,7 @@ void AutonomousCommand::SetupAuton() {
 		//AddCommands(TurnToPoint(endPoint, true), DriveToPoint(endPoint, true, true));
 		
 		// Stop-gap timing based auton: halt after one second
-		AddCommands(TurnToAngle(Drivetrain::getDrivetrain(), degree_t(0)), 
+		AddCommands(TurnToAngle(degree_t(0)), 
 		frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(1)), ContinuousDriveCommand(-0.4)));
 	}
 }

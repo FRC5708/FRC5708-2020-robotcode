@@ -5,20 +5,20 @@
 #include <frc2/command/CommandScheduler.h>
 #include "subsystems/subsystems.h"
 
-TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation) : 
+TurnToAngle::TurnToAngle(units::degree_t targetRotation) : 
+	drivetrain(drivetrain),
+	targetRotation(targetRotation),
 	PIDCommand(
 		frc2::PIDController(0.05, 0.005, 0.005), 
-		[drivetrain](){ return drivetrain->GetGyroAngle(); },
+		[this](){ return drivetrain->GetGyroAngle(); },
 		[this](){return this->targetRotation.value(); },
-		[drivetrain](double d){ 
+		[this](double d){ 
 			//std::cout << "turn power: " << d << std::endl;
 			drivetrain->DrivePolar(0, std::copysign(std::max(fabs(d), 0.07), d));
 			//drivetrain->DrivePolar(0, d);
 			},
-		drivetrain),
-	
-	drivetrain(drivetrain),
-	targetRotation(targetRotation) {
+		drivetrain)
+	{
 		
 	AddRequirements(drivetrain);
 		
@@ -29,7 +29,7 @@ TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation)
 }
 
 TurnToAngle::TurnToAngle(const TurnToAngle& otherMe) 
-: TurnToAngle(otherMe.drivetrain, otherMe.targetRotation) {
+: TurnToAngle(otherMe.targetRotation) {
 	
 }
 
@@ -42,7 +42,7 @@ bool TurnToAngle::IsFinished() { return GetController().AtSetpoint(); }
 
 
 TurnToPoint::TurnToPoint(frc::Translation2d point, bool backwards) : 
-TurnToAngle(Drivetrain::getDrivetrain(), units::degree_t(0)), targetPoint(point), backwards(backwards) {
+TurnToAngle(units::degree_t(0)), targetPoint(point), backwards(backwards) {
 	
 }
 void TurnToPoint::Initialize() {
@@ -55,7 +55,7 @@ void TurnToPoint::Initialize() {
 	std::cout << "starting turntopoint to " << targetRotation << std::endl;
 }
 
-VisionDrive::VisionDrive() : TurnToAngle(Drivetrain::getDrivetrain(), units::degree_t(0)) {
+VisionDrive::VisionDrive() : TurnToAngle(units::degree_t(0)) {
 	
 }
 

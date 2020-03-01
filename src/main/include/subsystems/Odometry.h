@@ -3,11 +3,13 @@
 #include <frc2/command/SubsystemBase.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include "DebugValues.h"
+#include "subsystems/Drivetrain.h"
 
 class Odometry : public frc2::SubsystemBase {
     void Periodic() override;
     //creating odometry object
     frc::DifferentialDriveOdometry m_odometry;
+    Drivetrain* drivetrain;
 public:
     Odometry();
     static Odometry* getOdometry();

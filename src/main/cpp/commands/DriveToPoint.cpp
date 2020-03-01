@@ -5,11 +5,7 @@
 using namespace units;
 
 DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter, bool backwards) : 
-targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards) {   
-    // I'm too lazy to do dependency injection
-    drivetrain = Drivetrain::getDrivetrain();
-    odometry = Odometry::getOdometry();
-    
+targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards), drivetrain(Drivetrain::getDrivetrain()), odometry(Odometry::getOdometry()){   
     AddRequirements(drivetrain); //Note: odometry is intentionally not a requirement -- but we might want to adjust this, as the Reset function exists.
 }
 

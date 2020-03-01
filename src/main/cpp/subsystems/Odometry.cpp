@@ -6,7 +6,7 @@
 Odometry* odometryInstance=nullptr;
 
 Odometry::Odometry() : m_odometry{frc::Rotation2d {units::degree_t(0)},
-    frc::Pose2d{units::meter_t(0),units::meter_t(0), frc::Rotation2d {units::degree_t(0)}}} {
+    frc::Pose2d{units::meter_t(0),units::meter_t(0), frc::Rotation2d {units::degree_t(0)}}}, drivetrain(Drivetrain::getDrivetrain()) {
     
     assert(odometryInstance==nullptr); //We should only have one shooter.
 	odometryInstance=this;
@@ -36,8 +36,8 @@ units::angle::degree_t Odometry::getRobotdeg() {
 
 
 void Odometry::Periodic() {
-    frc::Rotation2d gyroAngle{units::degree_t(Drivetrain::getDrivetrain()->GetGyroAngle())};
-    auto encoders = Drivetrain::getDrivetrain()->GetEncoderDistances();
+    frc::Rotation2d gyroAngle{units::degree_t(drivetrain->GetGyroAngle())};
+    auto encoders = drivetrain->GetEncoderDistances();
     
 
     currentPos = m_odometry.Update(gyroAngle, encoders.first, encoders.second);
@@ -48,10 +48,10 @@ void Odometry::Periodic() {
 
 void Odometry::Reset(frc::Pose2d newPose) {
     
-    Drivetrain::getDrivetrain()->leftEncoder->Reset();
-    Drivetrain::getDrivetrain()->rightEncoder->Reset();
+    drivetrain->leftEncoder->Reset();
+    drivetrain->rightEncoder->Reset();
     // Note: This IS necessary, despite DifferentialDriveOdometry saying it isn't, because of the way TurnToPoint is implemented 
-     Drivetrain::getDrivetrain()->gyro->Reset();
+     drivetrain->gyro->Reset();
     
-    m_odometry.ResetPosition(newPose, frc::Rotation2d {units::degree_t( Drivetrain::getDrivetrain()->GetGyroAngle())});
+    m_odometry.ResetPosition(newPose, frc::Rotation2d {units::degree_t( drivetrain->GetGyroAngle())});
 }

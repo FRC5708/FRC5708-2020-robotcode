@@ -12,7 +12,6 @@ public:
 	AutonomousCommand();
 	
 	void SetupAuton();
-	
 private:
 	frc::SendableChooser<char> startSelect;
 	frc::SendableChooser<bool> whetherToTrenchRun;
