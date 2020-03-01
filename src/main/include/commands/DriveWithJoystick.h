@@ -52,7 +52,7 @@ namespace DriveWithJoystick{
 			void End(bool interrupted) override;
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
-			frc::SendableChooser<char> driverOp;
+			std::unique_ptr<frc::SendableChooser<char>> driverOp = std::make_unique<frc::SendableChooser<char>>();
 			double driveLimit;
 			double turnLimit;
 			double creepDriveLimit;

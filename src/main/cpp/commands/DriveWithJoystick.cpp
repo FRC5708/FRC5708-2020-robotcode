@@ -53,7 +53,7 @@ void DoDrivetrain::Initialize() {
 	controller = &Robot::GetRobot()->controller;
 }
 void DoDrivetrain::Execute() {
-	switch(driverOp.GetSelected()){
+	switch(driverOp->GetSelected()){
 		case 'J':
 			driveLimit = 0.7;
 			turnLimit = 0.5;
