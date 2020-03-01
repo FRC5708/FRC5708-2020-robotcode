@@ -49,13 +49,6 @@ void Robot::RobotInit() {
 	);
 
 }
-void Robot::togglePOV(){
-	if(POV==robotPOV::IntakePOV) POV=robotPOV::ShooterPOV;
-	else POV=robotPOV::IntakePOV;
-	//TODO: Send control message to pi, so that some sort of POV indicator shows up on the stream?
-	std::cout << "POV switched to " << (POV==robotPOV::IntakePOV ? "Intake" : "Shooter")<< std::endl;
-}
-
 /**
  * This function is called every robot packet, no matter the mode. Use
  * this for items like diagnostics that you want to run during disabled,
