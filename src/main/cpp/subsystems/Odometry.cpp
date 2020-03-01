@@ -6,12 +6,18 @@
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include "Robot.h"
 
+Odometry* odometryInstance=nullptr;
 
 Odometry::Odometry() : m_odometry{frc::Rotation2d {units::degree_t(0)},
     frc::Pose2d{units::meter_t(0),units::meter_t(0), frc::Rotation2d {units::degree_t(0)}}} {
     
+    assert(odometryInstance==nullptr); //We should only have one shooter.
+	odometryInstance=this;
 }
-
+Odometry* Odometry::getOdometry(){
+	assert(odometryInstance!=nullptr);
+	return odometryInstance;
+}
 /*
 *returns the Pose2d x as a meter_t
 */

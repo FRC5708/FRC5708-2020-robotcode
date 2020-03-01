@@ -11,6 +11,7 @@ class Odometry : public frc2::SubsystemBase {
     frc::DifferentialDriveOdometry m_odometry;
 public:
     Odometry();
+    static Odometry* getOdometry();
     frc::Pose2d currentPos;
     units::length::meter_t getRobotx();
     units::length::meter_t getRoboty();

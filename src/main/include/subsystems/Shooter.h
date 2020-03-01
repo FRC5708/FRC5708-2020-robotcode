@@ -34,6 +34,7 @@ public:
     static constexpr double defaultSpeed = 60; // rotations per second
 	enum loader{extended,retracted};
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
+    static Shooter* getShooter();
 	void setShooterWheels(double velocity);
 	void setLoader(loader position); //TODO: IMPLEMENT ME!
     void ConfigureMotor(WPI_TalonSRX* theMotor);

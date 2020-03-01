@@ -10,6 +10,8 @@ using namespace units;
 constexpr inch_t ROBOT_WIDTH(28);
 constexpr inch_t ROBOT_LENGTH(28.25);
 
+Drivetrain* drivetrainInstance=nullptr;
+
 double Drivetrain::boundValue(const double value, const double bound){
 	/**
 	 * Bounds value to range [-bound,bound]
@@ -51,6 +53,12 @@ rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], tru
 	constexpr double metersPerPulse = units::meter_t(units::inch_t(6.0)).value() * M_PI / 360.0;
 	leftEncoder->SetDistancePerPulse(metersPerPulse);
 	rightEncoder->SetDistancePerPulse(metersPerPulse);
+	assert(drivetrainInstance==nullptr); //We should only have one shooter.
+	drivetrainInstance=this;
+}
+Drivetrain* Drivetrain::getDrivetrain(){
+	assert(drivetrainInstance!=nullptr);
+	return drivetrainInstance;
 }
 
 void Drivetrain::Drive(const double left,const double right){
