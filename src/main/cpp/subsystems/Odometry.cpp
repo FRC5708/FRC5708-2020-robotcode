@@ -1,10 +1,7 @@
-#include "subsystems/Odometry.h"
-
 #include <iostream>
 
-#include "subsystems/Drivetrain.h"
 #include <frc/kinematics/DifferentialDriveOdometry.h>
-#include "Robot.h"
+#include "subsystems/subsystems.h"
 
 Odometry* odometryInstance=nullptr;
 
