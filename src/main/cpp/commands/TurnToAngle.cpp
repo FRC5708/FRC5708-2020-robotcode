@@ -1,9 +1,9 @@
 #include "commands/TurnToAngle.h"
-#include "Robot.h"
 
 #include <iostream>
 #include <frc/controller/PIDController.h>
 #include <frc2/command/CommandScheduler.h>
+#include "subsystems/subsystems.h"
 
 TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation) : 
 	PIDCommand(
@@ -61,7 +61,7 @@ VisionDrive::VisionDrive() : TurnToAngle(Drivetrain::getDrivetrain(), units::deg
 
 void VisionDrive::Initialize(){
 
-	currentTarget = Robot::GetRobot()->visionReceiver.getBestTarget();
+	currentTarget = VisionReceiver::getVisionReceiver()->getBestTarget();
 	if(currentTarget.hasTarget){
 		SetAngle();
 	}
@@ -79,8 +79,8 @@ void VisionDrive::Execute(){
 	//tracked by the PIDCommand
 
 	//get the most up to date vision data
-	if(Robot::GetRobot()->visionReceiver.newData){
-		currentTarget = Robot::GetRobot()->visionReceiver.getBestTarget();
+	if(VisionReceiver::getVisionReceiver()->newData){
+		currentTarget = VisionReceiver::getVisionReceiver()->getBestTarget();
 	}
 	if(currentTarget.hasTarget){
 		SetAngle();

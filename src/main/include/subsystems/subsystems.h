@@ -8,3 +8,4 @@
 #include "./Odometry.h"
 #include "./Intake.h"
 #include "./Drivetrain.h"
+#include "./VisionReceiver.h"
