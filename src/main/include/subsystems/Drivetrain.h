@@ -6,6 +6,7 @@
 #include <frc/Encoder.h>
 #include <frc/GyroBase.h>
 #include <units/units.h>
+#include "DebugValues.h"
 
 class Drivetrain : public frc2::SubsystemBase {
 protected:
