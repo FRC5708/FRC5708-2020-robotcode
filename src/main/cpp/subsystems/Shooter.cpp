@@ -1,4 +1,5 @@
 #include "subsystems/Shooter.h"
+#include "subsystems/Intake.h"
 #include <ctre/Phoenix.h>
 #include "commands/DriveWithJoystick.h"
 #include "DIOMaps.h"
@@ -7,6 +8,7 @@
 // Encoder ticks based on emperical data
 constexpr double speedMultiplier = 1024*0.1*0.8;
 
+Shooter* shooterInstance=nullptr;
 
 Shooter::Shooter() : 
 	rightShooterMotor(new WPI_TalonSRX(RightShooterMotorChannel)),
@@ -14,7 +16,14 @@ Shooter::Shooter() :
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
-	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
+	SetDefaultCommand(DriveWithJoystick::DoShooter());
+
+	assert(shooterInstance==nullptr); //We should only have one shooter.
+	shooterInstance=this;
+}
+Shooter* Shooter::getShooter(){
+	assert(shooterInstance!=nullptr);
+	return shooterInstance;
 }
 void Shooter::ConfigureMotor(WPI_TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();
@@ -49,6 +58,7 @@ void Shooter::setShooterWheels(double speed){
 		leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
 		//rightShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
 		//leftShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
+		Intake::getIntake()->resetBallCounter();
 	}
 }
 void Shooter::setLoader(loader position){

@@ -16,7 +16,7 @@ class TurnToAngle : public frc2::PIDCommand {
 protected:
 	Drivetrain* drivetrain;
 public:
-	TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation);
+	TurnToAngle(units::degree_t targetRotation);
 	units::degree_t targetRotation;
 	
 	bool IsFinished() override;

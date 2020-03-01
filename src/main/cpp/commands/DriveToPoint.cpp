@@ -1,16 +1,12 @@
 #include "commands/DriveToPoint.h"
-#include "Robot.h"
+#include "subsystems/subsystems.h"
 #include <cmath>
 
 using namespace units;
 
 DriveToPoint::DriveToPoint(frc::Translation2d targetPoint, bool stopAfter, bool backwards) : 
-targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards) {   
-    // I'm too lazy to do dependency injection
-    drivetrain = &Robot::GetRobot()->drivetrain;
-    odometry = &Robot::GetRobot()->odometry;
-    
-    AddRequirements(drivetrain); 
+targetPoint(targetPoint), stopAfter(stopAfter), backwards(backwards), drivetrain(Drivetrain::getDrivetrain()), odometry(Odometry::getOdometry()){   
+    AddRequirements(drivetrain); //Note: odometry is intentionally not a requirement -- but we might want to adjust this, as the Reset function exists.
 }
 
 void DriveToPoint::Initialize() {

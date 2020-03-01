@@ -1,8 +1,7 @@
 #include "commands/DriveWithJoystick.h"
 #include <iostream>
-#include <frc2/command/CommandHelper.h>
-#include "Robot.h"
-
+#include "Control.h"
+#include "subsystems/subsystems.h"
 // buttons on xbox:
 // 1=A, 2=B, 3=X, 4=Y, 5=left bumper, 6=right bumper, 7=Back, 8=Start, 9=left joystick, 10=right joystick
 
@@ -43,11 +42,8 @@ void powerRampup(double input, double* outputVar) {
 	
 }
 
-DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain),controller(&Robot::GetRobot()->controller){
+DoDrivetrain::DoDrivetrain(Drivetrain* drivetrain) : drivetrain(drivetrain),controller(Control::controller){
    AddRequirements({drivetrain});
-}
-void DoDrivetrain::Initialize() {
-	controller = &Robot::GetRobot()->controller;
 }
 void DoDrivetrain::Execute() {
 	//Default POV is Shooter.
@@ -64,7 +60,7 @@ void DoDrivetrain::Execute() {
 		turn *= creepRate;
 		power *= creepRate;
 	}
-	if(Robot::GetRobot()->POV==robotPOV::IntakePOV){
+	if(Control::getPOV()==Control::POV::IntakePOV){
 		power = -power; //Switch forwards and backwards.
 	}
 	power *= .7; //Intentionally limit ourselves.
@@ -77,13 +73,10 @@ void DoDrivetrain::End(bool interrupted) {
 	drivetrain->Drive(0, 0);
 }
 
-DoShooter::DoShooter(Shooter* shooter) : shooter(shooter),controller(&Robot::GetRobot()->controller){
+DoShooter::DoShooter() : shooter(Shooter::getShooter()),controller(Control::controller){
    AddRequirements({shooter});
 }
-void DoShooter::Initialize() {
-	controller = &Robot::GetRobot()->controller;
-}
-void DoShooter::Execute() {
+void DoShooter::Execute(){
 
 	// Controls shooting wheels
 	if (controller->GetXButtonPressed()) {
@@ -109,11 +102,8 @@ void DoShooter::End(bool interrupted) {
 	isRunning = false;
 }
 
-DoIntake::DoIntake(Intake* intake) : intake(intake){
+DoIntake::DoIntake(Intake* intake) : intake(intake),controller(Control::controller){
    AddRequirements({intake});
-}
-void DoIntake::Initialize() {
-	controller = &Robot::GetRobot()->controller;
 }
 void DoIntake::Execute() {
 	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)) {
@@ -140,7 +130,7 @@ void DoIntake::End(bool interrupted) {
 ** Returns true if any input is pressed on the controller, ending the command
 */ 
 bool CheckJoystickForInterrupt() {
-	frc::XboxController* controller = &Robot::GetRobot()->controller;
+	frc::XboxController* controller = Control::controller;
 	return (controller->GetBackButton()
 	|| controller->GetBumper(frc::GenericHID::JoystickHand::kRightHand)
 	|| controller->GetBumper(frc::GenericHID::JoystickHand::kLeftHand)
@@ -156,14 +146,11 @@ bool CheckJoystickForInterrupt() {
 	);
 }
 
-void MagicalGarbage::Initialize(){
-	controller = &Robot::GetRobot()->controller;
-	std::cout << "The magical garbage has initialized." << std::endl;
-}
+MagicalGarbage::MagicalGarbage() : controller(Control::controller){}
 void MagicalGarbage::Execute(){
 	if(controller->GetAButtonPressed()){
 		std::cout << "POV Toggle" << std::endl;
-		Robot::GetRobot()->togglePOV();
+		Control::togglePOV();
 	}
 }
 }

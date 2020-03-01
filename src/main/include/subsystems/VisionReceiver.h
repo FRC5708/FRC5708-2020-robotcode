@@ -43,6 +43,7 @@ public:
  public:
 
 	VisionReceiver();
+	static VisionReceiver* getVisionReceiver();
 
 	// Subsystem Periodic() functions are always called before command Execute() functions
 	void Periodic() override;

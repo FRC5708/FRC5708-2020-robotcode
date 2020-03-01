@@ -9,8 +9,16 @@
 
 constexpr char VISION_PORT[] = "5808";
 
+VisionReceiver* visionReceiverInstance=nullptr;
+
 VisionReceiver::VisionReceiver() {
 	setupSocket();
+	assert(visionReceiverInstance==nullptr); //We should only have one vision receiver.
+	visionReceiverInstance=this;
+}
+VisionReceiver* VisionReceiver::getVisionReceiver(){
+	assert(visionReceiverInstance!=nullptr);
+	return visionReceiverInstance;
 }
 
 void VisionReceiver::setupSocket() {
