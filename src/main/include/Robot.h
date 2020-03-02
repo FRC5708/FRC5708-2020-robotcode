@@ -34,11 +34,6 @@ class Robot : public frc::TimedRobot {
 	void TestPeriodic() override;
 	void TestInit() override;
 	static Robot* GetRobot();
-	
-	Drivetrain drivetrain;
-	Shooter shooter;
-	Intake intake;
-	Odometry odometry;
     
 	VisionReceiver visionReceiver;
 

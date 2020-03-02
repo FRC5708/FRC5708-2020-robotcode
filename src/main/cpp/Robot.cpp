@@ -139,7 +139,7 @@ void Robot::TestPeriodic() {
 		//runs every 50 ticks (1 sec)
 		if (testing_tick_counter %50 == 0) {
 			std::vector<double> vect= Drivetrain::getDrivetrain()->getMotorPowers();
-			std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
+			std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (Drivetrain::getDrivetrain()->leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (Drivetrain::getDrivetrain()->rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (Drivetrain::getDrivetrain()->leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (Drivetrain::getDrivetrain()->rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
 		}
 	}
 	if (TestToRun.GetSelected() == 'F') {
