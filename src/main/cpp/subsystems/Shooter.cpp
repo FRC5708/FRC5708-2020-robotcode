@@ -6,7 +6,7 @@
 
 // Talons measure speed in encoder ticks per 100 ms
 // Encoder ticks based on emperical data
-constexpr double speedMultiplier = 1024*0.1*0.8;
+constexpr double speedMultiplier = 1024*0.1;
 
 Shooter* shooterInstance=nullptr;
 
