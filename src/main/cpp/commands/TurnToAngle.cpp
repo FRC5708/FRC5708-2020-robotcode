@@ -7,21 +7,20 @@
 #include "subsystems/Odometry.h"
 
 TurnToAngle::TurnToAngle(units::degree_t targetRotation) : 
-	drivetrain(drivetrain),
-	targetRotation(targetRotation),
 	PIDCommand(
 		frc2::PIDController(0.05, 0.005, 0.005), 
-		[this](){ return drivetrain->GetGyroAngle(); },
+		[this](){ return Drivetrain::getDrivetrain()->GetGyroAngle(); },
 		[this](){return this->targetRotation.value(); },
 		[this](double d){ 
 			//std::cout << "turn power: " << d << std::endl;
-			drivetrain->DrivePolar(0, std::copysign(std::max(fabs(d), 0.07), d));
+			Drivetrain::getDrivetrain()->DrivePolar(0, std::copysign(std::max(fabs(d), 0.07), d));
 			//drivetrain->DrivePolar(0, d);
 			},
-		drivetrain)
+		Drivetrain::getDrivetrain()),
+		targetRotation(targetRotation)
 	{
 		
-	AddRequirements(drivetrain);
+	AddRequirements(Drivetrain::getDrivetrain());
 		
 	// Set the controller to be continuous (because it is an angle controller)
 	m_controller.EnableContinuousInput(-180, 180);	
@@ -35,7 +34,7 @@ TurnToAngle::TurnToAngle(const TurnToAngle& otherMe)
 }
 
 void TurnToAngle::End(bool interrupted) {
-	drivetrain->Drive(0, 0);
+	Drivetrain::getDrivetrain()->Drive(0, 0);
 	std::cout << "Ending turntoangle" << std::endl;
 }
 
@@ -72,7 +71,7 @@ void VisionDrive::Initialize(){
 }
 
 void VisionDrive::SetAngle() {
-	targetRotation = units::degree_t(drivetrain->GetGyroAngle()) + currentTarget.target.robotAngle;
+	targetRotation = units::degree_t(Drivetrain::getDrivetrain()->GetGyroAngle()) + currentTarget.target.robotAngle;
 }
 
 void VisionDrive::Execute(){
