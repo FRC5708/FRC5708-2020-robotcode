@@ -1,7 +1,9 @@
 #include "commands/DriveWithJoystick.h"
 #include <iostream>
 #include "Control.h"
-#include "subsystems/subsystems.h"
+#include "subsystems/Drivetrain.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Shooter.h"
 // buttons on xbox:
 // 1=A, 2=B, 3=X, 4=Y, 5=left bumper, 6=right bumper, 7=Back, 8=Start, 9=left joystick, 10=right joystick
 

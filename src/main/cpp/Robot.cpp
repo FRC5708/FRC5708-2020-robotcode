@@ -13,6 +13,7 @@
 #include <frc2/command/CommandScheduler.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/button/JoystickButton.h>
+#include "subsystems/Drivetrain.h"
 
 #include <iostream>
 #include <sys/stat.h>

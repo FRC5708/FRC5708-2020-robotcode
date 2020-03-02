@@ -5,7 +5,10 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
 
-#include "subsystems/subsystems.h"
+#include "subsystems/Drivetrain.h"
+#include "subsystems/Odometry.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Shooter.h"
 
 
 using namespace units;
