@@ -8,7 +8,7 @@
 // Encoder ticks based on emperical data
 constexpr double speedMultiplier = 1024*0.1;
 
-Shooter* shooterInstance=nullptr;
+Shooter shooterInstance;
 
 Shooter::Shooter() : 
 	rightShooterMotor(new WPI_TalonSRX(RightShooterMotorChannel)),
@@ -17,15 +17,12 @@ Shooter::Shooter() :
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
 
-	assert(shooterInstance==nullptr); //We should only have one shooter.
-	shooterInstance=this;
-
 	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
+	assert(this == &shooterInstance); // there should only be one instance.
 	if(DEBUG_CONSTRUCTORS) std::cout << "Shooter initialized." << std::endl;
 }
 Shooter* Shooter::getShooter(){
-	assert(shooterInstance!=nullptr);
-	return shooterInstance;
+	return &shooterInstance;
 }
 void Shooter::ConfigureMotor(WPI_TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();

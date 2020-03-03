@@ -2,7 +2,7 @@
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h> //Let's avoid the header apocalypse.
 #include <iostream>
 
-Intake* intakeInstance=nullptr;
+Intake intakeInstance;
 
 Intake::Intake() :
     intakeMotor(new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(IntakeMotorChannel)),
@@ -11,13 +11,11 @@ Intake::Intake() :
     SetDefaultCommand(DriveWithJoystick::DoIntake(this));
     
     magazineMotor->SetInverted(true);
-    assert(intakeInstance==nullptr); //We should only ever have *one* intake.
-    intakeInstance=this;
+    assert(this == &intakeInstance); // there should only be one instance.
     if(DEBUG_CONSTRUCTORS) std::cout << "Intake initialized." << std::endl;
 }
 Intake* Intake::getIntake(){
-    assert(intakeInstance!=nullptr); 
-    return intakeInstance;
+    return &intakeInstance;
 }
 void Intake::setIntake(intake_mode mode){
     this->mode=mode;

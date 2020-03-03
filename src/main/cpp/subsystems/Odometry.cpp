@@ -4,18 +4,15 @@
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include "subsystems/Drivetrain.h"
 
-Odometry* odometryInstance=nullptr;
+Odometry odometryInstance;
 
 Odometry::Odometry() : m_odometry{frc::Rotation2d {units::degree_t(0)},
     frc::Pose2d{units::meter_t(0),units::meter_t(0), frc::Rotation2d {units::degree_t(0)}}}, drivetrain(Drivetrain::getDrivetrain()) {
-    
-    assert(odometryInstance==nullptr); //We should only have one shooter.
-	odometryInstance=this;
+    assert(this == &odometryInstance); // there should only be one instance.
     if(DEBUG_CONSTRUCTORS) std::cout << "Odometry initialized." << std::endl;
 }
 Odometry* Odometry::getOdometry(){
-	assert(odometryInstance!=nullptr);
-	return odometryInstance;
+	return &odometryInstance;
 }
 /*
 *returns the Pose2d x as a meter_t
