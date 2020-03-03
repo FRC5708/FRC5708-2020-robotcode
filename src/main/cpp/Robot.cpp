@@ -106,67 +106,10 @@ void Robot::TeleopPeriodic() {
 }
 
 
-
-
-//TESTING THINGS
-//TODO: add text box that explains what the heck all the sendable chooser boxes mean...
-void Robot::TestInit() {
-testing_tick_counter = 0;
-TestingTime = std::chrono::steady_clock::now();
-TestToRun.SetDefaultOption("None", 'N');
-TestToRun.AddOption("ACTIVATES MOTORS - Test Motor/Encoder sync", 'M');
-TestToRun.AddOption("ACTIVATES MOTORS - Run all wheels forward", 'F');
-OutputMotorValues.SetDefaultOption("No", false);
-OutputMotorValues.AddOption("Yes", true);
-frc::SmartDashboard::PutData("Test To Run", &TestToRun);
-frc::SmartDashboard::PutData("Output Motor Values?", &OutputMotorValues);
-} 
-/*
-*This function is called periodically during test mode.
-*/
-void Robot::TestPeriodic() {
-	/*TODO: directly calling drivetrain.Drive will *not* work as intended.
-	** Because doDrivetrain is the default command associated with that subsystem, 
-	**  manual calls will clash with the values being set by that command.
-	** The cleanest way to fix this would be to create a suite of testing commands, 
-	**  which Robot::TestInit should instantiate. 
-	*/
-
-	//std::cout << "I am not insane." << std::endl;
-	if (TestToRun.GetSelected() == 'M') {
-		testing_tick_counter++;
-		Drivetrain::getDrivetrain()->Drive(0.3, 0.3);
-		//runs every 50 ticks (1 sec)
-		if (testing_tick_counter %50 == 0) {
-			std::vector<double> vect= Drivetrain::getDrivetrain()->getMotorPowers();
-			std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (drivetrain.leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (drivetrain.rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
-		}
-	}
-	if (TestToRun.GetSelected() == 'F') {
-		testing_first_motor_test = true;
-		Drivetrain::getDrivetrain()->Drive(0.3, 0.3);
-	}
-	if (TestToRun.GetSelected() == 'N') {
-		testing_first_motor_test = true;
-		Drivetrain::getDrivetrain()->Drive(0, 0);
-
-	}
-	if (OutputMotorValues.GetSelected()) {
-		//counsts so that it activates every half second
-		testing_tick_counter++;
-		if (testing_tick_counter %25 == 0) {
-			std::vector<double> vect=Drivetrain::getDrivetrain()->getMotorPowers();
-			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3) << std::endl;
-		}
-	}
+void Robot::TestInit(){
+	TestingCommands::DrivetrainTestingCommands::TestDriveForward().Schedule();
 }
+
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
-
-/**
- * 
- * DONT WORRY ABOUT IT, ILL FIRGURE THIS PART OUT EVENTUALLY...
- * (also known as notes/code that i will hopefully use later)
- * what angle -->
-*/

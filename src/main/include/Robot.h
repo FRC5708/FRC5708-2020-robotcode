@@ -18,6 +18,7 @@
 #include "commands/TurnToAngle.h"
 #include "commands/Autonomous.h"
 #include "DebugValues.h"
+#include "commands/TestMode.h"
 
 extern const bool IS_PROD;
 
@@ -31,7 +32,6 @@ class Robot : public frc::TimedRobot {
 	void AutonomousPeriodic() override;
 	void TeleopInit() override;
 	void TeleopPeriodic() override;
-	void TestPeriodic() override;
 	void TestInit() override;
 	static Robot* GetRobot();
 	
@@ -42,14 +42,7 @@ class Robot : public frc::TimedRobot {
     
 	VisionReceiver visionReceiver;
 
-	int testing_tick_counter = 0;
-	bool testing_first_motor_test = true;
-	
 	DriveWithJoystick::InterruptableByController<VisionDrive> visionDrive;
-	std::chrono::steady_clock::time_point TestingTime;
-	std::chrono::steady_clock::time_point MotorTestStartTime;
-	frc::SendableChooser<char> TestToRun;
-	frc::SendableChooser<bool> OutputMotorValues;
 	DriveWithJoystick::MagicalGarbage povSwitcher;
  private:
 	AutonomousCommand autonomous;
