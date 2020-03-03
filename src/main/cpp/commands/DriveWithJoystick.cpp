@@ -75,7 +75,7 @@ void DoDrivetrain::End(bool interrupted) {
 	drivetrain->Drive(0, 0);
 }
 
-DoShooter::DoShooter() : shooter(Shooter::getShooter()),controller(Control::controller){
+DoShooter::DoShooter(Shooter* shooter) : shooter(shooter),controller(Control::controller){
    AddRequirements({shooter});
 }
 void DoShooter::Execute(){

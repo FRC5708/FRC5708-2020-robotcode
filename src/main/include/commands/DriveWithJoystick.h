@@ -36,7 +36,7 @@ namespace DriveWithJoystick{
 			bool isRunning = false;
 			void End(bool interrupted) override;
 		public:
-			DoShooter();
+			DoShooter(Shooter* shooter);
 	};
 	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoDrivetrain>{
 		private:

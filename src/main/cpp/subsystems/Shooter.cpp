@@ -16,10 +16,11 @@ Shooter::Shooter() :
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
-	SetDefaultCommand(DriveWithJoystick::DoShooter());
 
 	assert(shooterInstance==nullptr); //We should only have one shooter.
 	shooterInstance=this;
+
+	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
 	if(DEBUG_CONSTRUCTORS) std::cout << "Shooter initialized." << std::endl;
 }
 Shooter* Shooter::getShooter(){
