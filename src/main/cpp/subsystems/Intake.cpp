@@ -105,8 +105,8 @@ void Intake::trackPressState(){
                 //We definitely don't have it any more. 
                 state=none;
                 if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to none." << std::endl;
-                if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball camp " << ramp_ball_counter << std::endl;
                 ramp_ball_counter+=1; //Add a ball to the counter.
+                if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball count " << ramp_ball_counter << std::endl;
             }
             break;
     }
