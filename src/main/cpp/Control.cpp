@@ -12,7 +12,7 @@ namespace Control{
         //TODO: Send control message to pi, so that some sort of POV indicator shows up on the stream?
         std::cout << "POV switched to " << (robotPOV==POV::IntakePOV ? "Intake" : "Shooter")<< std::endl;
     }
-    extern frc::XboxController* controller=new frc::XboxController(0);
+    frc::XboxController* controller=new frc::XboxController(0);
     POV getPOV(){return robotPOV;}
     
 }

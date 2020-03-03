@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <netdb.h>
+#include "DebugValues.h"
 
 
 constexpr char VISION_PORT[] = "5808";
@@ -15,6 +16,7 @@ VisionReceiver::VisionReceiver() {
 	setupSocket();
 	assert(visionReceiverInstance==nullptr); //We should only have one vision receiver.
 	visionReceiverInstance=this;
+	if(DEBUG_CONSTRUCTORS) std::cout << "VisionReceiver initialized." << std::endl;
 }
 VisionReceiver* VisionReceiver::getVisionReceiver(){
 	assert(visionReceiverInstance!=nullptr);

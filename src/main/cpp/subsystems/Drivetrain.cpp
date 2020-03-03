@@ -55,6 +55,7 @@ rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], tru
 	rightEncoder->SetDistancePerPulse(metersPerPulse);
 	assert(drivetrainInstance==nullptr); //We should only have one shooter.
 	drivetrainInstance=this;
+	if(DEBUG_CONSTRUCTORS) std::cout << "Drivetrain initialized." << std::endl;
 }
 Drivetrain* Drivetrain::getDrivetrain(){
 	assert(drivetrainInstance!=nullptr);

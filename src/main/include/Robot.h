@@ -13,12 +13,16 @@
 #include <frc/XboxController.h>
 #include <chrono>
 
-#include "subsystems/subsystems.h"
 #include "commands/DriveWithJoystick.h"
 #include "commands/TurnToAngle.h"
 #include "commands/Autonomous.h"
 #include "DebugValues.h"
 #include "commands/TestMode.h"
+#include "subsystems/Drivetrain.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Odometry.h"
+#include "subsystems/Shooter.h"
+#include "subsystems/VisionReceiver.h"
 
 extern const bool IS_PROD;
 
@@ -34,13 +38,12 @@ class Robot : public frc::TimedRobot {
 	void TeleopPeriodic() override;
 	void TestInit() override;
 	static Robot* GetRobot();
-	
-	Drivetrain drivetrain;
-	Shooter shooter;
-	Intake intake;
-	Odometry odometry;
     
-	VisionReceiver visionReceiver;
+	VisionReceiver visionReceiver; //Requires nothing to be initialized.
+	Drivetrain drivetrain;
+	Odometry odometry;
+	Intake intake;
+	Shooter shooter;
 
 	DriveWithJoystick::InterruptableByController<VisionDrive> visionDrive;
 	DriveWithJoystick::MagicalGarbage povSwitcher;

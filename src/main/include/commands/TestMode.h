@@ -5,7 +5,10 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/SequentialCommandGroup.h>
-#include "subsystems/subsystems.h"
+#include "subsystems/Drivetrain.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Shooter.h"
+#include "subsystems/Odometry.h"
 
 namespace TestingCommands{
     extern Drivetrain* drivetrain;
