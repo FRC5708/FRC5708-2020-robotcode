@@ -20,6 +20,7 @@ Shooter::Shooter() :
 
 	assert(shooterInstance==nullptr); //We should only have one shooter.
 	shooterInstance=this;
+	if(DEBUG_CONSTRUCTORS) std::cout << "Shooter initialized." << std::endl;
 }
 Shooter* Shooter::getShooter(){
 	assert(shooterInstance!=nullptr);

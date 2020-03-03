@@ -11,6 +11,7 @@ Odometry::Odometry() : m_odometry{frc::Rotation2d {units::degree_t(0)},
     
     assert(odometryInstance==nullptr); //We should only have one shooter.
 	odometryInstance=this;
+    if(DEBUG_CONSTRUCTORS) std::cout << "Odometry initialized." << std::endl;
 }
 Odometry* Odometry::getOdometry(){
 	assert(odometryInstance!=nullptr);

@@ -13,6 +13,7 @@ Intake::Intake() :
     magazineMotor->SetInverted(true);
     assert(intakeInstance==nullptr); //We should only ever have *one* intake.
     intakeInstance=this;
+    if(DEBUG_CONSTRUCTORS) std::cout << "Intake initialized." << std::endl;
 }
 Intake* Intake::getIntake(){
     assert(intakeInstance!=nullptr); 
@@ -104,11 +105,16 @@ void Intake::trackPressState(){
                 //We definitely don't have it any more. 
                 state=none;
                 if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to none." << std::endl;
+                if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball camp " << ramp_ball_counter << std::endl;
                 ramp_ball_counter+=1; //Add a ball to the counter.
             }
             break;
     }
 }
+void Intake::resetBallCounter(){
+        if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Reset ramp ball count." << std::endl;
+        ramp_ball_counter=0;
+    }
 unsigned short Intake::getBallCount(){
     //TODO: IMPLEMENT ME!
     return 0;

@@ -17,6 +17,11 @@
 #include "commands/TurnToAngle.h"
 #include "commands/Autonomous.h"
 #include "DebugValues.h"
+#include "subsystems/Drivetrain.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Odometry.h"
+#include "subsystems/Shooter.h"
+#include "subsystems/VisionReceiver.h"
 
 extern const bool IS_PROD;
 
@@ -34,7 +39,11 @@ class Robot : public frc::TimedRobot {
 	void TestInit() override;
 	static Robot* GetRobot();
     
-	VisionReceiver visionReceiver;
+	VisionReceiver visionReceiver; //Requires nothing to be initialized.
+	Drivetrain drivetrain;
+	Odometry odometry;
+	Intake intake;
+	Shooter shooter;
 
 	int testing_tick_counter = 0;
 	bool testing_first_motor_test = true;
