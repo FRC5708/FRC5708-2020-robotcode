@@ -12,7 +12,11 @@ Shooter shooterInstance;
 
 Shooter::Shooter() : 
 	rightShooterMotor(new WPI_TalonSRX(RightShooterMotorChannel)),
-    leftShooterMotor(new WPI_TalonSRX(LeftShooterMotorChannel)) {
+    leftShooterMotor(new WPI_TalonSRX(LeftShooterMotorChannel)),
+	loader(9) {
+		
+	loader.SetBounds(2.5, 0, 0, 0, 0.5);
+	
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
@@ -59,17 +63,32 @@ void Shooter::setShooterWheels(double speed){
 		//leftShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
 	}
 }
-void Shooter::setLoader(loader position){
-	if(DEBUG_LOADER_STATE) std::cout << "Loader position set to " << (position==extended ? "extended" : "retracted") << std::endl;
-	if(position==extended){
+
+
+bool Shooter::isSpunTo(double speed) {
+	return ((rightShooterMotor->GetSelectedSensorVelocity() / speedMultiplier) / speed >= 0.95
+	&& (leftShooterMotor->GetSelectedSensorVelocity() / speedMultiplier) / speed >= 0.95);
+}
+
+void Shooter::setLoader(loaderPos position) {
+	switch (position) {
+		case loaderPos::extended: 
+			loader.Set(1); break;
+		case loaderPos::retracted:
+			loader.Set(0); break;
+		default:
+			abort();
+	};
+	
+	if(DEBUG_LOADER_STATE) std::cout << "Loader position set to " << (position==loaderPos::extended ? "extended" : "retracted") << std::endl;
+	if(position==loaderPos::extended){
 		Intake::getIntake()->decrementBallCounter();
 	}
-	//TODO: IMPLEMENT ME!
-	return;
 } 
+
 void Shooter::toggleLoader(){
 	//Toggle the loader state
-	if(loader_state==extended) loader_state=retracted;
-	else loader_state=extended;
+	if(loader_state==loaderPos::extended) loader_state=loaderPos::retracted;
+	else loader_state=loaderPos::extended;
 	setLoader(loader_state);
 }
