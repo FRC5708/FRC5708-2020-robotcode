@@ -30,6 +30,8 @@ private:
 	WPI_TalonSRX* rightShooterMotor;
     WPI_TalonSRX* leftShooterMotor;
     frc::Servo loader;
+    
+    void ConfigureMotor(WPI_TalonSRX* theMotor);
 public:
     // rotations per second
     static constexpr double defaultSpeed = 50; // rotations per second
@@ -40,5 +42,6 @@ public:
 	void setShooterWheels(double velocity);
 	void setLoader(loaderPos position); //TODO: IMPLEMENT ME!
     void toggleLoader();
-    void ConfigureMotor(WPI_TalonSRX* theMotor);
+    
+    bool isSpunTo(double speed);
 };

@@ -64,6 +64,12 @@ void Shooter::setShooterWheels(double speed){
 	}
 }
 
+
+bool Shooter::isSpunTo(double speed) {
+	return ((rightShooterMotor->GetSelectedSensorVelocity() / speedMultiplier) / speed >= 0.95
+	&& (leftShooterMotor->GetSelectedSensorVelocity() / speedMultiplier) / speed >= 0.95);
+}
+
 void Shooter::setLoader(loaderPos position) {
 	switch (position) {
 		case loaderPos::extended: 
