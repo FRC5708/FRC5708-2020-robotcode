@@ -1,8 +1,8 @@
 #include "commands/ShootCommand.h"
 
 
-ShootCommand::ShootCommand(Shooter* shooter, double power) : shooter(shooter), shooterSpeed(power) {
-	AddRequirements({shooter});
+ShootCommand::ShootCommand(double power) : shooterSpeed(power) {
+	AddRequirements({Shooter::getShooter()});
 	
 }
 

@@ -12,9 +12,8 @@ class Shooter; //Defined in subsystems/Shooter.h
 
 class ShootCommand : public frc2::CommandHelper<frc2::SequentialCommandGroup,ShootCommand> {
 public:
-    ShootCommand(Shooter* shooter,double power=Shooter::defaultSpeed);
+    ShootCommand(double power=Shooter::defaultSpeed);
 private:
-    Shooter* shooter;
     double shooterSpeed;
     
     bool shootingStarted = false;
