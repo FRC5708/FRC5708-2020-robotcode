@@ -79,26 +79,9 @@ DoShooter::DoShooter(Shooter* shooter) : shooter(shooter),controller(Control::co
    AddRequirements({shooter});
 }
 void DoShooter::Execute(){
-
-	// Controls shooting wheels
-	if (controller->GetXButtonPressed()) {
-		isRunning = !isRunning; //Toggle shooter state
-	}
-	if(controller->GetStartButton()) isRunning=false;
-	if (isRunning){
-		shooter->setShooterWheels(Shooter::defaultSpeed);
-	}
-	else {
-		shooter->setShooterWheels(0);
-	}
-
-	// Controls shooter loader
-	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		shooter->setLoader(Shooter::loader::extended);
-	}
-	if (controller->GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		shooter->setLoader(Shooter::loader::retracted);
-	}
+	if(controller->GetBumper(frc::GenericHID::JoystickHand::kRightHand)){
+		shootCommand.Schedule();
+	}	
 }
 void DoShooter::End(bool interrupted) {
 	isRunning = false;
