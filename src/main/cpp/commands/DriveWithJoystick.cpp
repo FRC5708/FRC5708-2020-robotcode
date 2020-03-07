@@ -67,6 +67,7 @@ void DoDrivetrain::Execute() {
 	if(Robot::GetRobot()->POV==robotPOV::IntakePOV){
 		power = -power; //Switch forwards and backwards.
 	}
+	power *= .7; //Intentionally limit ourselves.
 
 	//std::cout << "doDrivetrain executing" << std::endl;
 	drivetrain->DrivePolar(power, turn);
@@ -85,7 +86,7 @@ void DoShooter::Initialize() {
 void DoShooter::Execute() {
 
 	// Controls shooting wheels
-	if (controller->GetAButtonPressed()) {
+	if (controller->GetXButtonPressed()) {
 		isRunning = !isRunning; //Toggle shooter state
 	}
 	if(controller->GetStartButton()) isRunning=false;
@@ -118,13 +119,19 @@ void DoIntake::Execute() {
 	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kLeftHand)) {
 		isRunning=!isRunning;
 	}
-	if(controller->GetStartButton()) isRunning=false;
-	if(isRunning){
-		intake->setIntake(Intake::intake_mode::intake);
+	if(controller->GetStartButton()){
+		isRunning=false;
+		intake->setIntake(Intake::intake_mode::reverse);
+	} 
+	else{
+		if(isRunning){
+			intake->setIntake(Intake::intake_mode::intake);
+		}
+		else {
+			intake->setIntake(Intake::intake_mode::off);
+		}
 	}
-	else {
-		intake->setIntake(Intake::intake_mode::off);
-	}
+	if(controller->GetStartButtonReleased()) intake->setIntake(Intake::intake_mode::off);
 }
 void DoIntake::End(bool interrupted) {
 	isRunning = false;
@@ -154,7 +161,7 @@ void MagicalGarbage::Initialize(){
 	std::cout << "The magical garbage has initialized." << std::endl;
 }
 void MagicalGarbage::Execute(){
-	if(controller->GetXButtonPressed()){
+	if(controller->GetAButtonPressed()){
 		std::cout << "POV Toggle" << std::endl;
 		Robot::GetRobot()->togglePOV();
 	}

@@ -28,7 +28,7 @@ namespace DriveWithJoystick{
 		public:
 			DoIntake(Intake* intake);
 	};
-	class DoShooter : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+	class DoShooter : public frc2::CommandHelper<frc2::CommandBase,DoShooter>{
 		private:
 			Shooter* shooter; //Initialized within member initialization list
 			frc::XboxController* controller; //Initialized within member initialization list
@@ -40,7 +40,7 @@ namespace DriveWithJoystick{
 		public:
 			DoShooter(Shooter* shooter);
 	};
-	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+	class DoDrivetrain : public frc2::CommandHelper<frc2::CommandBase,DoDrivetrain>{
 		private:
 			Drivetrain* drivetrain; //Initialized within member initialization list
 			frc::XboxController* controller; //Initialized within member initialization list
@@ -52,7 +52,7 @@ namespace DriveWithJoystick{
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
 	};
-	class MagicalGarbage : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
+	class MagicalGarbage : public frc2::CommandHelper<frc2::CommandBase,MagicalGarbage>{
 		//Because Triggers are just straight-up broken in c++.
 		frc::XboxController* controller;
 		void Initialize() override;
