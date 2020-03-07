@@ -73,4 +73,16 @@ void Shooter::setLoader(loaderPos position) {
 		default:
 			abort();
 	};
+	
+	if(DEBUG_LOADER_STATE) std::cout << "Loader position set to " << (position==loaderPos::extended ? "extended" : "retracted") << std::endl;
+	if(position==loaderPos::extended){
+		Intake::getIntake()->decrementBallCounter();
+	}
 } 
+
+void Shooter::toggleLoader(){
+	//Toggle the loader state
+	if(loader_state==loaderPos::extended) loader_state=loaderPos::retracted;
+	else loader_state=loaderPos::extended;
+	setLoader(loader_state);
+}

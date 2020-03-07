@@ -109,14 +109,14 @@ void Intake::trackPressState(){
             break;
     }
 }
-void Intake::resetBallCounter(){
+void Intake::resetBallCounter(unsigned short count){
     //This should *not* be called under normal operation.
     std::cerr << "resetBallCounter called, this is probably a bad idea" << std::endl;
-    if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Reset ramp ball count." << std::endl;
-    ramp_ball_counter=0;
+    if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Reset ramp ball count to " << count << std::endl;
+    ramp_ball_counter=count;
 }
 void Intake::decrementBallCounter(){
-    if(!ramp_ball_counter>0){
+    if(!(ramp_ball_counter>0)){
        if(DEBUG_INTAKE_BALL_COUNT) std::cerr << "Ramp ball count attempted to be decremented, but was already 0!" << std::endl;
         return;
     } 

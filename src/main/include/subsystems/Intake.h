@@ -38,7 +38,7 @@ public:
     static Intake* getIntake(); //Get the singleton instance of the intake. 
 	void setIntake(intake_mode mode);
     unsigned short getBallCount(); //TODO: IMPLEMENT ME!
-    void resetBallCounter();
+    void resetBallCounter(unsigned short count=START_BALL_COUNT);
     void decrementBallCounter();
-   
+    
 };

@@ -34,9 +34,11 @@ public:
     // rotations per second
     static constexpr double defaultSpeed = 50; // rotations per second
 	enum struct loaderPos{extended,retracted};
+    loaderPos loader_state=loaderPos::retracted;
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
     static Shooter* getShooter();
 	void setShooterWheels(double velocity);
-    void setLoader(loaderPos pos);
+	void setLoader(loaderPos position); //TODO: IMPLEMENT ME!
+    void toggleLoader();
     void ConfigureMotor(WPI_TalonSRX* theMotor);
 };
