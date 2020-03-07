@@ -14,7 +14,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/button/JoystickButton.h>
 #include "subsystems/Drivetrain.h"
-
+#include "subsystems/Intake.h"
 #include <iostream>
 #include <sys/stat.h>
 #include <chrono>
@@ -84,6 +84,7 @@ void Robot::DisabledPeriodic() {}
 
 
 void Robot::AutonomousInit() {
+	Intake::getIntake()->resetBallCounter(); //Resets ball counter to value to START_BALL_COUNT
 	// Required because reasons
 	autonomous.SetupAuton();
 	autonomous.Schedule();

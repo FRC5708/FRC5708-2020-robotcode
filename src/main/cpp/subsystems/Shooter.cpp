@@ -60,6 +60,16 @@ void Shooter::setShooterWheels(double speed){
 	}
 }
 void Shooter::setLoader(loader position){
+	if(DEBUG_LOADER_STATE) std::cout << "Loader position set to " << (position==extended ? "extended" : "retracted") << std::endl;
+	if(position==extended){
+		Intake::getIntake()->decrementBallCounter();
+	}
 	//TODO: IMPLEMENT ME!
 	return;
 } 
+void Shooter::toggleLoader(){
+	//Toggle the loader state
+	if(loader_state==extended) loader_state=retracted;
+	else loader_state=extended;
+	setLoader(loader_state);
+}
