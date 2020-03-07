@@ -23,7 +23,6 @@ namespace DriveWithJoystick{
 			bool isRunning=false;
 
 			void Execute() override;
-			void Initialize() override;
 			void End(bool interrupted) override;
 		public:
 			DoIntake(Intake* intake);
@@ -34,7 +33,6 @@ namespace DriveWithJoystick{
 			frc::XboxController* controller; //Initialized within member initialization list
 
 			void Execute() override;
-			void Initialize() override;
 			bool isRunning = false;
 			void End(bool interrupted) override;
 		public:
@@ -47,16 +45,17 @@ namespace DriveWithJoystick{
 
 			double creepRate=0.25; //The slowdown multiplier while holding the creep button.
 			void Execute() override;
-			void Initialize() override; 
 			void End(bool interrupted) override;
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
 	};
 	class MagicalGarbage : public frc2::CommandHelper<frc2::CommandBase,MagicalGarbage>{
 		//Because Triggers are just straight-up broken in c++.
-		frc::XboxController* controller;
-		void Initialize() override;
-		void Execute() override;
+		private:
+			frc::XboxController* controller;
+			void Execute() override;
+		public:
+			MagicalGarbage();
 	};
 	
 	

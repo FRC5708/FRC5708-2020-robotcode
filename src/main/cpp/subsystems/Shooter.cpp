@@ -1,12 +1,14 @@
 #include "subsystems/Shooter.h"
+#include "subsystems/Intake.h"
 #include <ctre/Phoenix.h>
 #include "commands/DriveWithJoystick.h"
 #include "DIOMaps.h"
 
 // Talons measure speed in encoder ticks per 100 ms
 // Encoder ticks based on emperical data
-constexpr double speedMultiplier = 1024*0.1*0.8;
+constexpr double speedMultiplier = 1024*0.1;
 
+Shooter shooterInstance;
 
 Shooter::Shooter() : 
 	rightShooterMotor(new WPI_TalonSRX(RightShooterMotorChannel)),
@@ -14,7 +16,13 @@ Shooter::Shooter() :
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
+
 	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
+	assert(this == &shooterInstance); // there should only be one instance.
+	if(DEBUG_CONSTRUCTORS) std::cout << "Shooter initialized." << std::endl;
+}
+Shooter* Shooter::getShooter(){
+	return &shooterInstance;
 }
 void Shooter::ConfigureMotor(WPI_TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();
@@ -49,6 +57,7 @@ void Shooter::setShooterWheels(double speed){
 		leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
 		//rightShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
 		//leftShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
+		Intake::getIntake()->resetBallCounter();
 	}
 }
 void Shooter::setLoader(loader position){

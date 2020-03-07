@@ -6,6 +6,7 @@
 #include <frc/Encoder.h>
 #include <frc/GyroBase.h>
 #include <units/units.h>
+#include "DebugValues.h"
 
 class Drivetrain : public frc2::SubsystemBase {
 protected:
@@ -20,6 +21,7 @@ protected:
 public:
 
 	Drivetrain();
+	static Drivetrain* getDrivetrain();
 	void Drive(double left, double right);
 	void DrivePolar(double power, double turn);
 	double boundValue(double value, double bound);

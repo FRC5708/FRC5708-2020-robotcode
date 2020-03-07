@@ -1,26 +1,26 @@
 #include "commands/TurnToAngle.h"
-#include "Robot.h"
 
 #include <iostream>
 #include <frc/controller/PIDController.h>
 #include <frc2/command/CommandScheduler.h>
+#include "subsystems/Drivetrain.h"
+#include "subsystems/Odometry.h"
 
-TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation) : 
+TurnToAngle::TurnToAngle(units::degree_t targetRotation) : 
 	PIDCommand(
 		frc2::PIDController(0.05, 0.005, 0.005), 
-		[drivetrain](){ return drivetrain->GetGyroAngle(); },
+		[this](){ return Drivetrain::getDrivetrain()->GetGyroAngle(); },
 		[this](){return this->targetRotation.value(); },
-		[drivetrain](double d){ 
+		[this](double d){ 
 			//std::cout << "turn power: " << d << std::endl;
-			drivetrain->DrivePolar(0, std::copysign(std::max(fabs(d), 0.07), d));
+			Drivetrain::getDrivetrain()->DrivePolar(0, std::copysign(std::max(fabs(d), 0.07), d));
 			//drivetrain->DrivePolar(0, d);
 			},
-		drivetrain),
-	
-	drivetrain(drivetrain),
-	targetRotation(targetRotation) {
+		Drivetrain::getDrivetrain()),
+		targetRotation(targetRotation)
+	{
 		
-	AddRequirements(drivetrain);
+	AddRequirements(Drivetrain::getDrivetrain());
 		
 	// Set the controller to be continuous (because it is an angle controller)
 	m_controller.EnableContinuousInput(-180, 180);	
@@ -29,12 +29,12 @@ TurnToAngle::TurnToAngle(Drivetrain* drivetrain, units::degree_t targetRotation)
 }
 
 TurnToAngle::TurnToAngle(const TurnToAngle& otherMe) 
-: TurnToAngle(otherMe.drivetrain, otherMe.targetRotation) {
+: TurnToAngle(otherMe.targetRotation) {
 	
 }
 
 void TurnToAngle::End(bool interrupted) {
-	drivetrain->Drive(0, 0);
+	Drivetrain::getDrivetrain()->Drive(0, 0);
 	std::cout << "Ending turntoangle" << std::endl;
 }
 
@@ -42,12 +42,12 @@ bool TurnToAngle::IsFinished() { return GetController().AtSetpoint(); }
 
 
 TurnToPoint::TurnToPoint(frc::Translation2d point, bool backwards) : 
-TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)), targetPoint(point), backwards(backwards) {
+TurnToAngle(units::degree_t(0)), targetPoint(point), backwards(backwards) {
 	
 }
 void TurnToPoint::Initialize() {
 	
-	frc::Translation2d here = Robot::GetRobot()->odometry.currentPos.Translation();
+	frc::Translation2d here = Odometry::getOdometry()->currentPos.Translation();
 	targetRotation = units::math::atan2(targetPoint.Y() - here.Y(), targetPoint.X() - here.X());
 	if (backwards) targetRotation -= units::degree_t(180);
 	
@@ -55,13 +55,13 @@ void TurnToPoint::Initialize() {
 	std::cout << "starting turntopoint to " << targetRotation << std::endl;
 }
 
-VisionDrive::VisionDrive() : TurnToAngle(&Robot::GetRobot()->drivetrain, units::degree_t(0)) {
+VisionDrive::VisionDrive() : TurnToAngle(units::degree_t(0)) {
 	
 }
 
 void VisionDrive::Initialize(){
 
-	currentTarget = Robot::GetRobot()->visionReceiver.getBestTarget();
+	currentTarget = VisionReceiver::getVisionReceiver()->getBestTarget();
 	if(currentTarget.hasTarget){
 		SetAngle();
 	}
@@ -71,7 +71,7 @@ void VisionDrive::Initialize(){
 }
 
 void VisionDrive::SetAngle() {
-	targetRotation = units::degree_t(drivetrain->GetGyroAngle()) + currentTarget.target.robotAngle;
+	targetRotation = units::degree_t(Drivetrain::getDrivetrain()->GetGyroAngle()) + currentTarget.target.robotAngle;
 }
 
 void VisionDrive::Execute(){
@@ -79,8 +79,8 @@ void VisionDrive::Execute(){
 	//tracked by the PIDCommand
 
 	//get the most up to date vision data
-	if(Robot::GetRobot()->visionReceiver.newData){
-		currentTarget = Robot::GetRobot()->visionReceiver.getBestTarget();
+	if(VisionReceiver::getVisionReceiver()->newData){
+		currentTarget = VisionReceiver::getVisionReceiver()->getBestTarget();
 	}
 	if(currentTarget.hasTarget){
 		SetAngle();

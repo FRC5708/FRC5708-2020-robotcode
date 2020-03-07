@@ -5,12 +5,20 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <netdb.h>
+#include "DebugValues.h"
 
 
 constexpr char VISION_PORT[] = "5808";
 
+VisionReceiver visionReceiverInstance;
+
 VisionReceiver::VisionReceiver() {
 	setupSocket();
+	assert(this == &visionReceiverInstance); // there should only be one instance.
+	if(DEBUG_CONSTRUCTORS) std::cout << "VisionReceiver initialized." << std::endl;
+}
+VisionReceiver* VisionReceiver::getVisionReceiver(){
+	return &visionReceiverInstance;
 }
 
 void VisionReceiver::setupSocket() {
