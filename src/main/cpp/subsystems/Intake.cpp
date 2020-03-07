@@ -104,15 +104,25 @@ void Intake::trackPressState(){
                 state=none;
                 if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to none." << std::endl;
                 ramp_ball_counter+=1; //Add a ball to the counter.
-                if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball count " << ramp_ball_counter << std::endl;
+                if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball count increased to " << ramp_ball_counter << std::endl;
             }
             break;
     }
 }
 void Intake::resetBallCounter(){
-        if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Reset ramp ball count." << std::endl;
-        ramp_ball_counter=0;
-    }
+    //This should *not* be called under normal operation.
+    std::cerr << "resetBallCounter called, this is probably a bad idea" << std::endl;
+    if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Reset ramp ball count." << std::endl;
+    ramp_ball_counter=0;
+}
+void Intake::decrementBallCounter(){
+    if(!ramp_ball_counter>0){
+       if(DEBUG_INTAKE_BALL_COUNT) std::cerr << "Ramp ball count attempted to be decremented, but was already 0!" << std::endl;
+        return;
+    } 
+    ramp_ball_counter-=1;
+    if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball count decremented to " << ramp_ball_counter << std::endl;
+}
 unsigned short Intake::getBallCount(){
     //TODO: IMPLEMENT ME!
     return 0;

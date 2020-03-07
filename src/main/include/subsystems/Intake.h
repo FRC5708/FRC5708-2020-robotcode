@@ -39,5 +39,6 @@ public:
 	void setIntake(intake_mode mode);
     unsigned short getBallCount(); //TODO: IMPLEMENT ME!
     void resetBallCounter();
+    void decrementBallCounter();
    
 };
