@@ -94,10 +94,10 @@ void DoShooter::Execute(){
 
 	// Controls shooter loader
 	if (controller->GetBumperPressed(frc::GenericHID::JoystickHand::kRightHand)) {
-		shooter->setLoader(Shooter::loader::extended);
+		shooter->setLoader(Shooter::loaderPos::extended);
 	}
 	if (controller->GetBumperReleased(frc::GenericHID::JoystickHand::kRightHand)) {
-		shooter->setLoader(Shooter::loader::retracted);
+		shooter->setLoader(Shooter::loaderPos::retracted);
 	}
 }
 void DoShooter::End(bool interrupted) {

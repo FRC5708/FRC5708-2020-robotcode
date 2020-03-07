@@ -1,8 +1,8 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/Encoder.h>
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
+#include <frc/Servo.h>
 
 using ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
@@ -29,13 +29,14 @@ class Shooter : public frc2::SubsystemBase {
 private:
 	WPI_TalonSRX* rightShooterMotor;
     WPI_TalonSRX* leftShooterMotor;
+    frc::Servo loader;
 public:
     // rotations per second
     static constexpr double defaultSpeed = 50; // rotations per second
-	enum loader{extended,retracted};
+	enum struct loaderPos{extended,retracted};
 	Shooter(); //TODO: CONFIG WITH RIGHT VALUES!
     static Shooter* getShooter();
 	void setShooterWheels(double velocity);
-	void setLoader(loader position); //TODO: IMPLEMENT ME!
+    void setLoader(loaderPos pos);
     void ConfigureMotor(WPI_TalonSRX* theMotor);
 };
