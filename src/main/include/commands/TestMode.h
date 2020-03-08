@@ -15,6 +15,8 @@
 #include "subsystems/Odometry.h"
 
 namespace TestingCommands{
+    void initializeSendableChoosers();
+
     extern Drivetrain* drivetrain;
     extern Intake* intake;
     extern Odometry* odometry;
@@ -43,26 +45,27 @@ namespace TestingCommands{
     }
     namespace IntakeTestingCommands{
         extern frc::SendableChooser<int> intake_sendablechooser;
-        //if state is intake, the first threee should get passed directly, fourth should get held at top, fith should stp internaly in intake
+        //if state is intake, the first threee should get passed directly, fourth should get held at top, fifth should stop internaly in intake
         //after that point force intake should force motors to run no matter what
     }
     namespace OdometryTestingCommands{
         extern frc::SendableChooser<int> odometry_sendablechooser;
         class ReturnPose2D : public frc2::CommandHelper<frc2::CommandBase,ReturnPose2D>{
-
         };
     }
     namespace ShooterTestingCommands{
         extern frc::SendableChooser<int> shooter_sendablechooser;
         class ReturnShooterMotorPowers : public frc2::CommandHelper<frc2::CommandBase,ReturnShooterMotorPowers>{
-
         };
     }
 
     using namespace DrivetrainTestingCommands;
     
     class DrivetrainTests : public frc2::CommandHelper<frc2::SequentialCommandGroup,DrivetrainTests> {
-        
+    public:
+        DrivetrainTests();
+    private:
+        void Initialize() override;
     };
     class IntakeTests : public frc2::CommandHelper<frc2::SequentialCommandGroup,IntakeTests> {
 

@@ -15,6 +15,7 @@ namespace TestingCommands {
     std::chrono::steady_clock test_clock;
     std::chrono::steady_clock::time_point test_command_start_time;
     namespace DrivetrainTestingCommands {
+        frc::SendableChooser<int> drivetrain_sendablechooser;
         TestDriveForward::TestDriveForward() {
             AddRequirements(drivetrain);
         }
@@ -48,12 +49,25 @@ namespace TestingCommands {
             drivetrain->Drive(0, 0);
         }   
     }
-}
-/*void SOMETHING::Initialize() {
+    void initializeSendableChoosers() {
     drivetrain_sendablechooser.SetDefaultOption("None", 0);
     drivetrain_sendablechooser.AddOption("ACTIVATES MOTORS - Test driving motors forward", 1);
     drivetrain_sendablechooser.AddOption("ACTIVATES MOTORS - Test the Y value of the Xbox controller", 2);
     frc::SmartDashboard::PutData("Drivetrain Tests", &drivetrain_sendablechooser);
+    }
+    DrivetrainTests::DrivetrainTests() {
+        AddRequirements(drivetrain);
+    }
+    void DrivetrainTests::Initialize() {
+        switch (TestingCommands::DrivetrainTestingCommands::drivetrain_sendablechooser.GetSelected()) {
+            case 1:
+                AddCommands(TestingCommands::DrivetrainTestingCommands::TestDriveForward());
+                break;
+            case 2:
+                AddCommands(TestingCommands::DrivetrainTestingCommands::TestJoystickYValue());
+                break;
+        }
+    }
 }
+
 //SmartDashboard::PutData("ElevatorMove: up", new ElevatorMove(2.7));
-*/

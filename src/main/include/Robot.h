@@ -49,4 +49,6 @@ class Robot : public frc::TimedRobot {
 	DriveWithJoystick::MagicalGarbage povSwitcher;
  private:
 	AutonomousCommand autonomous;
+	//testing
+	TestingCommands::DrivetrainTests drivetrain_tests;
 };

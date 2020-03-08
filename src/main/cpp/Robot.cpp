@@ -41,6 +41,7 @@ Robot* Robot::GetRobot() {
 }
 
 void Robot::RobotInit() {
+	TestingCommands::initializeSendableChoosers();
 	theRobotInstance = this;
 
 	if(DEBUG_COMMAND_STATE){
@@ -108,7 +109,7 @@ void Robot::TeleopPeriodic() {
 
 
 void Robot::TestInit(){
-	TestingCommands::DrivetrainTestingCommands::TestDriveForward().Schedule();
+	drivetrain_tests.Schedule();
 }
 
 #ifndef RUNNING_FRC_TESTS

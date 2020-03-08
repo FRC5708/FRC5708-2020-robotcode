@@ -1,5 +1,6 @@
 #include "commands/DriveWithJoystick.h"
 #include <iostream>
+#include <math.h>
 #include "Control.h"
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Intake.h"
@@ -14,7 +15,7 @@ namespace DriveWithJoystick {
 
 double inputTransform(double input, double minPowerOutput, double inputDeadZone, 
 		 double inputChangePosition = 0.75, double outputChangePosition = 0.5) {
-
+	/*
 	double output = 0;
 	double correctedInput = (fabs(input) - inputDeadZone) / (1 - inputDeadZone);
 	
@@ -29,9 +30,12 @@ double inputTransform(double input, double minPowerOutput, double inputDeadZone,
 				/ (1 - inputChangePosition)
 				* (1 - outputChangePosition)
 				+ outputChangePosition;
-	}
+	} */
+	double output = pow(fabs(input), 1.8);
+
 	if (input < 0) output = -output;
 	return output;
+	
 }
 
 void powerRampup(double input, double* outputVar) {
