@@ -43,6 +43,10 @@ void Odometry::Periodic() {
     static int ticks = 0;
     ++ticks;
     if (DEBUG_ODOMETRY && ticks % 50 == 0) std::cout << "X: " << currentPos.Translation().X() << ", Y: " << currentPos.Translation().Y() << ", ROT: " << currentPos.Rotation().Degrees() << std::endl;
+    if(DEBUG_REQUIREMENTS && GetCurrentCommand()!=currentOwner){
+		currentOwner=GetCurrentCommand();
+		std::cout << "Ownership of Odometry switched to " << currentOwner->GetName() << std::endl;
+	}
 }
 
 void Odometry::Reset(frc::Pose2d newPose) {

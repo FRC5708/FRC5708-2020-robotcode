@@ -21,6 +21,10 @@ void Intake::setIntake(intake_mode mode){
     this->mode=mode;
 }  
 void Intake::Periodic(){
+	if(DEBUG_REQUIREMENTS && GetCurrentCommand()!=currentOwner){
+		currentOwner=GetCurrentCommand();
+		std::cout << "Ownership of Intake switched to " << currentOwner->GetName() << std::endl;
+	}
     trackPressState();
     //TODO: Make ball count reset back to zero!
     switch(mode){

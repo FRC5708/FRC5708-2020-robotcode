@@ -92,3 +92,9 @@ void Shooter::toggleLoader(){
 	else loader_state=loaderPos::extended;
 	setLoader(loader_state);
 }
+void Shooter::Periodic(){
+	if(DEBUG_REQUIREMENTS && GetCurrentCommand()!=currentOwner){
+		currentOwner=GetCurrentCommand();
+		std::cout << "Ownership of Shooter switched to " << currentOwner->GetName() << std::endl;
+	}
+}

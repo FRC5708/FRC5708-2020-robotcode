@@ -27,6 +27,7 @@ enum Constants {
 
 class Shooter : public frc2::SubsystemBase {
 private:
+    frc2::Command* currentOwner;
 	WPI_TalonSRX* rightShooterMotor;
     WPI_TalonSRX* leftShooterMotor;
     frc::Servo loader;
@@ -42,6 +43,7 @@ public:
 	void setShooterWheels(double velocity);
 	void setLoader(loaderPos position); //TODO: IMPLEMENT ME!
     void toggleLoader();
+    void Periodic() override;
     
     bool isSpunTo(double speed);
 };

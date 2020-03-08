@@ -6,6 +6,7 @@
 #include "subsystems/Drivetrain.h"
 
 class Odometry : public frc2::SubsystemBase {
+    frc2::Command* currentOwner;
     void Periodic() override;
     //creating odometry object
     frc::DifferentialDriveOdometry m_odometry;

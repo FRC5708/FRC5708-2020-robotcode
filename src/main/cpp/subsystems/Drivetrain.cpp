@@ -111,3 +111,10 @@ std::vector<double> Drivetrain::getMotorPowers(){
 	std::vector<double> vect {FLMotor->Get(),FRMotor->Get(),BLMotor->Get(),BRMotor->Get()};
 	return vect;
 }
+
+void Drivetrain::Periodic(){
+	if(DEBUG_REQUIREMENTS && GetCurrentCommand()!=currentOwner){
+		currentOwner=GetCurrentCommand();
+		std::cout << "Ownership of Drivetrain switched to " << currentOwner->GetName() << std::endl;
+	}
+}
