@@ -40,3 +40,9 @@ void ShootCommand::End(bool interrupted) {
 	if (!interrupted) Intake::getIntake()->decrementBallCounter();
 	Shooter::getShooter()->setShooterWheels(0);
 }
+
+ShootMultiple::ShootMultiple(unsigned short count, double power){
+	for(unsigned short i=0;i<count;i++){
+		AddCommands(ShootCommand(power));
+	}
+}

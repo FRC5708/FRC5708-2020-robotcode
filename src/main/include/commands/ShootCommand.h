@@ -24,3 +24,7 @@ private:
     void End(bool interrupted) override;
 };
  
+class ShootMultiple : public frc2::CommandHelper<frc2::SequentialCommandGroup,ShootMultiple> {
+    public:
+        ShootMultiple(unsigned short count, double power=Shooter::defaultSpeed);
+};
