@@ -37,7 +37,6 @@ bool ShootCommand::IsFinished() {
 	return (std::chrono::steady_clock::now() - shootStartTime >= totalShootTime);
 }
 void ShootCommand::End(bool interrupted) {
-	if (!interrupted) Intake::getIntake()->decrementBallCounter();
 	Shooter::getShooter()->setShooterWheels(0);
 }
 
