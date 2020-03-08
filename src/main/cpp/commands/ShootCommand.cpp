@@ -1,9 +1,12 @@
 #include "commands/ShootCommand.h"
+#include "subsystems/Intake.h"
 
 
 ShootCommand::ShootCommand(double power) : shooterSpeed(power) {
-	AddRequirements({Shooter::getShooter()});
+	// Removed because this is always called from doShooter or ShootMultiple
+	//AddRequirements({Shooter::getShooter()});
 	
+	AddRequirements(Intake::getIntake());
 }
 
 // TODO: test and set these values!
@@ -21,8 +24,11 @@ void ShootCommand::Execute() {
 			Shooter::getShooter()->setLoader(Shooter::loaderPos::extended);
 		}
 	}
-	else if (std::chrono::steady_clock::now() - shootStartTime >= pusherMoveTime) {
-		Shooter::getShooter()->setLoader(Shooter::loaderPos::retracted);
+	else {
+		Intake::getIntake()->setIntake(Intake::intake_mode::magazineOnly);
+		if (std::chrono::steady_clock::now() - shootStartTime >= pusherMoveTime) {
+			Shooter::getShooter()->setLoader(Shooter::loaderPos::retracted);
+		}
 	}
 }
 
@@ -31,5 +37,6 @@ bool ShootCommand::IsFinished() {
 	return (std::chrono::steady_clock::now() - shootStartTime >= totalShootTime);
 }
 void ShootCommand::End(bool interrupted) {
+	if (!interrupted) Intake::getIntake()->decrementBallCounter();
 	Shooter::getShooter()->setShooterWheels(0);
 }

@@ -64,6 +64,10 @@ void Intake::Periodic(){
             magazineMotor->Set(1);
             if(DEBUG_INTAKE_MAGAZINE && (state==hasBall || state==releasing)) std::cout << "Magazine running (at max capacity, but forced!)" << std::endl;
             break;
+        case intake_mode::magazineOnly:
+            intakeMotor->Set(0);
+            magazineMotor->Set(1);
+        break;
     }
 }
 //Step the FSM that tracks the state of our intake. Note: this is *completely* independent of motor control.

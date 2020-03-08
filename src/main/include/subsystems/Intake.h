@@ -18,7 +18,7 @@ constexpr unsigned short const RAMP_MAX_CAPACITY=3;
 class Intake : public frc2::SubsystemBase {
 public:
     frc2::Command* currentOwner;
-    enum intake_mode{intake,off,reverse,force_intake};
+    enum intake_mode{intake,off,reverse,force_intake, magazineOnly};
     enum intake_state{none,pressing,hasBall,releasing};
 private:
     frc::SpeedController* const intakeMotor;
