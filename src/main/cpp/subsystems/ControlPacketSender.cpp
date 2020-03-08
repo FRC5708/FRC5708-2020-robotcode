@@ -28,6 +28,7 @@ int ControlPacketSender::setupSocket(){
     hints.ai_flags = 0;
     hints.ai_protocol = 0;
 
+    //I think this will fail if the pi isn't up
     int s = getaddrinfo(hostname, port, &hints, &piSockInfo);
     if(s != 0){
         std::cerr << "Couldn't find the PI" << std::endl;
@@ -63,6 +64,14 @@ void ControlPacketSender::handleConnection(){
                     isAlive = true;
                     std::cout << "Connected to pi hopefully" << std::endl;
                     //TO DO: get connection message and only set alive if we receive it?
+                    char responseMessage[65536];
+                    int len = read(sockfd, responseMessage, sizeof(responseMessage)-1);
+                    if(len <= 0){
+                        isAlive = false;
+                        std::cout << "Connection isn't actually alive" << std::endl;
+                    }             
+                    responseMessage[len] = '\0';
+
                 }
             }
             sleep(1);
