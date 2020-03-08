@@ -8,24 +8,25 @@
 // Encoder ticks based on emperical data
 constexpr double speedMultiplier = 1024*0.1;
 
-Shooter* shooterInstance=nullptr;
+Shooter shooterInstance;
 
 Shooter::Shooter() : 
 	rightShooterMotor(new WPI_TalonSRX(RightShooterMotorChannel)),
-    leftShooterMotor(new WPI_TalonSRX(LeftShooterMotorChannel)) {
+    leftShooterMotor(new WPI_TalonSRX(LeftShooterMotorChannel)),
+	loader(9) {
+		
+	loader.SetBounds(2.5, 0, 0, 0, 0.5);
+	
 	ConfigureMotor(rightShooterMotor);
 	ConfigureMotor(leftShooterMotor);
 	rightShooterMotor->SetInverted(true);
 
-	assert(shooterInstance==nullptr); //We should only have one shooter.
-	shooterInstance=this;
-
 	SetDefaultCommand(DriveWithJoystick::DoShooter(this));
+	assert(this == &shooterInstance); // there should only be one instance.
 	if(DEBUG_CONSTRUCTORS) std::cout << "Shooter initialized." << std::endl;
 }
 Shooter* Shooter::getShooter(){
-	assert(shooterInstance!=nullptr);
-	return shooterInstance;
+	return &shooterInstance;
 }
 void Shooter::ConfigureMotor(WPI_TalonSRX* theMotor) {
 	theMotor->ConfigFactoryDefault();
@@ -60,10 +61,40 @@ void Shooter::setShooterWheels(double speed){
 		leftShooterMotor->Set(TalonSRXControlMode::Velocity,speed);
 		//rightShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
 		//leftShooterMotor->Set(TalonSRXControlMode::PercentOutput, 1);
-		Intake::getIntake()->resetBallCounter();
 	}
 }
-void Shooter::setLoader(loader position){
-	//TODO: IMPLEMENT ME!
-	return;
+
+
+bool Shooter::isSpunTo(double speed) {
+	return ((rightShooterMotor->GetSelectedSensorVelocity() / speedMultiplier) / speed >= 0.95
+	&& (leftShooterMotor->GetSelectedSensorVelocity() / speedMultiplier) / speed >= 0.95);
+}
+
+void Shooter::setLoader(loaderPos position) {
+	switch (position) {
+		case loaderPos::extended: 
+			loader.Set(1); break;
+		case loaderPos::retracted:
+			loader.Set(0); break;
+		default:
+			abort();
+	};
+	
+	if(DEBUG_LOADER_STATE) std::cout << "Loader position set to " << (position==loaderPos::extended ? "extended" : "retracted") << std::endl;
+	if(position==loaderPos::extended){
+		Intake::getIntake()->decrementBallCounter();
+	}
 } 
+
+void Shooter::toggleLoader(){
+	//Toggle the loader state
+	if(loader_state==loaderPos::extended) loader_state=loaderPos::retracted;
+	else loader_state=loaderPos::extended;
+	setLoader(loader_state);
+}
+void Shooter::Periodic(){
+	if(DEBUG_REQUIREMENTS && GetCurrentCommand()!=currentOwner){
+		currentOwner=GetCurrentCommand();
+		std::cout << "Ownership of Shooter switched to " << currentOwner->GetName() << std::endl;
+	}
+}

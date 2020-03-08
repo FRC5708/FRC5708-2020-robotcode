@@ -2,7 +2,7 @@
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h> //Let's avoid the header apocalypse.
 #include <iostream>
 
-Intake* intakeInstance=nullptr;
+Intake intakeInstance;
 
 Intake::Intake() :
     intakeMotor(new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(IntakeMotorChannel)),
@@ -11,18 +11,20 @@ Intake::Intake() :
     SetDefaultCommand(DriveWithJoystick::DoIntake(this));
     
     magazineMotor->SetInverted(true);
-    assert(intakeInstance==nullptr); //We should only ever have *one* intake.
-    intakeInstance=this;
+    assert(this == &intakeInstance); // there should only be one instance.
     if(DEBUG_CONSTRUCTORS) std::cout << "Intake initialized." << std::endl;
 }
 Intake* Intake::getIntake(){
-    assert(intakeInstance!=nullptr); 
-    return intakeInstance;
+    return &intakeInstance;
 }
 void Intake::setIntake(intake_mode mode){
     this->mode=mode;
 }  
 void Intake::Periodic(){
+	if(DEBUG_REQUIREMENTS && GetCurrentCommand()!=currentOwner){
+		currentOwner=GetCurrentCommand();
+		std::cout << "Ownership of Intake switched to " << currentOwner->GetName() << std::endl;
+	}
     trackPressState();
     //TODO: Make ball count reset back to zero!
     switch(mode){
@@ -62,6 +64,10 @@ void Intake::Periodic(){
             magazineMotor->Set(1);
             if(DEBUG_INTAKE_MAGAZINE && (state==hasBall || state==releasing)) std::cout << "Magazine running (at max capacity, but forced!)" << std::endl;
             break;
+        case intake_mode::magazineOnly:
+            intakeMotor->Set(0);
+            magazineMotor->Set(1);
+        break;
     }
 }
 //Step the FSM that tracks the state of our intake. Note: this is *completely* independent of motor control.
@@ -106,15 +112,25 @@ void Intake::trackPressState(){
                 state=none;
                 if(DEBUG_INTAKE_FSM) std::cout << "Intake FSM changed state to none." << std::endl;
                 ramp_ball_counter+=1; //Add a ball to the counter.
-                if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball count " << ramp_ball_counter << std::endl;
+                if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball count increased to " << ramp_ball_counter << std::endl;
             }
             break;
     }
 }
-void Intake::resetBallCounter(){
-        if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Reset ramp ball count." << std::endl;
-        ramp_ball_counter=0;
-    }
+void Intake::resetBallCounter(unsigned short count){
+    //This should *not* be called under normal operation.
+    std::cerr << "resetBallCounter called, this is probably a bad idea" << std::endl;
+    if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Reset ramp ball count to " << count << std::endl;
+    ramp_ball_counter=count;
+}
+void Intake::decrementBallCounter(){
+    if(!(ramp_ball_counter>0)){
+       if(DEBUG_INTAKE_BALL_COUNT) std::cerr << "Ramp ball count attempted to be decremented, but was already 0!" << std::endl;
+        return;
+    } 
+    ramp_ball_counter-=1;
+    if(DEBUG_INTAKE_BALL_COUNT) std::cout << "Ramp ball count decremented to " << ramp_ball_counter << std::endl;
+}
 unsigned short Intake::getBallCount(){
     //TODO: IMPLEMENT ME!
     return 0;

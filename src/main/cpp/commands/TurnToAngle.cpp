@@ -86,7 +86,3 @@ void VisionDrive::Execute(){
 		SetAngle();
 	}
 }
-
-void VisionDrive::End(bool interrupted){
-	
-}

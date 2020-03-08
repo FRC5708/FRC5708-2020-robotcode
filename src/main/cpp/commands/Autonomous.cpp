@@ -1,6 +1,7 @@
 #include "commands/Autonomous.h"
 #include "commands/DriveToPoint.h"
 #include "commands/TurnToAngle.h"
+#include "commands/ShootCommand.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
@@ -42,21 +43,7 @@ public:
 	}
 };
 
-class ContinuousShooterCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
-protected:
-	Shooter* shooter;
-	void Execute() override {
-		shooter->setShooterWheels(Shooter::defaultSpeed);
-	}
-	void End(bool interrupted) override {
-		shooter->setShooterWheels(0);
-	}
-public:
-	ContinuousShooterCommand() : shooter(Shooter::getShooter()){
-		AddRequirements(shooter);
-	}
-};
-class ContinuousDriveCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousShooterCommand> { 
+class ContinuousDriveCommand : public frc2::CommandHelper<frc2::CommandBase, ContinuousDriveCommand> { 
 protected:
 	double power;
 	Drivetrain* drivetrain;
@@ -102,7 +89,8 @@ void AutonomousCommand::SetupAuton() {
 	AddCommands(TurnToPoint(targetPos));
 	// TODO: correct timing
 	AddCommands(frc2::WaitCommand(second_t(0.5)), 
-	frc2::ParallelRaceGroup(frc2::WaitCommand(second_t(5.0)), ContinuousShooterCommand()));
+				ShootMultiple(3)
+	);
 	
 	if (whetherToTrenchRun.GetSelected()) {
 		frc::Translation2d trench1 = start + frc::Translation2d{inch_t(40), inch_t(0)};

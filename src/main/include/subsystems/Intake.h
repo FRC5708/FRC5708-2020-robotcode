@@ -17,7 +17,8 @@ constexpr unsigned short const RAMP_MAX_CAPACITY=3;
 
 class Intake : public frc2::SubsystemBase {
 public:
-    enum intake_mode{intake,off,reverse,force_intake};
+    frc2::Command* currentOwner;
+    enum intake_mode{intake,off,reverse,force_intake, magazineOnly};
     enum intake_state{none,pressing,hasBall,releasing};
 private:
     frc::SpeedController* const intakeMotor;
@@ -38,6 +39,7 @@ public:
     static Intake* getIntake(); //Get the singleton instance of the intake. 
 	void setIntake(intake_mode mode);
     unsigned short getBallCount(); //TODO: IMPLEMENT ME!
-    void resetBallCounter();
-   
+    void resetBallCounter(unsigned short count=START_BALL_COUNT);
+    void decrementBallCounter();
+    
 };

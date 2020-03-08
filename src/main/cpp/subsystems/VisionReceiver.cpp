@@ -10,17 +10,15 @@
 
 constexpr char VISION_PORT[] = "5808";
 
-VisionReceiver* visionReceiverInstance=nullptr;
+VisionReceiver visionReceiverInstance;
 
 VisionReceiver::VisionReceiver() {
 	setupSocket();
-	assert(visionReceiverInstance==nullptr); //We should only have one vision receiver.
-	visionReceiverInstance=this;
+	assert(this == &visionReceiverInstance); // there should only be one instance.
 	if(DEBUG_CONSTRUCTORS) std::cout << "VisionReceiver initialized." << std::endl;
 }
 VisionReceiver* VisionReceiver::getVisionReceiver(){
-	assert(visionReceiverInstance!=nullptr);
-	return visionReceiverInstance;
+	return &visionReceiverInstance;
 }
 
 void VisionReceiver::setupSocket() {

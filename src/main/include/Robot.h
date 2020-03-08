@@ -38,12 +38,6 @@ class Robot : public frc::TimedRobot {
 	void TeleopPeriodic() override;
 	void TestInit() override;
 	static Robot* GetRobot();
-    
-	VisionReceiver visionReceiver; //Requires nothing to be initialized.
-	Drivetrain drivetrain;
-	Odometry odometry;
-	Intake intake;
-	Shooter shooter;
 
 	DriveWithJoystick::InterruptableByController<VisionDrive> visionDrive;
 	DriveWithJoystick::MagicalGarbage povSwitcher;

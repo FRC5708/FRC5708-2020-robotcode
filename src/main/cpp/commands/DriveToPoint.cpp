@@ -69,17 +69,11 @@ void DriveToPoint::Execute() {
 }
 
 bool DriveToPoint::IsFinished() {
-    if (odometry->currentPos.Translation().Distance(targetPoint) < endDistance
-    || odometry->currentPos.Translation().Distance(startingPoint) > targetPoint.Distance(startingPoint)) {
-        drivetrain->Drive(0,0);
-        return true;
-    }
-    else {
-        return false;
-    }
-
+    return (odometry->currentPos.Translation().Distance(targetPoint) < endDistance
+    || odometry->currentPos.Translation().Distance(startingPoint) > targetPoint.Distance(startingPoint));
 }
 
 void DriveToPoint::End(bool interrupted) {
+    drivetrain->Drive(0,0);
     std::cout << "Ended drivetopoint" << std::endl;
 }

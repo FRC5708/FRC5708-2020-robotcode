@@ -7,9 +7,11 @@
 #include <frc/GyroBase.h>
 #include <units/units.h>
 #include "DebugValues.h"
+#include <frc2/command/CommandBase.h>
 
 class Drivetrain : public frc2::SubsystemBase {
 protected:
+	frc2::Command* currentOwner;
 	const static bool usingTalons=false;
 	frc::SpeedController* FLMotor;
 	frc::SpeedController* FRMotor;	
@@ -18,6 +20,7 @@ protected:
 	
 	bool leftEncoderGood = false, rightEncoderGood = false;
 	void checkEncoders();
+	void Periodic() override;
 public:
 
 	Drivetrain();
@@ -35,4 +38,5 @@ public:
 	std::pair<units::meter_t, units::meter_t> GetEncoderDistances();
 	
 	std::vector<double> getMotorPowers();
+	
 };

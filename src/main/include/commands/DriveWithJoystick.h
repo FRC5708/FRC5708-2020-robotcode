@@ -10,6 +10,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/XboxController.h>
+#include "commands/ShootCommand.h"
 
 class Intake; // Defined within subsystems/Intake.h
 class Shooter; // Defined within subsystems/Shooter.h
@@ -31,6 +32,8 @@ namespace DriveWithJoystick{
 		private:
 			Shooter* shooter; //Initialized within member initialization list
 			frc::XboxController* controller; //Initialized within member initialization list
+
+			ShootCommand shootCommand;
 
 			void Execute() override;
 			bool isRunning = false;
