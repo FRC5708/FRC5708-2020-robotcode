@@ -5,6 +5,17 @@
 #include <netdb.h>
 #include <string>
 #include <thread>
+#include <optional>
+#include <vector>
+#include <mutex>
+#include <condition_variable>
+
+struct ControlPacket {
+    ControlPacket(std::string _toSend)
+     : toSend(_toSend), response() {};
+    std::string toSend;
+    std::optional<std::string> response;
+};
 
 class ControlPacketSender {
 private:
@@ -18,16 +29,28 @@ private:
     bool gotSockInfo = false;
     addrinfo* piSockInfo;
 
-    bool isAlive = false;
+    volatile bool isAlive = false;
 
+    //messagerThread vars
+    unsigned int currentMessage = 0;
+    std::vector<ControlPacket> messageQueue;
+    //inter-thread(main & messager) vars
+    std::mutex mtx;
+    std::condition_variable cv;
+
+    //threads
     std::thread connectionThread;
+    std::thread messagerThread;
 public:
     ControlPacketSender();
     ~ControlPacketSender();
 
-    std::string sendMsg(std::string msg);
+    int queueMsg(std::string msg);
 private:
     int setupSocket();
     void handleConnection();
+    void handleMessages();
+
+    std::optional<std::string> sendMsg(std::string msg);
 };
 

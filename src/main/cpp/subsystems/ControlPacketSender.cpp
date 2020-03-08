@@ -9,6 +9,7 @@
 
 ControlPacketSender::ControlPacketSender() {
     connectionThread = std::thread(&ControlPacketSender::handleConnection, this);
+    messagerThread = std::thread(&ControlPacketSender::handleMessages, this);
 }
 
 ControlPacketSender::~ControlPacketSender(){
@@ -17,6 +18,7 @@ ControlPacketSender::~ControlPacketSender(){
     }
     close(sockfd);
     connectionThread.join();
+    messagerThread.join();
 }
 
 int ControlPacketSender::setupSocket(){
@@ -71,7 +73,6 @@ void ControlPacketSender::handleConnection(){
                         std::cout << "Connection isn't actually alive" << std::endl;
                     }             
                     responseMessage[len] = '\0';
-
                 }
             }
             sleep(1);
@@ -79,19 +80,44 @@ void ControlPacketSender::handleConnection(){
     }
 }
 
-std::string ControlPacketSender::sendMsg(std::string msg){
+void ControlPacketSender::handleMessages(){
+    while(true){
+        std::unique_lock<std::mutex> lck(mtx);
+        cv.wait(lck);
+        if(isAlive){
+            for(; currentMessage < messageQueue.size(); currentMessage++){
+                std::optional<std::string> response = sendMsg(messageQueue[currentMessage].toSend);
+                if(!(response.has_value())){
+                    isAlive = false;
+                    break;
+                } else {
+                    messageQueue[currentMessage].response = response;
+                }
+            }
+        }
+    }
+}
+
+std::optional<std::string> ControlPacketSender::sendMsg(std::string msg){
     if(write(sockfd, msg.c_str(), msg.length()) < 0){
         isAlive = false;
-        return std::string("FAILED TO WRITE MESSAGE");
+        return {};
     }
     //get the response
     char responseMessage[65536];
     int len = read(sockfd, responseMessage, sizeof(responseMessage)-1);
     if(len <= 0){
         isAlive = false;
-        return std::string("FAILED TO GET RESPONSE");
+        return {};
     }
     responseMessage[len] = '\0';
     std::cout << "Received PI response: \" " << responseMessage << "\"" << std::endl;
     return std::string(responseMessage);
+}
+
+int ControlPacketSender::queueMsg(std::string msg){
+    messageQueue.push_back(ControlPacket(msg));
+    std::unique_lock<std::mutex> lck(mtx);
+    cv.notify_all();
+    return messageQueue.size()-1; 
 }

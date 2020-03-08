@@ -91,6 +91,11 @@
     "iomanip": "cpp",
     "sstream": "cpp",
     "cinttypes": "cpp",
-    "__functional_03": "cpp"
+    "__functional_03": "cpp",
+    "__node_handle": "cpp",
+    "__tree": "cpp",
+    "stack": "cpp",
+    "codecvt": "cpp",
+    "filesystem": "cpp"
   }
 }
