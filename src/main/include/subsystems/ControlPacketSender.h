@@ -46,6 +46,7 @@ public:
     ~ControlPacketSender();
 
     int queueMsg(std::string msg);
+    std::optional<std::string> getResponse(unsigned int msgId);
 private:
     int setupSocket();
     void handleConnection();

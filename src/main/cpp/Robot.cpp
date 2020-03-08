@@ -52,7 +52,8 @@ void Robot::RobotInit() {
 void Robot::togglePOV(){
 	if(POV==robotPOV::IntakePOV) POV=robotPOV::ShooterPOV;
 	else POV=robotPOV::IntakePOV;
-	//TODO: Send control message to pi, so that some sort of POV indicator shows up on the stream?
+	controlPacketSender.queueMsg(std::string("HUD POV ") + std::string(POV == robotPOV::ShooterPOV ? "front" : "back"));
+	
 	std::cout << "POV switched to " << (POV==robotPOV::IntakePOV ? "Intake" : "Shooter")<< std::endl;
 }
 

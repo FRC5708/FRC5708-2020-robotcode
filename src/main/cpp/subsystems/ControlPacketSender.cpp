@@ -121,3 +121,11 @@ int ControlPacketSender::queueMsg(std::string msg){
     cv.notify_all();
     return messageQueue.size()-1; 
 }
+
+std::optional<std::string> ControlPacketSender::getResponse(unsigned int msgId){
+    if(msgId < messageQueue.size()){
+        return messageQueue[msgId].response;
+    } else {
+        return {};
+    }
+}
