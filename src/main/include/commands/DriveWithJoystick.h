@@ -17,6 +17,8 @@ class Shooter; // Defined within subsystems/Shooter.h
 class Drivetrain; // Defined within subsystems/Drivetrain.h
 
 namespace DriveWithJoystick{
+	extern std::unique_ptr<frc::SendableChooser<char>> driverOp;
+	void initializeOperaterSendableChooser();
 	class DoIntake : public frc2::CommandHelper<frc2::CommandBase,DoIntake>{
 		private:
 			Intake* intake; //Initialized within member initialization list
@@ -52,7 +54,6 @@ namespace DriveWithJoystick{
 			void End(bool interrupted) override;
 		public:
 			DoDrivetrain(Drivetrain* drivetrain);
-			std::unique_ptr<frc::SendableChooser<char>> driverOp = std::make_unique<frc::SendableChooser<char>>();
 			double driveLimit;
 			double turnLimit;
 			double creepDriveLimit;

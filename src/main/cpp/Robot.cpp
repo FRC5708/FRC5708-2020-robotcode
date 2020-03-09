@@ -40,6 +40,7 @@ Robot* Robot::GetRobot() {
 }
 
 void Robot::RobotInit() {
+	void initiailizeOperatorSendableChooser();
 	theRobotInstance = this;
 
 	frc2::CommandScheduler::GetInstance().OnCommandInterrupt(

@@ -1,9 +1,9 @@
 #include "commands/DriveWithJoystick.h"
 #include <iostream>
 #include <frc2/command/CommandHelper.h>
-#include <frc/smartdashboard/SendableChooser.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/shuffleboard/Shuffleboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 #include "Robot.h"
 
 // buttons on xbox:
@@ -13,6 +13,16 @@
 // constexpr int INTAKE_BUTTON = 5, 🤖 = 6;
 
 namespace DriveWithJoystick {
+	std::unique_ptr<frc::SendableChooser<char>> driverOp = std::make_unique<frc::SendableChooser<char>>();
+	void initiailizeOperatorSendableChooser() {
+		driverOp->SetDefaultOption("None", 'Z');
+		driverOp->AddOption("John", 'J');
+		driverOp->AddOption("Dane", 'D');
+		driverOp->AddOption("Slow", 'S');
+		driverOp->AddOption("Ivan", 'I');
+		driverOp->AddOption("None (VERY FAST)", 'N');
+		frc::SmartDashboard::PutData("Whos Driving?", &*driverOp);
+	}
 
 double inputTransform(double input, double minPowerOutput, double inputDeadZone, 
 		 double inputChangePosition = 0.75, double outputChangePosition = 0.5) {
@@ -103,16 +113,15 @@ void DoDrivetrain::Execute() {
 	power = inputTransform(power, 0.15, 0.03);
 	
 	if(controller->GetYButton()){ //If we're in creep mode
-		turn *= creepRate;
-		power *= creepRate;
+		turn *= creepTurnLimit;
+		power *= creepDriveLimit;
 	} else {
-		turn *= .1;
+		turn *= turnLimit;
 	}
 	if(Robot::GetRobot()->POV==robotPOV::IntakePOV){
 		power = -power; //Switch forwards and backwards.
 	}
-	power *= .6; //Intentionally limit ourselves.
-	turn *= .1;
+	power *= driveLimit; //Intentionally limit ourselves.
 
 	//std::cout << "doDrivetrain executing" << std::endl;
 	drivetrain->DrivePolar(power, turn);
