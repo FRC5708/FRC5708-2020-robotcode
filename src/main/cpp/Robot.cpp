@@ -27,7 +27,7 @@ const bool IS_PROD = environment_check(); /*IS_PROD is true if we are running on
 																					 *  happen to be using different types of motors/encoders.*/
 bool environment_check(){
 		//Checks if the file /home/lvuser/platform_test exists. If so, sets IS_PROD to false;
-		struct stat buffer;  
+		struct stat buffer;
 		bool IS_PROD_temp = !(stat ("/home/lvuser/platform_test", &buffer) == 0);
 		std::cout << "Platform detected as " << (IS_PROD_temp ? "PROD" : "TEST" )<< "..." << std::endl;
 		return IS_PROD_temp; 
@@ -40,7 +40,7 @@ Robot* Robot::GetRobot() {
 }
 
 void Robot::RobotInit() {
-	void initiailizeOperatorSendableChooser();
+	initiailizeOperatorSendableChooser();
 	theRobotInstance = this;
 
 	frc2::CommandScheduler::GetInstance().OnCommandInterrupt(

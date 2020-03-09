@@ -61,6 +61,8 @@ class Robot : public frc::TimedRobot {
 	frc::SendableChooser<char> TestToRun;
 	frc::SendableChooser<bool> OutputMotorValues;
 	DriveWithJoystick::MagicalGarbage povSwitcher;
+	void initiailizeOperatorSendableChooser();
+
  private:
 	AutonomousCommand autonomous;
 };
