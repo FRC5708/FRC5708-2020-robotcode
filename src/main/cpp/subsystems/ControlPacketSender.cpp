@@ -29,7 +29,7 @@ int ControlPacketSender::setupSocket(){
     memset(&hints, 0, sizeof(addrinfo));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = 0;
+    hints.ai_flags = SO_REUSEADDR;
     hints.ai_protocol = 0;
 
     //I think this will fail if the pi isn't up
@@ -81,7 +81,7 @@ void ControlPacketSender::handleConnection(){
                     perror("@handleConnection failed to connect");
                 }
             }
-            sleep(1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
     }
 }
@@ -93,10 +93,10 @@ void ControlPacketSender::handleMessages(){
         //cv.wait(lck);
         //std::cout << "finished waiting" << std::endl;
         //lck.unlock();
-        std::cout << "Handling Message: CM: " <<  currentMessage << " size: " << messageQueue.size() << "isAlive"<< std::endl;
+        std::cout << "Handling Message: CM: " <<  currentMessage << " size: " << messageQueue.size()<< std::endl;
         if(isAlive){
             std::cout << "Yeah, its alive" << std::endl;
-            for(int i = 0; currentMessage < messageQueue.size(); currentMessage++){
+            for(; currentMessage < messageQueue.size(); currentMessage++){
                 std::cout << "Trying to send message: " << messageQueue[currentMessage].toSend << std::endl;
                 std::optional<std::string> response = sendMsg(messageQueue[currentMessage].toSend);
                 if(!(response.has_value())){
