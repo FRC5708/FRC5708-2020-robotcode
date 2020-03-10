@@ -48,7 +48,8 @@ public:
     int queueMsg(std::string msg);
     std::optional<std::string> getResponse(unsigned int msgId);
 private:
-    int setupSocket();
+    int getPiInfo();
+    int makeSocket();
     void handleConnection();
     void handleMessages();
 

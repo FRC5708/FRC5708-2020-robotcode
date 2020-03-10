@@ -23,13 +23,13 @@ ControlPacketSender::~ControlPacketSender(){
     messagerThread.join();
 }
 
-int ControlPacketSender::setupSocket(){
+int ControlPacketSender::getPiInfo(){
     addrinfo hints;
 
     memset(&hints, 0, sizeof(addrinfo));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = SO_REUSEADDR;
+    hints.ai_flags = SO_REUSEADDR | SO_KEEPALIVE;
     hints.ai_protocol = 0;
 
     //I think this will fail if the pi isn't up
@@ -39,50 +39,55 @@ int ControlPacketSender::setupSocket(){
         std::cerr << "getaddrinfo error: " << gai_strerror(s) << std::endl; 
         return -1;
     }
+    return 0;
+}
 
+int ControlPacketSender::makeSocket(){
     sockfd = socket(piSockInfo->ai_family, piSockInfo->ai_socktype, piSockInfo->ai_protocol);
     if(sockfd == -1){
         close(sockfd);
         std::cerr << "making a socket failed" << std::endl;
-        return -2; 
+        return -1; 
     }
     return 0;
 }
 
 void ControlPacketSender::handleConnection(){
     while(true){
-        int e = setupSocket();
-        if(e < 0){
-            if(e == -2){
-                //failed to create a socket (not recoverable)
+        if(getPiInfo() < 0){
+            sleep(1);
+            gotSockInfo = true;
+        } else {
+            break;
+        }
+    }
+    while(true){
+        if(!isAlive){
+            std::cout << "Trying to connect" << std::endl;
+            close(sockfd); //close the old socket
+            if(makeSocket() < 0){
+                std::cout << "Uh oh, no bueno" << std::endl;
                 return;
             }
-            //otherwise just failed to find the pi
-            sleep(0.5);
-            continue;
-        }
-        gotSockInfo = true;
-        std::cout << "Finished making socket" << std::endl;
-        while(true){
-            if(!isAlive){
-                if(!(connect(sockfd, piSockInfo->ai_addr, piSockInfo->ai_addrlen) < 0)){ 
-                    isAlive = true;
-                    std::cout << "Connected to pi hopefully" << std::endl;
-                    //TO DO: get connection message and only set alive if we receive it?
-                    char responseMessage[65536];
-                    int len = read(sockfd, responseMessage, sizeof(responseMessage)-1);
-                    if(len <= 0){
-                        isAlive = false;
-                        perror("@handleConnection pi connection response");
-                        std::cout << "Connection isn't actually alive" << std::endl;
-                    }             
-                    responseMessage[len] = '\0';
-                } else {
-                    perror("@handleConnection failed to connect");
-                }
+            std::cout << "Finished making socket" << std::endl;
+            if(!(connect(sockfd, piSockInfo->ai_addr, piSockInfo->ai_addrlen) < 0)){ 
+                isAlive = true;
+                std::cout << "Connected to pi hopefully" << std::endl;
+                //TO DO: get connection message and only set alive if we receive it?
+                char responseMessage[65536];
+                int len = read(sockfd, responseMessage, sizeof(responseMessage)-1);
+                if(len <= 0){
+                    isAlive = false;
+                    perror("@handleConnection pi connection response");
+                    std::cout << "Connection isn't actually alive" << std::endl;
+                }             
+                responseMessage[len] = '\0';
+            } else {
+                std::cerr << "Error Code: " << errno << std::endl;
+                perror("@handleConnection failed to connect");
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
