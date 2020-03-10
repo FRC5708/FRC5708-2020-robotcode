@@ -19,6 +19,7 @@ private:
     bool shootingStarted = false;
     std::chrono::steady_clock::time_point shootStartTime;
     
+    void Initialize() override;
     void Execute() override;
 	bool IsFinished() override;
     void End(bool interrupted) override;

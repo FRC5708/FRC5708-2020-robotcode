@@ -13,6 +13,10 @@ ShootCommand::ShootCommand(double power) : shooterSpeed(power) {
 std::chrono::milliseconds totalShootTime{1000};
 std::chrono::milliseconds pusherMoveTime{500};
 
+void ShootCommand::Initialize() {
+	shootingStarted = false;
+}
+
 void ShootCommand::Execute() {
 	
 	Shooter::getShooter()->setShooterWheels(shooterSpeed);
