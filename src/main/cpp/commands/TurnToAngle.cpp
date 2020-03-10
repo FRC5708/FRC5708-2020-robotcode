@@ -9,7 +9,7 @@
 TurnToAngle::TurnToAngle(units::degree_t targetRotation) : 
 	PIDCommand(
 		frc2::PIDController(0.05, 0.005, 0.005), 
-		[this](){ return Drivetrain::getDrivetrain()->GetGyroAngle(); },
+		[this](){ return Odometry::getOdometry()->GetGyroAngle(); },
 		[this](){return this->targetRotation.value(); },
 		[this](double d){ 
 			//std::cout << "turn power: " << d << std::endl;
@@ -71,7 +71,7 @@ void VisionDrive::Initialize(){
 }
 
 void VisionDrive::SetAngle() {
-	targetRotation = units::degree_t(Drivetrain::getDrivetrain()->GetGyroAngle()) + currentTarget.target.robotAngle;
+	targetRotation = units::degree_t(Odometry::getOdometry()->GetGyroAngle()) + currentTarget.target.robotAngle;
 }
 
 void VisionDrive::Execute(){

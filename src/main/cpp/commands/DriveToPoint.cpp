@@ -35,7 +35,7 @@ void DriveToPoint::Execute() {
     degree_t absAngleToTarget = units::math::atan2(targetPoint.Y() - odometry->getRoboty(), targetPoint.X() - odometry->getRobotx());
     
     // Get reletive angle from front of robot to target
-    degree_t angleToTarget = absAngleToTarget - degree_t(drivetrain->GetGyroAngle());
+    degree_t angleToTarget = absAngleToTarget - degree_t(Odometry::getOdometry()->GetGyroAngle());
     
     std::cout << "abs angle:" << absAngleToTarget << " difference:" << angleToTarget << std::endl;
     if (backwards) angleToTarget += degree_t(180);
@@ -52,8 +52,8 @@ void DriveToPoint::Execute() {
     
     // Don't turn too much
     // It's awful, but it worked OK last year so I'm putting it in here this year.
-    double currentSpeed = (drivetrain->leftEncoder->GetRate() + drivetrain->rightEncoder->GetRate()) / 2.0;
-    double currentCentripetal = fabs(drivetrain->gyro->GetRate() * currentSpeed);
+    double currentSpeed = (Odometry::getOdometry()->leftEncoder->GetRate() + Odometry::getOdometry()->rightEncoder->GetRate()) / 2.0;
+    double currentCentripetal = fabs(Odometry::getOdometry()->gyro->GetRate() * currentSpeed);
 	if (currentCentripetal > maxCentripetal) {
 		turnPower /= pow(2, (currentCentripetal - maxCentripetal) * kTurnReduction);
 	}

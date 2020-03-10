@@ -18,6 +18,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <chrono>
+#include "subsystems/Odometry.h"
 
 #include <vector>
 
@@ -135,40 +136,7 @@ void Robot::TestPeriodic() {
 	*/
 
 	//std::cout << "I am not insane." << std::endl;
-	if (TestToRun.GetSelected() == 'M') {
-		testing_tick_counter++;
-		Drivetrain::getDrivetrain()->Drive(0.3, 0.3);
-		//runs every 50 ticks (1 sec)
-		if (testing_tick_counter %50 == 0) {
-			std::vector<double> vect= Drivetrain::getDrivetrain()->getMotorPowers();
-			std::cout << "FL Check: " << (((vect.at(0) > 0.1) && (Drivetrain::getDrivetrain()->leftEncoder -> GetDistance() > 1))? "Good :)" : "BAD!!!!") << ", FR Check: " << (((vect.at(1) > 0.1) && (Drivetrain::getDrivetrain()->rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BL Check: " << (((vect.at(2) > 0.1) && (Drivetrain::getDrivetrain()->leftEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << ", BR Check: " << (((vect.at(3) > 0.1) && (Drivetrain::getDrivetrain()->rightEncoder -> GetDistance() > 1)) ? "Good :)" : "BAD!!!!") << std::endl;
-		}
-	}
-	if (TestToRun.GetSelected() == 'F') {
-		testing_first_motor_test = true;
-		Drivetrain::getDrivetrain()->Drive(0.3, 0.3);
-	}
-	if (TestToRun.GetSelected() == 'N') {
-		testing_first_motor_test = true;
-		Drivetrain::getDrivetrain()->Drive(0, 0);
-
-	}
-	if (OutputMotorValues.GetSelected()) {
-		//counsts so that it activates every half second
-		testing_tick_counter++;
-		if (testing_tick_counter %25 == 0) {
-			std::vector<double> vect=Drivetrain::getDrivetrain()->getMotorPowers();
-			std::cout << "FL: " << vect.at(0) << "| FR: " << vect.at(1) << "| BL: " << vect.at(2) << "| BR: " << vect.at(3) << std::endl;
-		}
-	}
 }
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
-
-/**
- * 
- * DONT WORRY ABOUT IT, ILL FIRGURE THIS PART OUT EVENTUALLY...
- * (also known as notes/code that i will hopefully use later)
- * what angle -->
-*/

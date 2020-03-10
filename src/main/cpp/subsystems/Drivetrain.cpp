@@ -1,7 +1,6 @@
 #include "subsystems/Drivetrain.h"
 #include "DIOMaps.h"
 #include <ctre/Phoenix.h>
-#include <frc/ADXRS450_Gyro.h>
 #include <commands/DriveWithJoystick.h>
 #include <iostream>
 
@@ -24,10 +23,7 @@ double Drivetrain::boundValue(const double value, const double bound){
 
 
 
-Drivetrain::Drivetrain() :
-gyro(new frc::ADXRS450_Gyro()),
-leftEncoder(new frc::Encoder(leftEncoderChannel[0],leftEncoderChannel[1], false)),
-rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], true)) {
+Drivetrain::Drivetrain() {
 	//Set encoder and spark parameters here
 	if (Drivetrain::usingTalons) {
 		FLMotor = new WPI_TalonSRX(frontLeftMotorChannel);
@@ -49,10 +45,6 @@ rightEncoder(new frc::Encoder(rightEncoderChannel[0],rightEncoderChannel[1], tru
 	dynamic_cast<BaseMotorController *>(BRMotor)->SetNeutralMode(Brake);
 	
 	SetDefaultCommand(DriveWithJoystick::DoDrivetrain(this));
-	
-	constexpr double metersPerPulse = units::meter_t(units::inch_t(6.0)).value() * M_PI / 360.0;
-	leftEncoder->SetDistancePerPulse(metersPerPulse);
-	rightEncoder->SetDistancePerPulse(metersPerPulse);
 	
 	assert(this == &drivetrainInstance); // there should only be one instance.
 	if(DEBUG_CONSTRUCTORS) std::cout << "Drivetrain initialized." << std::endl;
@@ -79,29 +71,6 @@ void Drivetrain::DrivePolar(const double power, const double turn){
 	double leftMotorOutput = (v-w)/2;
 
 	Drive(leftMotorOutput,rightMotorOutput);
-}
-
-void Drivetrain::checkEncoders() {
-	if (!leftEncoderGood) leftEncoderGood = fabs(leftEncoder->GetDistance()) > 0.1;
-	if (!rightEncoderGood) rightEncoderGood = fabs(rightEncoder->GetDistance()) > 0.1;
-}
-std::pair<units::meter_t, units::meter_t> Drivetrain::GetEncoderDistances() {
-	checkEncoders();
-	meter_t leftDistance(leftEncoder->GetDistance());
-	meter_t rightDistance(rightEncoder->GetDistance());
-	
-	if (!leftEncoderGood && rightEncoderGood) {
-		// emulate with gyro
-		return { rightDistance - radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH, rightDistance };
-	}
-	else if (!rightEncoderGood && leftEncoderGood) {
-		return { leftDistance, leftDistance + radian_t(degree_t(GetGyroAngle())).value() * ROBOT_WIDTH };
-	}
-	else {
-		// both encoders, yay!
-		// or maybe no encoders
-		return {leftDistance, rightDistance};
-	}
 }
 
 /* std::vector<double> Drivetrain::getMotorPowers()
