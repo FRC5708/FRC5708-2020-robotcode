@@ -107,6 +107,8 @@ void DoIntake::Execute() {
 		}
 	}
 	if(controller->GetStartButtonReleased()) intake->setIntake(Intake::intake_mode::off);
+	
+	if (controller->GetBackButtonPressed()) intake->resetBallCounter(0);
 }
 void DoIntake::End(bool interrupted) {
 	isRunning = false;

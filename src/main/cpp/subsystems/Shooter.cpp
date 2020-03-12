@@ -77,7 +77,7 @@ void Shooter::setLoader(loaderPos position) {
 		case loaderPos::retracted:
 			loader.Set(0); break;
 		default:
-			abort();
+			throw std::invalid_argument("invalid loaderPos");
 	};
 	
 	if(DEBUG_LOADER_STATE) std::cout << "Loader position set to " << (position==loaderPos::extended ? "extended" : "retracted") << std::endl;

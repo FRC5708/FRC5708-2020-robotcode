@@ -18,6 +18,9 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <chrono>
+#include <signal.h>
+#include <execinfo.h>
+#include <unistd.h>
 
 #include <vector>
 
@@ -34,6 +37,22 @@ bool environment_check(){
 		return IS_PROD_temp; 
 }
 
+//From https://stackoverflow.com/a/77336/4062079
+void printStackTrace(int sig) {
+  void *array[10];
+  size_t size;
+
+  // get void*'s for all entries on the stack
+  size = backtrace(array, 10);
+
+  // print out all the frames to stderr
+  fprintf(stderr, "Error: signal %d:\n", sig);
+  backtrace_symbols_fd(array, size, STDERR_FILENO);
+  
+  signal(sig, SIG_DFL);
+  raise(sig);
+}
+
 Robot* theRobotInstance;
 
 Robot* Robot::GetRobot() {
@@ -42,6 +61,9 @@ Robot* Robot::GetRobot() {
 
 void Robot::RobotInit() {
 	theRobotInstance = this;
+	
+	signal(SIGSEGV, &printStackTrace);
+	signal(SIGABRT, &printStackTrace);
 
 	if(DEBUG_COMMAND_STATE){
 		frc2::CommandScheduler::GetInstance().OnCommandInterrupt(
