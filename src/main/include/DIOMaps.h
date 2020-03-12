@@ -8,16 +8,20 @@
 
 constexpr int const leftEncoderChannel[2] = {0,1}; //DIO
 constexpr int const rightEncoderChannel[2] = {2,3}; //DIO
-
-constexpr int const frontLeftMotorChannel = 3; //CAN
-constexpr int const frontRightMotorChannel = 1; //CAN
-constexpr int const backLeftMotorChannel = 4; //CAN
-constexpr int const backRightMotorChannel = 2; //CAN
+constexpr int const IntakeLimitSwitchChannel = 4; //DIO 
+constexpr int const ShooterCAMChannel = 5; //DIO
 
 constexpr int const RightShooterMotorChannel = 0; //CAN
-constexpr int const LeftShooterMotorChannel = 6; //CAN
-constexpr int const ShooterCAMChannel = 10; //CAN
-constexpr int const IntakeMotorChannel = 7; //CAN
+constexpr int const frontRightMotorChannel = 1; //CAN
+constexpr int const backRightMotorChannel = 2; //CAN
+constexpr int const frontLeftMotorChannel = 3; //CAN
+constexpr int const backLeftMotorChannel = 4; //CAN
 constexpr int const MagazineMotorChannel = 5; //CAN
+constexpr int const LeftShooterMotorChannel = 6; //CAN
+constexpr int const IntakeMotorChannel = 7; //CAN
 
-constexpr int const IntakeLimitSwitchChannel = 4; //DIO 
+
+
+
+
+
