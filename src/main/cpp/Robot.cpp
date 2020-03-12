@@ -17,6 +17,8 @@
 #include "subsystems/Intake.h"
 #include <iostream>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
 #include <chrono>
 #include <signal.h>
 #include <execinfo.h>
@@ -45,9 +47,12 @@ void printStackTrace(int sig) {
   // get void*'s for all entries on the stack
   size = backtrace(array, 10);
 
-  // print out all the frames to stderr
+  // print out all the frames to stderr...
   fprintf(stderr, "Error: signal %d:\n", sig);
   backtrace_symbols_fd(array, size, STDERR_FILENO);
+  // ...and a file.
+  int fd=open("/home/lvuser/stacktrace",O_CREAT | O_WRONLY);
+  backtrace_symbols_fd(array,size,fd);
   
   signal(sig, SIG_DFL);
   raise(sig);
